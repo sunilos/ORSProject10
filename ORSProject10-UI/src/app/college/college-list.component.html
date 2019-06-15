@@ -1,0 +1,41 @@
+<div>
+  <H1>College List</H1>
+
+  <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
+  <div *ngIf="form.error == false" style="color:green;"> {{form.message}}</div>
+
+  <form>
+
+    Type: * <input name="name" type="text" [(ngModel)]="form.searchParams.name">
+
+    Code: * <input name="address" type="text" [(ngModel)]="form.searchParams.address">
+
+    Subject: * <input name="phone" type="text" [(ngModel)]="form.searchParams.phone">
+
+    <button (click)="submit()" > Search </button>
+    <button (click)="forward('/college')" >New</button>
+  
+
+  </form>
+
+  <table border="1" width='100%'>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Phone</th>
+      <th>City</th>
+      <th>State</th>
+    </tr>
+    <tr *ngFor="let m of form.list ">
+      <td> {{ m.id }} </td>
+      <td> {{ m.name }} </td>
+      <td> {{ m.address }} </td>
+      <td> {{ m.phoneNo }} </td>
+      <td> {{ m.city }} </td>
+      <td> {{ m.state }} </td>
+      <td> <button (click)="forward( '/college/' +  m.id)">Edit</button> </td>
+      <td> <button (click)="delete(m.id)">Delete</button> </td>
+    </tr>
+  </table>
+</div>

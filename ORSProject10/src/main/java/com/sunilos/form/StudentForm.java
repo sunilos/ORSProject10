@@ -28,7 +28,6 @@ public class StudentForm extends BaseForm {
 	@NotEmpty
 	private String lastName;
 
-	@NotEmpty
 	private String dob;
 
 	@NotEmpty
@@ -98,6 +97,18 @@ public class StudentForm extends BaseForm {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public BaseDTO getDto() {
+		StudentDTO dto = new StudentDTO();
+		dto.setId(id);
+		dto.setCollegeId(collegeId);
+		dto.setEmail(email);
+		dto.setFirstName(firstName);
+		dto.setLastName(lastName);
+		dto.setMobileNo(mobileNo);
+		return dto;
 	}
 
 }

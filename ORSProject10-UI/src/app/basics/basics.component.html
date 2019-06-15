@@ -1,0 +1,82 @@
+<h1>
+  Angular JS basics
+</h1>
+
+<div>
+  <H2>One way Data Binding</H2>
+  Title: {{title}}<br> Subtitle: {{subtitle}}<br>
+</div>
+
+<div>
+  <H2>Directive *ngFor directive</H2>
+  <H3>Person List </H3>
+  <table border="1">
+    <tr>
+      <th>
+        Name
+      </th>
+      <th>
+        Age
+      </th>
+      <th>
+        City
+      </th>
+    </tr>
+    <tr *ngFor="let person of personlist">
+      <td>
+        {{person.name}}
+      </td>
+      <td>
+        {{person.age}}
+      </td>
+      <td>
+        {{person.city}}
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<div>
+  <h2>Directive *ngIf</h2>
+  <h3>Two way data binding  & ng-template</h3>
+
+  Enter Money: <input [(ngModel)]="money" name="money"><br>
+
+  <p *ngIf="money>100">Hurray! I can buy pizza.</p>
+
+  <span *ngIf="money>100;then wow else oops"></span>
+  <ng-template #wow>
+    <p>Wow! I can buy pizza.</p>
+  </ng-template>
+  <ng-template #oops>
+    <p>OOPS! I can not buy pizza.</p>
+  </ng-template>
+</div>
+
+
+<div>
+  <H2>Event handling</H2>
+  Months :
+  <!--Handles change event-->
+  <select name="month" (change) = "changeMonth($event)" >
+    <option *ngFor="let m of monthList">{{m}}</option>
+  </select>
+  {{month}}
+</div>
+
+<div>
+  <H2>Pipes</H2>
+  <p>Uppercase: {{title | uppercase}}</p>
+  <p>Lowercase: {{title | lowercase}}</p>
+  <p>Currency {{12345.678 | currency:"USD"}}</p>
+  <p>Currency {{12345.678 | currency:"USD":"code"}}</p>
+  <p>Date {{todaydate | date:'d/M/y'}}</p>
+  <p>Date {{todaydate | date:'shortTime'}}</p>
+
+  <!--// 3 is for main integer, 4 -4 are for integers to be displayed. -->
+  <p>Decimal: {{123.4567890 | number: '3.4-4' }}</p> 
+  <p>Percentage: {{00.6010 | percent}}</p>
+  <p>Array Slice: {{monthList | slice:2:6}}</p> 
+  
+</div>

@@ -1,5 +1,7 @@
 package com.sunilos.common.message;
 
+import java.util.HashMap;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,19 @@ public class MessageCtl extends BaseCtl<MessageForm, MessageDTO, MessageServiceI
 	@GetMapping("/preload")
 	public ORSResponse preload() {
 		ORSResponse res = new ORSResponse(true);
+		
+		HashMap<String, String> yesNo = new HashMap<String, String>();
+		yesNo.put("Yes", "Y");
+		yesNo.put("No", "N");
+		
+		res.addResult("yesNo", yesNo);
+		
+		HashMap<String, String> types = new HashMap<String, String>();
+		types.put("Email", "EMAIL");
+		types.put("SMS", "SMS");
+		
+		res.addResult("types", types);
+		
 		return res;
 	}
 

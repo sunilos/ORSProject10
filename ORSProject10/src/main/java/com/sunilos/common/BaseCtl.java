@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.sunilos.dto.UserDTO;
+
 /**
  * Base controller class contains get, search, save, delete REST APIs
  * 
@@ -65,6 +67,17 @@ public abstract class BaseCtl<F extends BaseForm, T extends BaseDTO, S extends B
 	@ModelAttribute
 	public void setUserContext(HttpSession session) {
 		userContext = (UserContext) session.getAttribute("userContext");
+		if(userContext == null){
+			UserDTO dto  = new UserDTO();
+			dto.setLoginId("root@sunilos.com");
+			dto.setFirstName("Dummy name");
+			dto.setLastName("Dummy name");
+			dto.setOrgId(0L);
+			dto.setRoleId(1L);
+			dto.setOrgName("root");
+			userContext = new UserContext(dto);
+		}
+	
 	}
 
 	/**
@@ -180,6 +193,7 @@ public abstract class BaseCtl<F extends BaseForm, T extends BaseDTO, S extends B
 
 		try {
 			T dto = (T) form.getDto();
+			System.out.println("---------------------------------------------->" + dto);
 			if (dto.getId() != null && dto.getId() > 0) {
 				baseService.update(dto, userContext);
 			} else {

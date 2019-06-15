@@ -1,0 +1,31 @@
+<div>
+    <H1>Student</H1>
+  
+    <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
+    <div *ngIf="!form.error" style="color:green;"> {{form.message}}</div>
+  
+    <form>
+  
+      College *
+      <select  name="collegeId"  [(ngModel)]="form.data.collegeId"> // value is a string or number
+          <option *ngFor="let obj of form.preload.collegeList" [value]="obj.id">{{obj.name}}</option>
+      </select>      
+      <span style="color: red"> {{form.inputerror.collegeId}} </span> <br>
+  
+      First Name: * <input name="firstName" type="text" [(ngModel)]="form.data.firstName">
+      <span style="color: red"> {{form.inputerror.firstName}} </span> <br>
+  
+      Last Name: * <input name="lastName" type="text" [(ngModel)]="form.data.lastName">
+      <span style="color: red"> {{form.inputerror.lastName}} </span> <br>
+
+      Email: * <input name="email" type="text" [(ngModel)]="form.data.email">
+      <span style="color: red"> {{form.inputerror.email}} </span> <br>
+
+      Mobile: * <input name="mobileNo" type="text" [(ngModel)]="form.data.mobileNo">
+      <span style="color: red"> {{form.inputerror.mobileNo}} </span> <br>
+  
+      <button (click)="submit()" [disabled]="!validate()">Save</button>
+      <button (click)="forward('/studentlist')" >List</button>
+  
+    </form>
+  </div>

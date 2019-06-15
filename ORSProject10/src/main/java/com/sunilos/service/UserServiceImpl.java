@@ -126,7 +126,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDAOInt> implem
 	 * Register new user
 	 */
 	@Override
-	public UserDTO register(UserDTO dto, UserContext userContext) {
+	public UserDTO register(UserDTO dto) {
+
+		UserContext userContext = new UserContext();
+		userContext.setLoginId("super@nenosystems.com");
+		userContext.setOrgId(0L);
+		userContext.setOrgName("root");
 
 		Long id = add(dto, userContext);
 

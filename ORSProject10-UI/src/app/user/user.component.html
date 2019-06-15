@@ -1,0 +1,44 @@
+<div>
+  <H1>User </H1>
+
+  <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
+  <div *ngIf="form.error == false" style="color:green;"> {{form.message}}</div>
+
+  <form>
+
+    roleId: *
+
+    <select name="roleId" [(ngModel)]="form.data.roleId"> // value is a string or number
+      <option *ngFor="let obj of form.preload.roleList" [value]="obj.key">{{obj.value}}</option>
+    </select>
+    <br>
+
+    First Name: * <input name="firstName" type="text" [(ngModel)]="form.data.firstName">
+    <span style="color: red"> {{form.inputerror.firstName}} </span> <br>
+
+    lastName: * <input name="lastName" type="text" [(ngModel)]="form.data.lastName">
+    <span style="color: red"> {{form.inputerror.lastName}} </span> <br>
+
+    loginId: * <input name="loginId" type="text" [(ngModel)]="form.data.loginId">
+    <span style="color: red"> {{form.inputerror.subject}} </span> <br>
+
+    password: * <input name="password" type="text" [(ngModel)]="form.data.password">
+    <span style="color: red"> {{form.inputerror.login}} </span> <br>
+
+    Gender <select name="gender" [(ngModel)]="form.data.gender">
+      <option value="M">Male </option>
+      <option value="F">Female </option>
+    </select>
+    <br>
+
+    Status <select name="status" [(ngModel)]="form.data.status">
+      <option value="Active">Active </option>
+      <option value="Inactive">Inactive </option>
+    </select>
+
+
+    <button (click)="submit()" [disabled]="!validate()">Save</button>
+    <button (click)="forward('/userlist')">List</button>
+
+  </form>
+</div>

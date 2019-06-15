@@ -28,6 +28,6 @@ public interface UserServiceInt extends BaseServiceInt<UserDTO> {
 
 	public UserDTO forgotPassword(String loginId);
 
-	public UserDTO register(UserDTO dto, UserContext userContext);
+	public UserDTO register(UserDTO dto);
 
 }

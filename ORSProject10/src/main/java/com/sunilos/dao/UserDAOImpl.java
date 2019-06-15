@@ -7,11 +7,20 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sunilos.common.BaseDAOImpl;
+import com.sunilos.common.UserContext;
+import com.sunilos.dto.RoleDTO;
 import com.sunilos.dto.UserDTO;
 
+/**
+ * Contains User CRUD operations
+ * 
+ * @author DELL
+ *
+ */
 @Repository
 public class UserDAOImpl extends BaseDAOImpl<UserDTO> implements UserDAOInt {
 
@@ -70,6 +79,17 @@ public class UserDAOImpl extends BaseDAOImpl<UserDTO> implements UserDAOInt {
 		}
 
 		return whereCondition;
+	}
+
+	@Autowired
+	RoleDAOInt roleDao;
+
+	@Override
+	protected void populate(UserDTO dto, UserContext userContext) {
+		if (dto.getRoleId() != null && dto.getRoleId() > 0) {
+			RoleDTO roleDto = roleDao.findByPK(dto.getRoleId(), userContext);
+			dto.setRoleName(roleDto.getName());
+		}
 	}
 
 }

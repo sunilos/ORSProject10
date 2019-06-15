@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import com.sunilos.common.BaseDTO;
 import com.sunilos.common.BaseForm;
+import com.sunilos.common.message.MessageDTO;
 import com.sunilos.dto.MarksheetDTO;
 
 /**
@@ -89,6 +90,18 @@ public class MarksheetForm extends BaseForm {
 
 	public void setStudentId(Long studentId) {
 		this.studentId = studentId;
+	}
+
+	@Override
+	public BaseDTO getDto() {
+		MarksheetDTO dto = new MarksheetDTO();
+		dto.setId(id);
+		dto.setStudentId(studentId);
+		dto.setName(name);
+		dto.setPhysics(physics);
+		dto.setChemistry(chemistry);
+		dto.setMaths(maths);
+		return dto;
 	}
 
 }

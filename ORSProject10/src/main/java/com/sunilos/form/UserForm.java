@@ -2,7 +2,13 @@ package com.sunilos.form;
 
 import java.util.Date;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import com.sunilos.common.BaseDTO;
 import com.sunilos.common.BaseForm;
+import com.sunilos.dto.UserDTO;
 
 /**
  * Contains User form elements and their declarative input validations.
@@ -14,10 +20,13 @@ import com.sunilos.common.BaseForm;
  */
 public class UserForm extends BaseForm {
 
+	@NotEmpty
 	private String firstName;
 
+	@NotEmpty
 	private String lastName;
 
+	@NotEmpty
 	private String loginId;
 
 	private String password;
@@ -28,6 +37,8 @@ public class UserForm extends BaseForm {
 
 	private String roleName = null;
 
+	@NotNull
+	@Min(1)
 	private Long roleId;
 
 	private String phone;
@@ -151,5 +162,25 @@ public class UserForm extends BaseForm {
 	public void setName(String firstName) {
 		this.firstName = firstName;
 	}
+
+	@Override
+	public BaseDTO getDto() {
+		UserDTO dto =new UserDTO();
+		dto.setId(id);
+		dto.setFirstName(firstName);
+		dto.setLastName(lastName);
+		dto.setEmail(email);
+		dto.setLoginId(loginId);
+		dto.setPassword(password);
+		dto.setRoleId(roleId);
+		dto.setRoleName(roleName);
+		dto.setCreatedBy(alternateMobile);
+		dto.setDob(dob);
+		dto.setGender(gender);
+		dto.setStatus(status);
+		return dto;
+	}
+	
+	
 
 }

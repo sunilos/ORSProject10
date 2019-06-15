@@ -1,0 +1,55 @@
+<div>
+  <H1>User List</H1>
+
+  <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
+  <div *ngIf="form.error == false" style="color:green;"> {{form.message}}</div>
+
+  <form>
+
+    firstName: <input name="firstName" type="text" [(ngModel)]="form.searchParams.firstName">
+
+    Last Name: <input name="lastName" type="text" [(ngModel)]="form.searchParams.lastName">
+
+    loginId: <input name="loginId" type="text" [(ngModel)]="form.searchParams.loginId">
+
+    Status: <input name="status" type="text" [(ngModel)]="form.searchParams.status">
+
+    Active: <input name="status" type="text" [(ngModel)]="form.searchParams.status">
+
+    <button (click)="submit()"> Search </button>
+
+    <hr>
+
+    <button (click)="previous()" [disabled]="form.pageNo == 0"  > Previous </button> 
+    <button (click)="next()"> Next </button>
+    <button (click)="forward('/user')"> New </button>
+
+  </form>
+
+  <table border="1" width='100%'>
+    <tr>
+      <th>ID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Login</th>
+      <th>Email</th>
+      <th>Status</th>
+      <th>Role</th>
+      <th>Phone</th>
+      <th>DOB</th>
+    </tr>
+    <tr *ngFor="let m of form.list ">
+      <td> {{ m.id }} </td>
+      <td> {{ m.firstName }} </td>
+      <td> {{ m.lastName }} </td>
+      <td> {{ m.loginId }} </td>
+      <td> {{ m.email }} </td>
+      <td> {{ m.status }} </td>
+      <td> {{ m.roleName }} </td>
+      <td> {{ m.phone }} </td>
+      <td> {{ m.dob }} </td>
+      <td> <button (click)="forward( '/user/' +  m.id)">Edit</button> </td>
+      <td> <button (click)="delete(m.id)">Delete</button> </td>
+    </tr>
+  </table>
+</div>

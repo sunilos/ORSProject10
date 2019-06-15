@@ -1,0 +1,49 @@
+<div>
+    <H1>Message List</H1>
+  
+    <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
+    <div *ngIf="form.error == false" style="color:green;"> {{form.message}}</div>
+  
+    <form>
+  
+      Code: <input name="code" type="text" [(ngModel)]="form.searchParams.code">
+  
+      Subject: <input name="subject" type="text" [(ngModel)]="form.searchParams.subject">
+  
+      Body: <input name="body" type="text" [(ngModel)]="form.searchParams.body">
+  
+      Status: <input name="status" type="text" [(ngModel)]="form.searchParams.status">
+  
+      Html: <input name="html" type="text" [(ngModel)]="form.searchParams.html">
+  
+      <button (click)="submit()"> Search </button>
+  
+      <hr>
+  
+      <button (click)="previous()" [disabled]="form.pageNo == 0"  > Previous </button> 
+      <button (click)="next()"> Next </button>
+      <button (click)="forward('/student')"> New </button>
+  
+    </form>
+  
+    <table border="1" width='100%'>
+      <tr>
+        <th>ID</th>
+        <th>Code</th>
+        <th>Subject</th>
+        <th>Body</th>
+        <th>Type</th>
+        <th>Status</th>
+      </tr>
+      <tr *ngFor="let m of form.list ">
+        <td> {{ m.id }} </td>
+        <td> {{ m.code }} </td>
+        <td> {{ m.subject }} </td>
+        <td> {{ m.body }} </td>
+        <td> {{ m.type }} </td>
+        <td> {{ m.status }} </td>
+        <td> <button (click)="forward( '/message/' +  m.id)">Edit</button> </td>
+        <td> <button (click)="delete(m.id)">Delete</button> </td>
+      </tr>
+    </table>
+  </div>

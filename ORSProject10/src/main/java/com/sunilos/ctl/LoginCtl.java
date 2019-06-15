@@ -1,8 +1,12 @@
 package com.sunilos.ctl;
 
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.bcel.classfile.EnumElementValue;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,8 +78,12 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 			UserContext context = new UserContext(dto);
 			session.setAttribute("userContext", context);
 			res.setSuccess(true);
-			res.addMessage("Login is successful");
+			res.addData(dto);
+			res.addResult("jsessionid", session.getId());
+			System.out.println("jsessionid " + session.getId());
 		}
+		
+		System.out.println("Login Uer context : " + session.getAttribute("userContext")) ;
 		return res;
 
 	}
@@ -86,7 +94,17 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 	 * @return
 	 */
 	@GetMapping("fp/{login}")
-	public ORSResponse forgotPassword(@PathVariable String login) {
+	public ORSResponse forgotPassword(@PathVariable String login, HttpServletRequest request) {
+		
+		
+		Enumeration<String> e =  request.getHeaderNames();
+		String key = null;
+		while ( e.hasMoreElements() ){
+			key = e.nextElement();
+			System.out.println(key + " = " + request.getHeader(key));
+		}
+		
+		
 		ORSResponse res = new ORSResponse(true);
 		UserDTO dto = this.baseService.forgotPassword(login);
 		if (dto == null) {
@@ -115,22 +133,24 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 			return res;
 		}
 
-		UserDTO dto = baseService.authenticate(form.getLogin(), form.getPassword());
+		UserDTO dto = baseService.findByLoginId(form.getLogin(), userContext);
 
 		if (dto != null) {
 			res.setSuccess(false);
 			res.addMessage("Login Id already exists");
 			return res;
 		}
-
+		
 		dto = new UserDTO();
 		dto.setFirstName(form.getFirstName());
 		dto.setLastName(form.getLastName());
 		dto.setLoginId(form.getLogin());
 		dto.setGender(form.getGender());
 		dto.setDob(form.getDob());
+		dto.setPhone(form.getMobileNo());
+		
 
-		baseService.register(dto, userContext);
+		baseService.register(dto);
 
 		res.setSuccess(true);
 		res.addMessage("User has been registered");

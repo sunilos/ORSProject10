@@ -84,4 +84,15 @@ public class CollegeForm extends BaseForm {
 		this.message = message;
 	}
 
+	@Override
+	public BaseDTO getDto() {
+		CollegeDTO dto = new CollegeDTO();
+		dto.setAddress(address);
+		dto.setCity(city);
+		dto.setName(name);
+		dto.setState(state);
+		dto.setPhoneNo(phoneNo);
+		return dto;
+	}
+
 }

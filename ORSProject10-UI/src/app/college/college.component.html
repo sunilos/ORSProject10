@@ -1,0 +1,28 @@
+<div>
+  <H1>College</H1>
+
+  <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
+  <div *ngIf="!form.error" style="color:green;"> {{form.message}}</div>
+
+  <form>
+
+    Name: * <input name="name" type="text" [(ngModel)]="form.data.name">
+    <span style="color: red"> {{form.inputerror.name}} </span> <br>
+
+    Address: * <input name="address" type="text" [(ngModel)]="form.data.address">
+    <span style="color: red"> {{form.inputerror.address}} </span> <br>
+
+    City: * <input name="city" type="text" [(ngModel)]="form.data.city">
+    <span style="color: red"> {{form.inputerror.city}} </span> <br>
+
+    State: * <input name="state" type="text" [(ngModel)]="form.data.state">
+    <span style="color: red"> {{form.inputerror.state}} </span> <br>
+
+    Phone: * <input name="phoneNo" type="text" [(ngModel)]="form.data.phoneNo">
+    <span style="color: rgb(53, 51, 51)"> {{form.inputerror.phoneNo}} </span> <br>
+
+    <button (click)="submit()" [disabled]="!validate()">Save</button>
+    <button (click)="forward('/collegelist')" >List</button>
+  
+  </form>
+</div>

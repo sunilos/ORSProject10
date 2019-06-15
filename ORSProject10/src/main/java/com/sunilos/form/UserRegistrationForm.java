@@ -39,7 +39,7 @@ public class UserRegistrationForm {
 	/**
 	 * Gender of User
 	 */
-	@NotEmpty
+	//@NotEmpty
 	private String gender;
 
 	public String getFirstName() {

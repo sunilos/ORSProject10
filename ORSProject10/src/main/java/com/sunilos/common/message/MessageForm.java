@@ -29,7 +29,7 @@ public class MessageForm extends BaseForm {
 
 	private String status = null;
 
-	public String html = "Y";
+	public String html = null ;
 
 	public String getSubject() {
 		return subject;

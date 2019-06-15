@@ -88,7 +88,7 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 		// Create criteria
 		CriteriaQuery<T> cq = builder.createQuery(getDTOClass());
 
-		//Columns information
+		// Columns information
 		Root<T> qRoot = cq.from(getDTOClass());
 
 		// Column of query
@@ -127,9 +127,11 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 	public List search(T dto, int pageNo, int pageSize, UserContext userContext) {
 
 		TypedQuery<T> query = createCriteria(dto, userContext);
-
+		
+		System.out.println(" PAGE ->>>>>>>>>>>>>>>>" + pageNo + " --- " + pageSize);
 		if (pageSize > 0) {
-			query.setFirstResult(pageNo);
+			
+			query.setFirstResult(pageNo * pageSize);
 			query.setMaxResults(pageSize);
 		}
 
@@ -169,11 +171,20 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 		dto.setOrgId(userContext.getOrgId());
 		dto.setOrgName(userContext.getOrgName());
 
-		// Session session = entityManager.unwrap(Session.class);
-		// session.save(dto);
+		populate(dto,userContext);
+
 		entityManager.persist(dto);
 
 		return dto.getId();
+
+	}
+
+	/**
+	 * Populate redundant values into dto. Overridden by chiled classes.
+	 * 
+	 * @param dto
+	 */
+	protected void populate(T dto, UserContext userContext) {
 
 	}
 
@@ -182,8 +193,12 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 	 */
 	public void update(T dto, UserContext userContext) {
 		checkDuplicate(dto, userContext);
+
 		dto.setModifiedBy(userContext.getLoginId());
 		dto.setModifiedDatetime(new Timestamp(new Date().getTime()));
+
+		populate(dto, userContext);
+
 		entityManager.merge(dto);
 	}
 
@@ -194,6 +209,9 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 	 */
 	private void checkDuplicate(T dto, UserContext userContext) {
 		LinkedHashMap<String, Object> uniqueKeys = dto.uniqueKeys();
+		if (uniqueKeys == null) {
+			return;
+		}
 		uniqueKeys.forEach((key, value) -> {
 			T dtoExist = findByUniqueKey(key, value, userContext);
 			if (dtoExist != null && dto.getId() != dtoExist.getId()) {

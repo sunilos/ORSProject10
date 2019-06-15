@@ -1,0 +1,31 @@
+<div>
+  <H1>Message vv {{form.dada}}</H1>
+
+  <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
+  <div *ngIf="form.error == false" style="color:green;"> {{form.message}}</div>
+
+  <form>
+
+    Type: * <input name="type" type="text" [(ngModel)]="form.data.type">
+    <span style="color: red"> {{form.inputerror.type}} </span> <br>
+
+    Code: * <input name="code" type="text" [(ngModel)]="form.data.code">
+    <span style="color: red"> {{form.inputerror.code}} </span> <br>
+
+    Subject: * <input name="subject" type="text" [(ngModel)]="form.data.subject">
+    <span style="color: red"> {{form.inputerror.subject}} </span> <br>
+
+    Body: * <input name="body" type="text" [(ngModel)]="form.data.body">
+    <span style="color: red"> {{form.inputerror.login}} </span> <br>
+
+    Status: * <input name="status" type="text" [(ngModel)]="form.data.status">
+    <span style="color: rgb(53, 51, 51)"> {{form.inputerror.status}} </span> <br>
+
+    Html: * <input name="html" type="text" [(ngModel)]="form.data.html">
+    <span style="color: rgb(53, 51, 51)"> {{form.inputerror.html}} </span> <br>
+
+    <button (click)="submit()" [disabled]="!validate()">Save</button>
+    <button (click)="forward('/messagelist')" >List</button>
+
+  </form>
+</div>
