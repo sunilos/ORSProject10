@@ -1,51 +1,89 @@
-  <div>
-      <H1>Student List</H1>
-    
-      <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
-      <div *ngIf="form.error == false" style="color:green;"> {{form.message}}</div>
-    
-      <form>
-    
-        Type
-     
-        College : <input name="code" type="text" [(ngModel)]="form.searchParams.collegeId">
-    
-        First Name: <input name="firstName" type="text" [(ngModel)]="form.searchParams.firstName">
-    
-        Last Name: <input name="lastName" type="text" [(ngModel)]="form.searchParams.lastName">
-    
-        Email: <input name="email" type="text" [(ngModel)]="form.searchParams.email">
-    
-        Mobile: <input name="mobileNo" type="text" [(ngModel)]="form.searchParams.mobileNo">
-    
-        <button (click)="submit()"> Search </button>
-    
-        <hr>
-    
-        <button (click)="previous()" [disabled]="form.pageNo == 0"  > Previous </button> 
-        <button (click)="next()"> Next </button>
-        <button (click)="forward('/student')"> New </button>
-    
-      </form>
-    
-      <table border="1" width='100%'>
-        <tr>
-          <th>ID</th>
-          <th>College</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Mobile</th>
-          <th>Email</th>
-        </tr>
-        <tr *ngFor="let m of form.list ">
-          <td> {{ m.id }} </td>
-          <td> {{ m.collegeId }} </td>
-          <td> {{ m.firstName }} </td>
-          <td> {{ m.lastName }} </td>
-          <td> {{ m.mobileNo }} </td>
-          <td> {{ m.email }} </td>
-          <td> <button (click)="forward( '/student/' +  m.id)">Edit</button> </td>
-          <td> <button (click)="delete(m.id)">Delete</button> </td>
-        </tr>
-      </table>
+<div class="content-wrapper">
+  <div class="container-fluid">
+
+    <div class="panel panel-primary">
+      <div class="panel-heading" style="height: 50px;">
+        <div class="col-sm-6 p-1">
+          <h4>Student List</h4>
+        </div>
+      </div>
+
+      <div class="row p-1">
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.collegeId" placeholder="Search College Type">
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.firstName" placeholder="Search First Name">
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.lastName" placeholder="Search Last Name">
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.email" placeholder="Search Email">
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.mobileNo" placeholder="Search Mobile Number">
+        </div>
+        <div class="col-sm-1">
+          <button (click)="submit()" class="btn btn-primary">
+            Search</button>
+        </div>
+      </div>
+
+      <div class="row p-1">
+
+        <div class="col-lg-1">
+          <button (click)="previous()" [disabled]="form.pageNo == 0" class="btn btn-info"> Previous </button>
+        </div>
+        <div class="col-lg-1">
+          <button (click)="next()" class="btn btn-info"> Next </button>
+        </div>
+        <div class="col-lg-2">
+          <button (click)="forward('/student')" type="button" class="btn btn-success">Add Student
+          </button>
+        </div>
+      </div>
+
+      <div class="col-sm-12" *ngIf="form.error" class="alert alert-danger"> {{form.message}}</div>
+      <div class="col-sm-12" *ngIf="form.error == false && form.message != null" class="alert alert-success"> {{form.message}}</div>
+
+      <div class="p-1">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-light text-uppercase">
+              <tr>
+                <th>S.No</th>
+                <th>College</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>#</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let m of form.list; let i = index">
+                <td> {{(form.pageNo*5)+i+ 1}} </td>
+                <td> {{ m.collegeId }} </td>
+                <td> {{ m.firstName }} </td>
+                <td> {{ m.lastName }} </td>
+                <td> {{ m.mobileNo }} </td>
+                <td> {{ m.email }} </td>
+                <td>
+                  <a (click)="forward( '/student/' +  m.id)" style="cursor: pointer;">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  /
+                  <a (click)="delete(m.id)" style="cursor: pointer;">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
+  </div>
+</div>

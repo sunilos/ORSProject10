@@ -1,39 +1,78 @@
-<div>
-  <H1>Message List</H1>
+<div class="content-wrapper">
+  <div class="container-fluid">
 
+    <div class="panel panel-primary">
+      <div class="panel-heading" style="height: 50px;">
+        <div class="col-sm-6 p-1">
+          <h4>Marksheet List</h4>
+        </div>
+      </div>
 
-  <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
-  <div *ngIf="form.error == false" style="color:green;"> {{form.message}}</div>
+      <div class="row p-1">
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.name" placeholder="Search Name">
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.rollNo" placeholder="Search Roll No">
+        </div>
 
-  <form>
+        <div class="col-sm-1">
+          <button (click)="submit()" class="btn btn-primary">
+            Search</button>
+        </div>
+        <div class="col-lg-2">
+          <button (click)="forward('/marksheet')" type="button" class="btn btn-success">Add Marksheet
+          </button>
+        </div>
+      </div>
 
-    Name <input name="name" type="text" [(ngModel)]="form.searchParams.name">
+      <div class="col-sm-12" *ngIf="form.error" class="alert alert-danger"> {{form.message}}</div>
+      <div class="col-sm-12" *ngIf="form.error == false && form.message != null" class="alert alert-success"> {{form.message}}</div>
 
-    RollNO <input name="rollNo" type="text" [(ngModel)]="form.searchParams.rollNo">
+      <div class="p-1">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-light text-uppercase">
+              <tr>
+                <th>ID</th>
+                <th>RollNO</th>
+                <th>Name</th>
+                <th>Physics</th>
+                <th>Chemistry</th>
+                <th>Maths</th>
+                <th>#</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let m of form.list; let i = index">
+                <td> {{(form.pageNo*5)+i+ 1}} </td>
+                <td> {{ m.rollNo }} </td>
+                <td> {{ m.name }} </td>
+                <td> {{ m.physics }} </td>
+                <td> {{ m.chemistry }} </td>
+                <td> {{ m.maths }} </td>
+                <td>
+                  <a (click)="forward( '/markseet/' +  m.id)" style="cursor: pointer;">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  /
+                  <a (click)="delete(m.id)" style="cursor: pointer;">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+                <!-- <td>
+                    <button (click)="forward( '/college/' +  m.id)">Edit</button>
+                  </td>
+                  <td>
+                    <button (click)="delete(m.id)">Delete</button>
+                  </td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-    <button (click)="submit()"> Search </button>
-    <button (click)="forward('/marksheet')"> New </button>    
+    </div>
 
-  </form>
-
-  <table border="1" width='100%'>
-    <tr>
-      <th>ID</th>
-      <th>RollNO</th>
-      <th>Name</th>
-      <th>Physics</th>
-      <th>Chemistry</th>
-      <th>Maths</th>
-    </tr>
-    <tr *ngFor="let m of form.list ">
-      <td> {{ m.id }} </td>
-      <td> {{ m.rollNo }} </td>
-      <td> {{ m.name }} </td>
-      <td> {{ m.physics }} </td>
-      <td> {{ m.chemistry }} </td>
-      <td> {{ m.maths }} </td>
-      <td> <button (click)="forward( '/markseet/' +  m.id)">Edit</button> </td>
-      <td> <button (click)="delete(m.id)">Delete</button> </td>
-    </tr>
-  </table>
+  </div>
 </div>

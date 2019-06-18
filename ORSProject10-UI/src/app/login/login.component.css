@@ -1,0 +1,17 @@
+.alertRedColor {
+    color: red;
+}
+
+
+.required-field::after { 		
+  content: "*";		
+  color: red;		
+   }	
+
+   .successColor{
+    color: green;
+   }
+
+   .btn-space {
+    margin-right: 5px;
+}

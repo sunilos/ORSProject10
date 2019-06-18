@@ -15,4 +15,6 @@ export class StudentListComponent extends BaseListCtl {
     super(locator.endpoints.STUDENT, locator, route);
   }
 
+  
+
 }

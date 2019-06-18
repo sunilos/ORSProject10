@@ -27,6 +27,7 @@ import { StudentListComponent } from './student/student-list.component';
 import { UserComponent } from './user/user.component';
 import { PageNotFoundComponent } from './page-not-found.component';
 import { UserListComponent } from './user/user-list.component';
+import { TopNavComponent } from './top-nav/top-nav.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { UserListComponent } from './user/user-list.component';
     MessageListComponent,
     UserComponent,
     UserListComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    TopNavComponent
   ],
   imports: [
     BrowserModule,

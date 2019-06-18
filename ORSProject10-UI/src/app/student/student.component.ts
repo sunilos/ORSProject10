@@ -31,4 +31,6 @@ export class StudentComponent extends BaseCtl {
     form.lastName = data.lastName;
     form.mobileNo = data.mobileNo;
   }
+
+  
 }

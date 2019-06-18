@@ -1,49 +1,88 @@
-<div>
-    <H1>Message List</H1>
-  
-    <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
-    <div *ngIf="form.error == false" style="color:green;"> {{form.message}}</div>
-  
-    <form>
-  
-      Code: <input name="code" type="text" [(ngModel)]="form.searchParams.code">
-  
-      Subject: <input name="subject" type="text" [(ngModel)]="form.searchParams.subject">
-  
-      Body: <input name="body" type="text" [(ngModel)]="form.searchParams.body">
-  
-      Status: <input name="status" type="text" [(ngModel)]="form.searchParams.status">
-  
-      Html: <input name="html" type="text" [(ngModel)]="form.searchParams.html">
-  
-      <button (click)="submit()"> Search </button>
-  
-      <hr>
-  
-      <button (click)="previous()" [disabled]="form.pageNo == 0"  > Previous </button> 
-      <button (click)="next()"> Next </button>
-      <button (click)="forward('/student')"> New </button>
-  
-    </form>
-  
-    <table border="1" width='100%'>
-      <tr>
-        <th>ID</th>
-        <th>Code</th>
-        <th>Subject</th>
-        <th>Body</th>
-        <th>Type</th>
-        <th>Status</th>
-      </tr>
-      <tr *ngFor="let m of form.list ">
-        <td> {{ m.id }} </td>
-        <td> {{ m.code }} </td>
-        <td> {{ m.subject }} </td>
-        <td> {{ m.body }} </td>
-        <td> {{ m.type }} </td>
-        <td> {{ m.status }} </td>
-        <td> <button (click)="forward( '/message/' +  m.id)">Edit</button> </td>
-        <td> <button (click)="delete(m.id)">Delete</button> </td>
-      </tr>
-    </table>
+<div class="content-wrapper">
+  <div class="container-fluid">
+
+    <div class="panel panel-primary">
+      <div class="panel-heading" style="height: 50px;">
+        <div class="col-sm-6 p-1">
+          <h4>Message List</h4>
+        </div>
+      </div>
+
+      <div class="row p-1">
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.code" placeholder="Search Code">
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.subject" placeholder="Search Subject">
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.body" placeholder="Search Body">
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.status" placeholder="Search Status">
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" [(ngModel)]="form.searchParams.html" placeholder="Search Html">
+        </div>
+        <div class="col-sm-1">
+          <button (click)="submit()" class="btn btn-primary">
+            Search</button>
+        </div>
+      </div>
+
+      <div class="row p-1">
+        <div class="col-lg-1">
+          <button (click)="previous()" [disabled]="form.pageNo == 0" class="btn btn-info"> Previous </button>
+        </div>
+        <div class="col-lg-1">
+          <button (click)="next()" class="btn btn-info"> Next </button>
+        </div>
+        <div class="col-lg-2">
+          <button (click)="forward('/message')" type="button" class="btn btn-success">Add Message
+          </button>
+        </div>
+      </div>
+
+      <div class="col-sm-12" *ngIf="form.error" class="alert alert-danger"> {{form.message}}</div>
+      <div class="col-sm-12" *ngIf="form.error == false && form.message != null" class="alert alert-success"> {{form.message}}</div>
+
+      <div class="p-1">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-light text-uppercase">
+              <tr>
+                <th>S.No</th>
+                <th>Code</th>
+                <th>Subject</th>
+                <th>Body</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>#</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let m of form.list; let i = index">
+                <td> {{(form.pageNo*5)+i+ 1}} </td>
+                <td> {{ m.code }} </td>
+                <td> {{ m.subject }} </td>
+                <td> {{ m.body }} </td>
+                <td> {{ m.type }} </td>
+                <td> {{ m.status }} </td>
+                <td>
+                  <a (click)="forward( '/message/' +  m.id)" style="cursor: pointer;">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  /
+                  <a (click)="delete(m.id)" style="cursor: pointer;">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
   </div>
+</div>

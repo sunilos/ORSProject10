@@ -28,7 +28,7 @@ export class BaseCtl implements OnInit {
    */
   public form = {
     error: false, //error 
-    message: null, //error or sucess message
+    message: null, //error or success message
     preload: null, // preload data
     data: { id: null }, //form data
     inputerror: {}, // form input error messages
@@ -109,10 +109,11 @@ export class BaseCtl implements OnInit {
         _self.form.list = res.result.data;
         if(_self.form.list.length == 0){
           _self.form.message = "No record found";
+          _self.form.error = true;
         }
         console.log("List Size",_self.form.list.length );
       }else{
-        _self.form.error =true;
+        _self.form.error = false;
         _self.form.message = res.result.message;
       }
       console.log('FORM', _self.form);
