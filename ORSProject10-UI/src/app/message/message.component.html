@@ -1,31 +1,85 @@
-<div>
-  <H1>Message vv {{form.dada}}</H1>
+<div class="content-wrapper">
+  <div class="container-fluid">
 
-  <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
-  <div *ngIf="form.error == false" style="color:green;"> {{form.message}}</div>
+    <div class="panel panel-default">
+      <div class="panel-heading" style="height: 50px;">
+        <div class="col-sm-6 p-1">
+          <h4>Message List</h4>
+        </div>
+      </div>
 
-  <form>
+      <div class="col-sm-12" *ngIf="form.error" class="alert alert-danger"> {{form.message}}</div>
+      <div class="col-sm-12" *ngIf="!form.error && form.message != null" class="alert alert-success"> {{form.message}}</div>
 
-    Type: * <input name="type" type="text" [(ngModel)]="form.data.type">
-    <span style="color: red"> {{form.inputerror.type}} </span> <br>
+      <form>
+        <div class="form-group row">
+          <label for="default" class="col-sm-1 control-label ">Type:
+            <span class="required-field"></span>
+          </label>
+          <div class="col-sm-3">
+            <input type="text" name="type" [(ngModel)]="form.data.type" class="form-control" placeholder="Enter Message Type">
+            <span class="alertRedColor"> {{form.inputerror.type}} </span>
+          </div>
+        </div>
 
-    Code: * <input name="code" type="text" [(ngModel)]="form.data.code">
-    <span style="color: red"> {{form.inputerror.code}} </span> <br>
+        <div class="form-group row">
+          <label for="default" class="col-sm-1 control-label ">Code:
+            <span class="required-field"></span>
+          </label>
+          <div class="col-sm-3">
+            <input type="text" name="code" [(ngModel)]="form.data.code" class="form-control" placeholder="Enter Message Code">
+            <span class="alertRedColor">{{form.inputerror.code}}</span>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="default" class="col-sm-1 control-label ">Subject:
+            <span class="required-field"></span>
+          </label>
+          <div class="col-sm-3">
+            <input type="text" name="subject" [(ngModel)]="form.data.subject" class="form-control" placeholder="Enter Message Subject">
+            <span class="alertRedColor"> {{form.inputerror.subject}} </span>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="default" class="col-sm-1 control-label ">Body:
+            <span class="required-field"></span>
+          </label>
+          <div class="col-sm-3">
+            <input type="text" name="body" [(ngModel)]="form.data.body" class="form-control" placeholder="Enter Message Body">
+            <span class="alertRedColor"> {{form.inputerror.body}} </span>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="default" class="col-sm-1 control-label ">Status:
+          </label>
+          <div class="col-sm-3">
+            <input type="text" name="status" [(ngModel)]="form.data.status" class="form-control" placeholder="Enter Message Status">
+            <span class="alertRedColor"> {{form.inputerror.status}} </span>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="default" class="col-sm-1 control-label ">HTML:
+          </label>
+          <div class="col-sm-3">
+            <input type="text" name="html" [(ngModel)]="form.data.html" class="form-control" placeholder="Enter Message HTML">
+            <span class="alertRedColor"> {{form.inputerror.html}} </span>
+          </div>
+        </div>
 
-    Subject: * <input name="subject" type="text" [(ngModel)]="form.data.subject">
-    <span style="color: red"> {{form.inputerror.subject}} </span> <br>
+        <div class="form-group row">
+          <div class="col-sm-1">
+          </div>
+          <div class="col-sm-1">
+            <button (click)="submit()" [disabled]="!validate()" class="btn btn-success mr-2">
+              Save</button>
+          </div>
+          <div class="col-sm-1">
+            <button (click)="forward('/messagelist')" type="button" class="btn btn-primary mr-1">List
+            </button>
+          </div>
+        </div>
+      </form>
 
-    Body: * <input name="body" type="text" [(ngModel)]="form.data.body">
-    <span style="color: red"> {{form.inputerror.login}} </span> <br>
-
-    Status: * <input name="status" type="text" [(ngModel)]="form.data.status">
-    <span style="color: rgb(53, 51, 51)"> {{form.inputerror.status}} </span> <br>
-
-    Html: * <input name="html" type="text" [(ngModel)]="form.data.html">
-    <span style="color: rgb(53, 51, 51)"> {{form.inputerror.html}} </span> <br>
-
-    <button (click)="submit()" [disabled]="!validate()">Save</button>
-    <button (click)="forward('/messagelist')" >List</button>
-
-  </form>
+    </div>
+  </div>
 </div>

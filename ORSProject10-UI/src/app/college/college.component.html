@@ -17,7 +17,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #name='ngModel' name="name" [(ngModel)]="form.data.name" class="form-control" id="name" placeholder="Enter Name">
+            <input type="text" name="name" [(ngModel)]="form.data.name" class="form-control" placeholder="Enter Name">
             <span class="alertRedColor"> {{form.inputerror.name}} </span>
           </div>
         </div>
@@ -26,7 +26,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #addr='ngModel' name="addr" [(ngModel)]="form.data.address" class="form-control" id="addr" placeholder="Enter Address">
+            <input type="text" name="addr" [(ngModel)]="form.data.address" class="form-control" placeholder="Enter Address">
             <span class="alertRedColor"> {{form.inputerror.address}} </span>
           </div>
         </div>
@@ -35,7 +35,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #city='ngModel' name="city" [(ngModel)]="form.data.city" class="form-control" id="city" placeholder="Enter City">
+            <input type="text" name="city" [(ngModel)]="form.data.city" class="form-control" placeholder="Enter City">
             <span class="alertRedColor"> {{form.inputerror.city}} </span>
           </div>
         </div>
@@ -44,7 +44,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #state='ngModel' name="state" [(ngModel)]="form.data.state" class="form-control" id="state" placeholder="Enter State">
+            <input type="text" name="state" [(ngModel)]="form.data.state" class="form-control" placeholder="Enter State">
             <span class="alertRedColor"> {{form.inputerror.state}} </span>
           </div>
         </div>
@@ -53,12 +53,13 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #phnNo='ngModel' name="phnNo" [(ngModel)]="form.data.phoneNo" class="form-control" id="phnNo" placeholder="Enter Phone No.">
+            <input type="text" name="phnNo" [(ngModel)]="form.data.phoneNo" class="form-control" placeholder="Enter Phone No.">
             <span class="alertRedColor"> {{form.inputerror.phoneNo}} </span>
           </div>
         </div>
 
         <div class="form-group row">
+          <div class="col-sm-1"></div>
           <div class="col-sm-1">
             <button (click)="submit()" [disabled]="!validate()" class="btn btn-success mr-2">
               Save</button>
@@ -73,31 +74,3 @@
     </div>
   </div>
 </div>
-
-
-
-<!-- <div>
-  <H1>College</H1>
-  <div *ngIf="form.error" style="color:red;"> {{form.message}}</div>
-  <div *ngIf="!form.error" style="color:green;"> {{form.message}}</div>
-  <form>
-    Name: *
-    <input name="name" type="text" [(ngModel)]="form.data.name">
-    <span style="color: red"> {{form.inputerror.name}} </span>
-    <br> Address: *
-    <input name="address" type="text" [(ngModel)]="form.data.address">
-    <span style="color: red"> {{form.inputerror.address}} </span>
-    <br> City: *
-    <input name="city" type="text" [(ngModel)]="form.data.city">
-    <span style="color: red"> {{form.inputerror.city}} </span>
-    <br> State: *
-    <input name="state" type="text" [(ngModel)]="form.data.state">
-    <span style="color: red"> {{form.inputerror.state}} </span>
-    <br> Phone: *
-    <input name="phoneNo" type="text" [(ngModel)]="form.data.phoneNo">
-    <span style="color: rgb(53, 51, 51)"> {{form.inputerror.phoneNo}} </span>
-    <br>
-    <button (click)="submit()" [disabled]="!validate()">Save</button>
-    <button (click)="forward('/collegelist')">List</button>
-  </form>
-</div> -->

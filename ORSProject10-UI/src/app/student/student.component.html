@@ -17,7 +17,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <select class="form-control" #collegeId='ngModel' name="collegeId" [(ngModel)]="form.data.collegeId" id="collegeId" style="cursor: pointer;">
+            <select class="form-control" name="collegeId" [(ngModel)]="form.data.collegeId" style="cursor: pointer;">
               <option *ngFor="let obj of form.preload.collegeList" [value]="obj.id">{{obj.name}}</option>
             </select>
             <span class="alertRedColor"> {{form.inputerror.collegeId}} </span>
@@ -29,7 +29,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #firstN='ngModel' name="firstN" [(ngModel)]="form.data.firstName" class="form-control" id="firstN" placeholder="Enter First Name">
+            <input type="text" name="firstN" [(ngModel)]="form.data.firstName" class="form-control" placeholder="Enter First Name">
             <span class="alertRedColor"> {{form.inputerror.firstName}} </span>
           </div>
         </div>
@@ -39,7 +39,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #lastN='ngModel' name="lastN" [(ngModel)]="form.data.lastName" class="form-control" id="lastN" placeholder="Enter Last Name">
+            <input type="text" name="lastN" [(ngModel)]="form.data.lastName" class="form-control" placeholder="Enter Last Name">
             <span class="alertRedColor">{{form.inputerror.lastName}}</span>
           </div>
         </div>
@@ -48,7 +48,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #email='ngModel' name="email" [(ngModel)]="form.data.email" class="form-control" id="email" placeholder="Enter Email Id">
+            <input type="text" name="email" [(ngModel)]="form.data.email" class="form-control" placeholder="Enter Email Id">
             <span class="alertRedColor"> {{form.inputerror.email}} </span>
           </div>
         </div>
@@ -57,13 +57,13 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #mobileNo='ngModel' name="mobileNo" [(ngModel)]="form.data.mobileNo" class="form-control" id="mobileNo"
-              placeholder="Enter Mobile Number">
+            <input type="text" name="mobileNo" [(ngModel)]="form.data.mobileNo" class="form-control" placeholder="Enter Mobile Number">
             <span class="alertRedColor"> {{form.inputerror.mobileNo}} </span>
           </div>
         </div>
 
         <div class="form-group row">
+            <div class="col-sm-2"></div>
           <div class="col-sm-1">
             <button (click)="submit()" [disabled]="!validate()" class="btn btn-success mr-2">
               Save</button>

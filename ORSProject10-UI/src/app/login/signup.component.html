@@ -4,7 +4,7 @@
     <div class="panel panel-default">
       <div class="panel-heading" style="height: 50px;">
         <div class="col-sm-6 p-1">
-          <h4>Sign Up</h4>
+          <h4>Sign Up{{form.message}}#{{form.error}}</h4>
         </div>
       </div>
 
@@ -17,7 +17,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #firstN='ngModel' name="firstN" [(ngModel)]="form.firstName" class="form-control" id="firstN" placeholder="Enter First Name">
+            <input type="text" name="firstN" [(ngModel)]="form.firstName" class="form-control" placeholder="Enter First Name">
             <span class="alertRedColor"> {{inputerror.firstName}} </span>
           </div>
         </div>
@@ -27,7 +27,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #lastN='ngModel' name="lastN" [(ngModel)]="form.lastName" class="form-control" id="lastN" placeholder="Enter Last Name">
+            <input type="text" name="lastN" [(ngModel)]="form.lastName" class="form-control" placeholder="Enter Last Name">
             <span class="alertRedColor">{{inputerror.lastName}}</span>
           </div>
         </div>
@@ -36,7 +36,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #email='ngModel' name="email" [(ngModel)]="form.login" class="form-control" id="email" placeholder="Enter Email Id">
+            <input type="text" name="email" [(ngModel)]="form.login" class="form-control" placeholder="Enter Email Id">
             <span class="alertRedColor"> {{inputerror.email}} </span>
           </div>
         </div>
@@ -45,7 +45,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="password" #pwd='ngModel' name="pwd" [(ngModel)]="form.password" class="form-control" id="pwd" placeholder="Enter Password">
+            <input type="password" name="pwd" [(ngModel)]="form.password" class="form-control" placeholder="Enter Password">
             <span class="alertRedColor"> {{inputerror.password}}</span>
           </div>
         </div>
@@ -53,9 +53,12 @@
         <div class="form-group row">
           <div class="col-sm-2">
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-1">
             <button (click)="submit()" [disabled]="!validate()" class="btn btn-success mr-2">
               Save</button>
+          </div>
+          <div class="col-sm-2">
+            <a href="/login">Sign In</a>
           </div>
         </div>
       </form>

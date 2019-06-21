@@ -18,7 +18,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <select class="form-control" #roleId='ngModel' name="roleId" [(ngModel)]="form.data.roleId" id="roleId" style="cursor: pointer;">
+            <select class="form-control" name="roleId" [(ngModel)]="form.data.roleId" style="cursor: pointer;">
               <option *ngFor="let obj of form.preload.roleList" [value]="obj.key">{{obj.value}}</option>
             </select>
           </div>
@@ -29,7 +29,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #fn='ngModel' name="fn" [(ngModel)]="form.data.firstName" class="form-control" id="fn" placeholder="Enter First Name">
+            <input type="text" name="fn" [(ngModel)]="form.data.firstName" class="form-control" placeholder="Enter First Name">
             <span class="alertRedColor"> {{form.inputerror.firstName}} </span>
           </div>
         </div>
@@ -39,7 +39,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #ln='ngModel' name="ln" [(ngModel)]="form.data.lastName" class="form-control" id="ln" placeholder="Enter Last Name">
+            <input type="text" name="ln" [(ngModel)]="form.data.lastName" class="form-control" placeholder="Enter Last Name">
             <span class="alertRedColor"> {{form.inputerror.lastName}} </span>
           </div>
         </div>
@@ -48,7 +48,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #loginId='ngModel' name="loginId" [(ngModel)]="form.data.loginId" class="form-control" id="loginId" placeholder="Enter Login Id">
+            <input type="text" name="loginId" [(ngModel)]="form.data.loginId" class="form-control" placeholder="Enter Login Id">
             <span class="alertRedColor"> {{form.inputerror.state}} </span>
           </div>
         </div>
@@ -57,7 +57,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #pwd='ngModel' name="pwd" [(ngModel)]="form.data.password" class="form-control" id="pwd" placeholder="Enter Password">
+            <input type="text" name="pwd" [(ngModel)]="form.data.password" class="form-control" placeholder="Enter Password">
             <span class="alertRedColor"> {{form.inputerror.phoneNo}} </span>
           </div>
         </div>
@@ -66,7 +66,7 @@
           <label for="default" class="col-sm-2 control-label ">Gender:
           </label>
           <div class="col-sm-3">
-            <select class="form-control" #gender='ngModel' name="gender" [(ngModel)]="form.data.gender" id="gender" style="cursor: pointer;">
+            <select class="form-control" name="gender" [(ngModel)]="form.data.gender" id="gender" style="cursor: pointer;">
               <option [value]="M">Male </option>
               <option [value]="F">Female </option>
             </select>
@@ -77,7 +77,7 @@
           <label for="default" class="col-sm-2 control-label ">Status:
           </label>
           <div class="col-sm-3">
-            <select class="form-control" #status='ngModel' name="status" [(ngModel)]="form.data.status" id="status" style="cursor: pointer;">
+            <select class="form-control" name="status" [(ngModel)]="form.data.status" style="cursor: pointer;">
               <option [value]="Active">Active </option>
               <option [value]="Inactive">Inactive </option>
             </select>
@@ -85,6 +85,7 @@
         </div>
 
         <div class="form-group row">
+          <div class="col-sm-2"></div>
           <div class="col-sm-1">
             <button (click)="submit()" [disabled]="!validate()" class="btn btn-success mr-2">
               Save</button>

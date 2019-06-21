@@ -1,12 +1,48 @@
-<div>
-  <H1>Login</H1>
-  <form #loginForm="ngForm">
-    <span style="color: red"> {{form.message}} </span> <br>
-    User ID: <input name="userId" type="text" [(ngModel)]="form.loginId">
-    <span style="color: red"> {{inputerror.loginId}} </span> <br>
-    Password: <input name="password" type="password" [(ngModel)]="form.password">
-    <span style="color: red"> {{inputerror.password}} </span> <br>
-    <button (click)="signIn()" [disabled]="!validate()"  >   Sign In</button>
-    <a href="/forgotpassword"  >Forgot PAssword</a>
-  </form>
+<div class="content-wrapper">
+  <div class="container-fluid">
+
+    <div class="panel panel-primary ">
+      <div class="panel-heading" style="height: 50px;">
+        <div class="col-sm-6 p-1">
+          <h4>Login</h4>
+        </div>
+      </div>
+
+      <div class="col-sm-12" *ngIf="form.error" class="alert alert-danger"> {{form.message}}</div>
+
+      <form #loginForm="ngForm">
+        <div class="form-group row">
+          <label for="default" class="col-sm-1 control-label ">User ID:
+            <span class="required-field"></span>
+          </label>
+          <div class="col-sm-3">
+            <input type="text" name="loginId" [(ngModel)]="form.loginId" class="form-control" placeholder="Enter Login Id">
+            <span class="alertRedColor">{{inputerror.loginId}}</span>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="default" class="col-sm-1 control-label ">Password:
+            <span class="required-field"></span>
+          </label>
+          <div class="col-sm-3">
+            <input type="text" name="pwd" [(ngModel)]="form.password" class="form-control" placeholder="Enter Password">
+            <span class="alertRedColor">{{inputerror.password}}</span>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-sm-1">
+          </div>
+          <div class="col-sm-1">
+            <button (click)="signIn()" [disabled]="!validate()" class="btn btn-success mr-2">
+              Save</button>
+          </div>
+          <div class="col-sm-2">
+            <a href="/forgotpassword">Forgot Password</a>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
 </div>

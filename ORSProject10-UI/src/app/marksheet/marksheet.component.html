@@ -16,7 +16,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #rollNo='ngModel' name="rollNo" [(ngModel)]="form.data.rollNo" class="form-control" id="rollNo" placeholder="Enter Roll No">
+            <input type="text" name="rollNo" [(ngModel)]="form.data.rollNo" class="form-control" placeholder="Enter Roll No">
             <span class="alertRedColor"> {{form.inputerror.rollNo}} </span>
           </div>
         </div>
@@ -26,7 +26,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <select class="form-control" #stdId='ngModel' name="stdId" [(ngModel)]="form.data.studentId" id="stdId" style="cursor: pointer;">
+            <select class="form-control" name="stdId" [(ngModel)]="form.data.studentId" style="cursor: pointer;">
               <option *ngFor="let obj of form.preload.studentList" [value]="obj.id">{{obj.firstName}}</option>
             </select>
             <span class="alertRedColor"> {{form.inputerror.address}} </span>
@@ -38,7 +38,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #name='ngModel' name="name" [(ngModel)]="form.data.name" class="form-control" id="name" placeholder="Enter Name">
+            <input type="text" name="name" [(ngModel)]="form.data.name" class="form-control" id="name" placeholder="Enter Name">
             <span class="alertRedColor">{{form.inputerror.name}}</span>
           </div>
         </div>
@@ -47,7 +47,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #phy='ngModel' name="phy" [(ngModel)]="form.data.physics" class="form-control" id="phy" placeholder="Enter Physics">
+            <input type="text" name="phy" [(ngModel)]="form.data.physics" class="form-control" placeholder="Enter Physics">
             <span class="alertRedColor"> {{form.inputerror.physics}} </span>
           </div>
         </div>
@@ -56,8 +56,7 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #chemistry='ngModel' name="chemistry" [(ngModel)]="form.data.chemistry" class="form-control" id="chemistry"
-              placeholder="Enter Chemistry">
+            <input type="text" name="chemistry" [(ngModel)]="form.data.chemistry" class="form-control" placeholder="Enter Chemistry">
             <span class="alertRedColor"> {{form.inputerror.chemistry}} </span>
           </div>
         </div>
@@ -66,12 +65,13 @@
             <span class="required-field"></span>
           </label>
           <div class="col-sm-3">
-            <input type="text" #math='ngModel' name="math" [(ngModel)]="form.data.maths" class="form-control" id="math" placeholder="Enter Maths">
+            <input type="text" name="math" [(ngModel)]="form.data.maths" class="form-control" placeholder="Enter Maths">
             <span class="alertRedColor"> {{form.inputerror.maths}} </span>
           </div>
         </div>
 
         <div class="form-group row">
+          <div class="col-sm-1"></div>
           <div class="col-sm-1">
             <button (click)="submit()" [disabled]="!validate()" class="btn btn-success mr-2">
               Save</button>
@@ -81,13 +81,8 @@
             </button>
           </div>
         </div>
-
       </form>
 
-
     </div>
-
-
-
   </div>
 </div>

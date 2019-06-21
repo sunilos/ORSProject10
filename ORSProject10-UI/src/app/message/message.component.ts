@@ -9,7 +9,8 @@ import { BaseCtl } from '../base.component';
 
 @Component({
   selector: 'app-message',
-  templateUrl: './message.component.html'
+  templateUrl: './message.component.html',
+  styleUrls: ['./message.component.css']
 })
 
 export class MessageComponent extends BaseCtl {
@@ -20,7 +21,7 @@ export class MessageComponent extends BaseCtl {
 
   validateForm(form) {
     let flag = true;
-    let validator =this.serviceLocator.dataValidator; 
+    let validator = this.serviceLocator.dataValidator;
     flag = flag && validator.isNotNullObject(form.type);
     flag = flag && validator.isNotNullObject(form.code);
     flag = flag && validator.isNotNullObject(form.subject);

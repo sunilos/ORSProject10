@@ -41,7 +41,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   submit() {
     var _self = this;
-    this.httpService.get(this.endpoint + "/fp/"+ this.form.loginId ,function (res) {
+    this.httpService.get(_self.endpoint + "/fp/"+ this.form.loginId ,function (res) {
 
       console.log('MyResoonse', res);
 
