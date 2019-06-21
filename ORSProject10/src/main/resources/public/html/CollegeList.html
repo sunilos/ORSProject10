@@ -1,0 +1,52 @@
+<!-- Account form displayed in ng-view-->
+<DIV align="center">
+
+	<H1>College List</H1>
+
+	<FORM name="frm" >
+
+		<p style="color: green" ng-bind="form.searchMessage"></p>
+
+		<br> College Name : <INPUT TYPE="text"
+			ng-model="form.searchParams.name"> &nbsp; Address: <INPUT
+			TYPE="text" ng-model="form.searchParams.address">&nbsp;
+		State: <INPUT TYPE="text" ng-model="form.searchParams.phone">&nbsp;
+
+		<button ng-click="search()">Search</button>
+		<br>
+		<td><button ng-click="forward('/college')">New</button></td>
+		<td><button ng-click="previous()">Previous</button></td>
+		<td><button ng-click="next()">Next</button></td>
+
+
+		<table border="1">
+			<tr>
+				<td><input type="checkbox"></td>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Address</th>
+				<th>Phone</th>
+				<th>City</th>
+				<th>State</th>
+			</tr>
+			<tr ng-repeat="d in form.list">
+				<td><input type="checkbox" ng-model="temp[$index]"
+					ng-click1="delete(d.id,temp[$index])"></td>
+				<td>{{$index + 1 + (form.pageNo * form.pageSize)}}</td>
+				<td>{{d.name}}</td>
+				<td>{{d.address}}</td>
+				<td>{{d.phone}}</td>
+				<td>{{d.city}}</td>
+				<td>{{d.state}}</td>
+				<td><button ng-click="forward('/college/' +  d.id)">Edit</button></td>
+			</tr>
+			<tr>
+			</tr>
+
+		</table>
+		{{form}}
+		<hr>
+
+
+	</FORM>
+</DIV>

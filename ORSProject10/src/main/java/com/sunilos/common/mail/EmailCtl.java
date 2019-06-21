@@ -1,5 +1,6 @@
 package com.sunilos.common.mail;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunilos.common.ORSResponse;
@@ -25,7 +27,8 @@ import com.sunilos.common.ORSResponse;
  * @Copyright (c) SunilOS
  *
  */
-@RestController("Email")
+@RestController
+@RequestMapping(value = "Email")
 public class EmailCtl {
 
 	@Autowired

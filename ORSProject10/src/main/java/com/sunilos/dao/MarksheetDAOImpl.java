@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sunilos.common.BaseDAOImpl;
+import com.sunilos.common.UserContext;
 import com.sunilos.dto.MarksheetDTO;
+import com.sunilos.dto.StudentDTO;
 
 @Repository
 public class MarksheetDAOImpl extends BaseDAOImpl<MarksheetDTO> implements MarksheetDAOInt {
@@ -21,7 +23,6 @@ public class MarksheetDAOImpl extends BaseDAOImpl<MarksheetDTO> implements Marks
 
 	@Override
 	public List<MarksheetDTO> getMeritList() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -47,6 +48,16 @@ public class MarksheetDAOImpl extends BaseDAOImpl<MarksheetDTO> implements Marks
 		}
 
 		return whereCondition;
+	}
+
+	@Override
+	protected void populate(MarksheetDTO dto, UserContext userContext) {
+		if (dto.getStudentId() != null) {
+			StudentDTO studentDTO = studentDao.findByPK(dto.getStudentId(), userContext);
+			if (studentDTO != null) {
+				dto.setName(studentDTO.getFirstName() + " " + studentDTO.getLastName());
+			}
+		}
 	}
 
 	@Override

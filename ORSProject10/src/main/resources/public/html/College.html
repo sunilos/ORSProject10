@@ -1,0 +1,41 @@
+<!-- Account form displayed in ng-view-->
+<DIV align="center">
+	<H1>College</H1>
+	<FORM name="frm">
+		<p style="color: green" ng-bind="form.message"></p>
+		<table>
+			<tr>
+				<td><input type="hidden" ng-model="form.id"
+					value="form.data.id"></td>
+			</tr>
+			<tr>
+				<td>College Name</td>
+				<td><INPUT TYPE="text" ng-model="form.data.name" required></td>
+			</tr>
+			<tr>
+				<td>College Address</td>
+				<td><INPUT TYPE="text" ng-model="form.data.address" required></td>
+			</tr>
+			<tr>
+				<td>State</td>
+				<td><INPUT TYPE="text" ng-model="form.data.state" required></td>
+			</tr>
+			<tr>
+				<td>City</td>
+				<td><INPUT TYPE="text" ng-model="form.data.city" required></td>
+			</tr>
+			<tr>
+				<td>Phone Number</td>
+				<td><INPUT TYPE="text" ng-model="form.data.phoneNo" required></td>
+			</tr>
+			<tr>
+				<td>
+					<button ng-click="submit()" ng-disabled="frm.$invalid">Submit</button>
+					<button ng-click="forward('/collegeList')">List</button>
+				</td>
+			</tr>
+		</table>
+		{{form}}
+
+	</FORM>
+</DIV>

@@ -34,35 +34,42 @@ public class FrontCtl extends HandlerInterceptorAdapter {
 
 		if (!path.startsWith("/Auth/")) {
 			if (session.getAttribute("userContext") == null) {
-				throw new RuntimeException("OOPS! Your session has been expired");
-				
+				// throw new RuntimeException("OOPS! Your session has been
+				// expired");
+
 				/*
-				response.setContentType("application/json");
-				response.setStatus(HttpServletResponse.SC_OK);
-
-				//response.setHeader("Access-Control-Allow-Origin", "*");
-				//response.setHeader("Access-Control-Allow-Credentials", "true");
-
-				response.setHeader("Access-Control-Allow-Origin", "*");
-				response.setHeader("Access-Control-Allow-Credentials", "true");
-				response.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-				response.setHeader("Access-Control-Allow-Headers",
-						"set-cookie,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-
-				PrintWriter out = response.getWriter();
-				out.print("{\"success\":\"false\",\"error\":\"OOPS! Your session has been expired\"}");
-				out.close();
-				*/
-				//return false;
+				 * response.setContentType("application/json");
+				 * response.setStatus(HttpServletResponse.SC_OK);
+				 * 
+				 * //response.setHeader("Access-Control-Allow-Origin", "*");
+				 * //response.setHeader("Access-Control-Allow-Credentials",
+				 * "true");
+				 * 
+				 * response.setHeader("Access-Control-Allow-Origin", "*");
+				 * response.setHeader("Access-Control-Allow-Credentials",
+				 * "true"); response.setHeader("Access-Control-Allow-Methods",
+				 * "GET,HEAD,OPTIONS,POST,PUT");
+				 * response.setHeader("Access-Control-Allow-Headers",
+				 * "set-cookie,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+				 * );
+				 * 
+				 * PrintWriter out = response.getWriter(); out.
+				 * print("{\"success\":\"false\",\"error\":\"OOPS! Your session has been expired\"}"
+				 * ); out.close();
+				 */
+				// return false;
 			}
 		}
 		return true;
 	}
-	/*
-	 * 
-	 * @Override public void postHandle(HttpServletRequest request,
-	 * HttpServletResponse response, Object handler, ModelAndView modelAndView)
-	 * throws Exception { //response.setHeader("Access-Control-Allow-Origin",
-	 * "SunilOS"); }
-	 */
+
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+			ModelAndView modelAndView) throws Exception {
+		response.setHeader("Access-Control-Allow-Origin", "SunilOS");
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+	}
+
 }

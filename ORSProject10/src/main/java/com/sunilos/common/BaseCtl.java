@@ -1,5 +1,6 @@
 package com.sunilos.common;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +89,7 @@ public abstract class BaseCtl<F extends BaseForm, T extends BaseDTO, S extends B
 	@GetMapping
 	public ORSResponse get() {
 		ORSResponse res = new ORSResponse(true);
-		res.addData("I am okay");
+		res.addData("I am okay " + this.getClass() + " --" + new Date());
 		return res;
 	}
 

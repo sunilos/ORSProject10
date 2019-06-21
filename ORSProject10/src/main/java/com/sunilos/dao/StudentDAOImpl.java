@@ -7,9 +7,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sunilos.common.BaseDAOImpl;
+import com.sunilos.common.UserContext;
+import com.sunilos.dto.CollegeDTO;
 import com.sunilos.dto.StudentDTO;
 
 @Repository
@@ -50,6 +53,17 @@ public class StudentDAOImpl extends BaseDAOImpl<StudentDTO> implements StudentDA
 	@Override
 	public Class<StudentDTO> getDTOClass() {
 		return StudentDTO.class;
+	}
+
+	@Autowired
+	CollegeDAOInt collegeService = null;
+
+	@Override
+	protected void populate(StudentDTO dto, UserContext userContext) {
+		CollegeDTO collegeDTO = collegeService.findByPK(dto.getCollegeId(), userContext);
+		if (collegeDTO != null) {
+			dto.setCollegeName(collegeDTO.getName());
+		}
 	}
 
 }
