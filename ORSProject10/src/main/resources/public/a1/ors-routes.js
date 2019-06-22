@@ -11,6 +11,19 @@ var routes = function($routeProvider) {
 	}).when("/studentList", {
 		templateUrl : "StudentList.html",
 		controller : 'studentListCtl'
+			
+	}).when("/marksheet", {
+		templateUrl : "Marksheet.html",
+		controller : 'marksheetCtl'
+			
+	}).when("/marksheet/:id", {
+		templateUrl : "Marksheet.html",
+		controller : 'marksheetCtl'
+
+	}).when("/marksheetList", {
+		templateUrl : "MarksheetList.html",
+		controller : 'marksheetListCtl'
+			
 	}).when("/account", {
 		templateUrl : "Account.html",
 		controller : 'accountCtl'

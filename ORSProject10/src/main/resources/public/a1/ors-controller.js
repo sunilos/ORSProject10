@@ -67,6 +67,39 @@ app.controller('studentListCtl', function($scope, $routeParams, ServiceLocator) 
 });
 
 
+/**
+ * Marksheet controller
+ */
+app.controller('marksheetCtl', function($scope, $routeParams, ServiceLocator) {
+
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.MARKSHEET, $scope, $routeParams, ServiceLocator);
+	
+	_self.populateForm  = function(form, data) {
+		console.log('data======',data);
+		form.id = data.id;
+		form.rollNo = data.rollNo;
+		form.name = data.name;
+		form.physics = data.physics;
+		form.chemistry = data.chemistry;
+		form.maths = data.maths;
+		form.studentId = data.studentId;
+		console.log('Populated Form', form, _self.api);
+	}
+	
+	_self.init();
+});
+
+app.controller('marksheetListCtl', function($scope, $routeParams, ServiceLocator) {
+
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.MARKSHEET, $scope, $routeParams, ServiceLocator);
+
+	_self.initList();
+});
+
 
 
 /**

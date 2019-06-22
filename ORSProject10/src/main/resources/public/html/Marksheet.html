@@ -1,0 +1,45 @@
+<!-- Account form displayed in ng-view-->
+<DIV align="center">
+	<H1>Marksheet</H1>
+	<FORM name="frm">
+		<p style="color: green" ng-bind="form.message"></p>
+		<table>
+			<tr>
+				<td><input type="hidden" ng-model="form.id"
+					value="form.data.id"></td>
+			</tr>
+			<tr>
+				<td>Roll No</td>
+				<td><INPUT TYPE="text" ng-model="form.data.rollNo" required></td>
+			</tr>
+			<tr>
+				<td>Student Name</td>
+				<td><select ng-model="form.data.studentId"
+					ng-options="s.id as s.firstName+' '+s.lastName for s in form.preload.studentList">
+						<option>-Select-</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td>Physics</td>
+				<td><INPUT TYPE="number" ng-model="form.data.physics" required></td>
+			</tr>
+			<tr>
+				<td>Chemistry</td>
+				<td><INPUT TYPE="number" ng-model="form.data.chemistry"
+					required></td>
+			</tr>
+			<tr>
+				<td>Maths</td>
+				<td><INPUT TYPE="text" ng-model="form.data.maths" required></td>
+			</tr>
+			<tr>
+				<td>
+					<button ng-click="submit()" ng-disabled="frm.$invalid">Submit</button>
+					<button ng-click="forward('/marksheetList')">List</button>
+				</td>
+			</tr>
+		</table>
+		{{form}}
+
+	</FORM>
+</DIV>

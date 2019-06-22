@@ -6,8 +6,9 @@
 		<table>
 			<tr>
 				<td>College Name</td>
-				<td><select ng-model="form.data.collegeId">
-						<option ng-repeat="c in form.preload.collegeList" value="{{c.id}}">{{c.name}}</option>
+				<td><select ng-model="form.data.collegeId"
+					ng-options="c.id as c.name for c in form.preload.collegeList">
+						<option>-Select-</option>
 				</select></td>
 			</tr>
 			<tr>
@@ -19,17 +20,17 @@
 				<td><INPUT TYPE="text" ng-model="form.data.lastName" required></td>
 			</tr>
 			<tr>
-				<td>Emai</td>
+				<td>Email</td>
 				<td><INPUT TYPE="text" ng-model="form.data.email" required></td>
 			</tr>
 			<tr>
 				<td>Phone Number</td>
-				<td><INPUT TYPE="text" ng-model="form.data.mobile" required></td>
+				<td><INPUT TYPE="text" ng-model="form.data.mobileNo" required></td>
 			</tr>
 			<tr>
 				<td>DOB</td>
 				<td><datepicker date-format="dd-MM-yyyy"> <input
-						style="cursor: pointer" type="text" ng-model="form.data.dob"
+						style="cursor: pointer" ng-model="form.data.dob"
 						class="form-control" placeholder="DD-MM-YYYY" /> </datepicker></td>
 			</tr>
 			<tr>

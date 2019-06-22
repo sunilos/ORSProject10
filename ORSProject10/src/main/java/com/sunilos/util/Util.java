@@ -1,5 +1,6 @@
 package com.sunilos.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -61,4 +62,19 @@ public class Util {
 		return dateString;
 	}
 
+
+	public static Date convertDateFormat(String date) {
+		return convertDateFormat(date, "dd-MM-yyyy");
+	}
+
+	public static Date convertDateFormat(String date, String format) {
+		Date convertedDate = null;
+		if (date != null)
+			try {
+				SimpleDateFormat targetFormat = new SimpleDateFormat(format);
+				convertedDate = targetFormat.parse(date);
+			} catch (ParseException localParseException) {
+			}
+		return convertedDate;
+	}
 }

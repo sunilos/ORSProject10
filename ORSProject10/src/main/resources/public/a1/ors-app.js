@@ -96,7 +96,7 @@ app.service('EndpointService', function() {
 	var self = this;
 	this.COLLEGE = "/College";
 	this.STUDENT = "/Student";
-	this.MARKSHEET = "/Markseet";
+	this.MARKSHEET = "/Marksheet";
 	this.USER = "/User";
 	this.Role = "/Role";
 	
