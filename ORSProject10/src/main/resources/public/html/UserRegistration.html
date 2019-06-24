@@ -1,0 +1,52 @@
+<!-- Account form displayed in ng-view-->
+<DIV align="center">
+	<H1>User Registration</H1>
+	<FORM name="frm">
+		<p style="color: green" ng-bind="form.message"></p>
+		<table>
+			<tr>
+				<td><input type="hidden" ng-model="form.id"
+					value="form.data.id"></td>
+			</tr>
+			<tr>
+				<td>First Name</td>
+				<td><INPUT TYPE="text" ng-model="form.data.firstName" required></td>
+			</tr>
+			<tr>
+				<td>Last Name</td>
+				<td><INPUT TYPE="text" ng-model="form.data.lastName" required></td>
+			</tr>
+			<tr>
+				<td>Login Id</td>
+				<td><INPUT TYPE="text" ng-model="form.data.loginId" required></td>
+			</tr>
+			<tr>
+				<td>Password</td>
+				<td><INPUT TYPE="password" ng-model="form.data.password" required></td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td><INPUT TYPE="text" ng-model="form.data.email" required></td>
+			</tr>
+			<tr>
+				<td>Mobile No</td>
+				<td><INPUT TYPE="text" ng-model="form.data.phone" required></td>
+			</tr>
+			<tr>
+				<td>Gender</td>
+				<td><select ng-model="form.data.gender"
+					ng-options="g for g in ['Male','Female']">
+						<option>-Select-</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td>
+					<button ng-click="submit()" ng-disabled="frm.$invalid">Submit</button>
+					<button ng-click="forward('/userList')">List</button>
+				</td>
+			</tr>
+		</table>
+		{{form}}
+
+	</FORM>
+</DIV>

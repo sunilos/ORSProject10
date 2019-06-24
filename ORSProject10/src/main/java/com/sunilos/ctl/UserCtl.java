@@ -256,4 +256,30 @@ public class UserCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * Forgot Password 
+	 * 
+	 * @param form
+	 * @param bindingResult
+	 * @return
+	 */
+	@GetMapping("forgotPassword/{loginId}")
+	public ORSResponse myProfile(@PathVariable String loginId, HttpServletResponse response) {
+		ORSResponse res=new ORSResponse();
+		UserDTO userDto = baseService.forgotPassword(loginId);
+		try {
+			if (userDto != null) {
+				res.addData(userDto);
+				res.setSuccess(true);
+			} else {
+				res.setSuccess(false);
+				res.addMessage("Login id is not exist");
+			}
+		} catch (Exception e) {
+			res.addMessage(e.getMessage());
+		}
+		return res;
+	}
+	
 }

@@ -108,6 +108,8 @@ public class StudentForm extends BaseForm {
 		dto.setFirstName(firstName);
 		dto.setLastName(lastName);
 		dto.setMobileNo(mobileNo);
+		dto.setCollegeName(collegeName);
+		dto.setDob(Util.convertDateFormat(dob));
 		return dto;
 	}
 

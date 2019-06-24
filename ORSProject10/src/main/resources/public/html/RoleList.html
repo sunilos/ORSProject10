@@ -1,0 +1,43 @@
+<!-- Account form displayed in ng-view-->
+<DIV align="center">
+
+	<H1>Role List</H1>
+
+	<FORM name="frm" >
+
+		<p style="color: green" ng-bind="form.searchMessage"></p>
+
+		<br> Role Name : <INPUT TYPE="text"
+			ng-model="form.searchParams.name"> &nbsp;
+		<button ng-click="search()">Search</button>
+		<br>
+		<td><button ng-click="forward('/role')">New</button></td>
+		<td><button ng-click="previous()">Previous</button></td>
+		<td><button ng-click="next()">Next</button></td>
+
+
+		<table border="1">
+			<tr>
+				<td><input type="checkbox"></td>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Description</th>
+			</tr>
+			<tr ng-repeat="d in form.list">
+				<td><input type="checkbox" ng-model="temp[$index]"
+					ng-click1="delete(d.id,temp[$index])"></td>
+				<td>{{$index + 1 + (form.pageNo * form.pageSize)}}</td>
+				<td>{{d.name}}</td>
+				<td>{{d.discription}}</td>
+				<td><button ng-click="forward('/role/' +  d.id)">Edit</button></td>
+			</tr>
+			<tr>
+			</tr>
+
+		</table>
+		{{form}}
+		<hr>
+
+
+	</FORM>
+</DIV>

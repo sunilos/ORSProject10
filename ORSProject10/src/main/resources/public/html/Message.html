@@ -1,0 +1,45 @@
+<!-- Account form displayed in ng-view-->
+<DIV align="center">
+	<H1>College</H1>
+	<FORM name="frm">
+		<p style="color: green" ng-bind="form.message"></p>
+		<table>
+			<tr>
+				<td><input type="hidden" ng-model="form.id"
+					value="form.data.id"></td>
+			</tr>
+			<tr>
+				<td>Subject</td>
+				<td><INPUT TYPE="text" ng-model="form.data.subject" required></td>
+			</tr>
+			<tr>
+				<td>Code</td>
+				<td><INPUT TYPE="text" ng-model="form.data.code" required></td>
+			</tr>
+			<tr>
+				<td>Type</td>
+				<td><input type="radio" ng-model="form.data.type" value="SMS" checked>
+					SMS<input type="radio" ng-model="form.data.type" value="Email" checked>Email</td>
+			</tr>
+			<tr>
+				<td>Status</td>
+				<td><select ng-model="form.data.status"
+					ng-options=" d for d in ['Active','Deactive']" required >
+						<options>-Select-</options>
+				</select></td>
+			</tr>
+			<tr>
+				<td>Message</td>
+				<td><textarea TYPE="text" ng-model="form.data.body" required></textarea></td>
+			</tr>
+			<tr>
+				<td>
+					<button ng-click="submit()" ng-disabled="frm.$invalid">Submit</button>
+					<button ng-click="forward('/messageList')">List</button>
+				</td>
+			</tr>
+		</table>
+		{{form}}
+
+	</FORM>
+</DIV>

@@ -101,6 +101,99 @@ app.controller('marksheetListCtl', function($scope, $routeParams, ServiceLocator
 });
 
 
+/**
+ * Marksheet controller
+ */
+app.controller('userRegistrationCtl', function($scope, $routeParams, ServiceLocator) {
+
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.USER, $scope, $routeParams, ServiceLocator);
+	
+	_self.populateForm  = function(form, data) {
+		console.log('USER data======',data);
+		form.id = data.id;
+		form.firstName = data.firstName;
+		form.lastName = data.lastName;
+		form.email = data.email;
+		form.loginId = data.loginId;
+		form.gender = data.gender;
+		form.phone = data.phone;
+		form.password = data.password;
+	}
+	
+	_self.init();
+});
+
+app.controller('userListCtl', function($scope, $routeParams, ServiceLocator) {
+
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.USER, $scope, $routeParams, ServiceLocator);
+
+	_self.initList();
+});
+
+/**
+ * Role controller
+ */
+app.controller('roleCtl', function($scope, $routeParams, ServiceLocator) {
+
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.Role, $scope, $routeParams, ServiceLocator);
+	
+	_self.populateForm  = function(form, data) {
+		form.id = data.id;
+		form.name = data.name;
+		form.discription = data.discription;
+		console.log('Populated Form', form, _self.api);
+	}
+	
+	_self.init();
+});
+
+app.controller('roleListCtl', function($scope, $routeParams, ServiceLocator) {
+
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.Role, $scope, $routeParams, ServiceLocator);
+
+	_self.initList();
+});
+
+
+/**
+ * Message controller
+ */
+app.controller('messageCtl', function($scope, $routeParams, ServiceLocator) {
+
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.Message, $scope, $routeParams, ServiceLocator);
+	
+	_self.populateForm  = function(form, data) {
+		form.id = data.id;
+		form.status = data.status;
+		form.subject = data.subject;
+		form.code = data.code;
+		form.type = data.type;
+		form.body = data.body;
+		console.log('Populated Form', form, _self.api);
+	}
+	
+	_self.init();
+});
+
+app.controller('messageListCtl', function($scope, $routeParams, ServiceLocator) {
+
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.Message, $scope, $routeParams, ServiceLocator);
+
+	_self.initList();
+});
+
 
 /**
  * Initialize controller

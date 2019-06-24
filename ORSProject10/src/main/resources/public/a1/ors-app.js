@@ -99,6 +99,7 @@ app.service('EndpointService', function() {
 	this.MARKSHEET = "/Marksheet";
 	this.USER = "/User";
 	this.Role = "/Role";
+	this.Message = "/Message";
 	
 	self.getAPI = function(ep){
 		return {

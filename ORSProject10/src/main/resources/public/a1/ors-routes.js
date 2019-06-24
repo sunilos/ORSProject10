@@ -24,6 +24,42 @@ var routes = function($routeProvider) {
 		templateUrl : "MarksheetList.html",
 		controller : 'marksheetListCtl'
 			
+	}).when("/userRegistration", {
+		templateUrl : "UserRegistration.html",
+		controller : 'userRegistrationCtl'
+			
+	}).when("/userRegistration/:id", {
+		templateUrl : "UserRegistration.html",
+		controller : 'userRegistrationCtl'
+			
+	}).when("/userList", {
+		templateUrl : "UserList.html",
+		controller : 'userListCtl'
+			
+	}).when("/roleList", {
+		templateUrl : "RoleList.html",
+		controller : 'roleListCtl'
+			
+	}).when("/role", {
+		templateUrl : "Role.html",
+		controller : 'roleCtl'
+			
+	}).when("/role/:id", {
+		templateUrl : "role.html",
+		controller : 'roleCtl'
+
+	}).when("/message", {
+		templateUrl : "Message.html",
+		controller : 'messageCtl'
+			
+	}).when("/message/:id", {
+		templateUrl : "Message.html",
+		controller : 'messageCtl'
+
+	}).when("/messageList", {
+		templateUrl : "MessageList.html",
+		controller : 'messageListCtl'
+			
 	}).when("/account", {
 		templateUrl : "Account.html",
 		controller : 'accountCtl'

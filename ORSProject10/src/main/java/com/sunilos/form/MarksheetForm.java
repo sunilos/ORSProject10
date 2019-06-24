@@ -19,7 +19,6 @@ import com.sunilos.dto.MarksheetDTO;
  * 
  */
 public class MarksheetForm extends BaseForm {
-	protected long id = 0;
 
 	@NotEmpty
 	private String rollNo = null;
@@ -96,6 +95,7 @@ public class MarksheetForm extends BaseForm {
 	public BaseDTO getDto() {
 		MarksheetDTO dto = new MarksheetDTO();
 		dto.setId(id);
+		dto.setRollNo(rollNo);
 		dto.setStudentId(studentId);
 		dto.setName(name);
 		dto.setPhysics(physics);
