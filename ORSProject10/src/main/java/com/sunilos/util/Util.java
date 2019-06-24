@@ -15,59 +15,18 @@ import java.util.Date;
 
 public class Util {
 
-	public static Date getDate(String date) {
+	public static String DATE_FORMAT_IND = "dd/MM/yyyy";
+	public static String DATE_FORMAT = "MM/dd/yyyy";
+	public static String DATE_FORMAT_MYSQL = "yyyy-MM-dd";
 
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-		Date date1 = null;
-
-		try {
-			date1 = formatter.parse(date);
-			System.out.println(date1);
-			System.out.println(formatter.format(date1));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return date1;
-	}
-
-	public static String getDate(Date indate) {
-		String dateString = null;
-		SimpleDateFormat sdfr = new SimpleDateFormat("MM/dd/yyyy");
-		/*
-		 * you can also use DateFormat reference instead of SimpleDateFormat
-		 * like this: DateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
-		 */
-		try {
-			dateString = sdfr.format(indate);
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-		return dateString;
-	}
-
-	public static String convertStringToDate(Date indate) {
-		String dateString = null;
-		SimpleDateFormat sdfr = new SimpleDateFormat("dd/MMM/yyyy");
-		/*
-		 * you can also use DateFormat reference instead of SimpleDateFormat
-		 * like this: DateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
-		 */
-		try {
-			dateString = sdfr.format(indate);
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-		return dateString;
-	}
-
-
-	public static Date convertDateFormat(String date) {
-		return convertDateFormat(date, "dd-MM-yyyy");
-	}
-
-	public static Date convertDateFormat(String date, String format) {
+	/**
+	 * Parse date from given formatted string
+	 * 
+	 * @param date
+	 * @param format
+	 * @return
+	 */
+	public static Date getDate(String date, String format) {
 		Date convertedDate = null;
 		if (date != null)
 			try {
@@ -77,4 +36,40 @@ public class Util {
 			}
 		return convertedDate;
 	}
+
+	/**
+	 * Converts Date to string in given format
+	 * 
+	 * @param indate
+	 * @param format
+	 * @return
+	 */
+	public static String getDate(Date indate, String format) {
+		String dateString = null;
+
+		SimpleDateFormat sdfr = new SimpleDateFormat(format);
+		try {
+			dateString = sdfr.format(indate);
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+		return dateString;
+	}
+
+	public static Date getDate(String date) {
+		return getDate(date, DATE_FORMAT);
+	}
+
+	public static String getDate(Date d) {
+		return getDate(d, "MM/dd/yyyy");
+	}
+
+	public static String convertStringToDate(Date d) {
+		return getDate(d, DATE_FORMAT_IND);
+	}
+
+	public static Date convertDateFormat(String date) {
+		return getDate(date, "dd-MM-yyyy");
+	}
+
 }
