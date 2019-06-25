@@ -32,6 +32,14 @@ var routes = function($routeProvider) {
 		templateUrl : "UserRegistration.html",
 		controller : 'userRegistrationCtl'
 			
+	}).when("/user", {
+		templateUrl : "User.html",
+		controller : 'userRegistrationCtl'
+			
+	}).when("/user/:id", {
+		templateUrl : "User.html",
+		controller : 'userRegistrationCtl'
+			
 	}).when("/userList", {
 		templateUrl : "UserList.html",
 		controller : 'userListCtl'

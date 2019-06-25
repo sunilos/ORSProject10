@@ -1,0 +1,12 @@
+<!-- Loan form displayed in ng-view-->
+<DIV >
+	<H1>Login</H1>  
+	<FORM name="frm">
+		<p style="color:green" ng-bind="message" ></p>
+		Login Id: <INPUT TYPE="text" ng-model="form.loginId" required> <BR>
+		Password <INPUT TYPE="number" ng-model="form.password" required> <BR>
+		<button ng-click="submit()" ng-disabled="frm.$invalid" >Submit</button>
+		<br>
+		aForm : {{form}}
+	</FORM>
+</DIV>

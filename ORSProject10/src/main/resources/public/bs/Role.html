@@ -1,0 +1,30 @@
+<!-- Account form displayed in ng-view-->
+<DIV align="center">
+	<H1>Role</H1>
+	<FORM name="frm">
+		<p style="color: green" ng-bind="form.message"></p>
+		<table>
+			<tr>
+				<td><input type="hidden" ng-model="form.id"
+					value="form.data.id"></td>
+			</tr>
+			<tr>
+				<td>Role Name</td>
+				<td><INPUT TYPE="text" ng-model="form.data.name" required></td>
+			</tr>
+			<tr>
+				<td>Description</td>
+				<td><INPUT TYPE="text" ng-model="form.data.discription"
+					required></td>
+			</tr>
+			<tr>
+				<td>
+					<button ng-click="submit()" ng-disabled="frm.$invalid">Submit</button>
+					<button ng-click="forward('/roleList')">List</button>
+				</td>
+			</tr>
+		</table>
+		{{form}}
+
+	</FORM>
+</DIV>

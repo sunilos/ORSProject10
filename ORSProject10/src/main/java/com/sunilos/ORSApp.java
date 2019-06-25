@@ -61,7 +61,7 @@ public class ORSApp extends SpringBootServletInitializer {
 
 			@Override
 			public void addResourceHandlers(ResourceHandlerRegistry registry) {
-				registry.addResourceHandler("/pub/**").addResourceLocations("classpath:/public/");
+				registry.addResourceHandler("/**").addResourceLocations("classpath:/public/");
 			}
 
 		};

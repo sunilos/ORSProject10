@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>ORS</title>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
+
+<script src="../a1/ors-app.js"></script>
+<script src="../a1/ors-routes.js"></script>
+<script src="../a1/ors-controller.js"></script>
+
+</head>
+
+<body ng-app="myApp">
+
+	<div ng-controller="errorCtl" ng-show="errorShow">
+		<table width="100%" style="color: red; background-color: yellow">
+			<tr>
+				<td>{{errorMsg}}</td>
+				<td align="right"><button ng-click="reset()">X</button></td>
+			</tr>
+		</table>
+	</div>
+
+	<div align="center">
+		<h3>ORS</h3>
+		<table>
+			<tr>
+				<td><a href="#/userRegistration">User Registration</a>
+				<td>
+				<td><a href="#/userList">User List</a>
+				<td>
+				<td><a href="#/role">Role</a>
+				<td>
+				<td><a href="#/roleList">Role List</a></td>
+				<td><a href="#/message">Message</a>
+				<td>
+				<td><a href="#/messageList">Message List</a></td>
+				<td><a href="#/college">College</a></td>
+				<td><a href="#/collegeList">College List</a></td>
+				<br>
+				<td><a href="#/student">Student</a>
+				<td>
+				<td><a href="#/studentList">Student List</a>
+				<td>
+				<td><a href="#/marksheetList">Marksheet List</a>
+				<td>
+				<td><a href="#/marksheet">Marksheet</a>
+				<td>
+			</tr>
+		</table>
+	</div>
+
+	<div ng-view></div>
+
+</body>
+</html>

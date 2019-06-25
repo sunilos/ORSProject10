@@ -165,8 +165,8 @@ public class UserForm extends BaseForm {
 
 	@Override
 	public BaseDTO getDto() {
-		UserDTO dto =new UserDTO();
-		dto.setId(id);
+
+		UserDTO dto = initDTO(new UserDTO());
 		dto.setFirstName(firstName);
 		dto.setLastName(lastName);
 		dto.setEmail(email);
@@ -177,6 +177,7 @@ public class UserForm extends BaseForm {
 		dto.setCreatedBy(alternateMobile);
 		dto.setDob(dob);
 		dto.setGender(gender);
+		dto.setPhone(phone);
 		dto.setStatus(status);
 		return dto;
 	}

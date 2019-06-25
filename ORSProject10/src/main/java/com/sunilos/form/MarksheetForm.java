@@ -93,8 +93,7 @@ public class MarksheetForm extends BaseForm {
 
 	@Override
 	public BaseDTO getDto() {
-		MarksheetDTO dto = new MarksheetDTO();
-		dto.setId(id);
+		MarksheetDTO dto = initDTO(new MarksheetDTO());
 		dto.setRollNo(rollNo);
 		dto.setStudentId(studentId);
 		dto.setName(name);

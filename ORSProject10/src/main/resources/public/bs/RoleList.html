@@ -1,17 +1,17 @@
 <!-- Account form displayed in ng-view-->
 <DIV align="center">
 
-	<H1>College List</H1>
+	<H1>Role List</H1>
 
 	<FORM name="frm" >
 
 		<p style="color: green" ng-bind="form.searchMessage"></p>
 
-		<br> Code : <INPUT TYPE="text"
-			ng-model="form.searchParams.code"> &nbsp;&nbsp;
+		<br> Role Name : <INPUT TYPE="text"
+			ng-model="form.searchParams.name"> &nbsp;
 		<button ng-click="search()">Search</button>
 		<br>
-		<td><button ng-click="forward('/message')">New</button></td>
+		<td><button ng-click="forward('/role')">New</button></td>
 		<td><button ng-click="previous()">Previous</button></td>
 		<td><button ng-click="next()">Next</button></td>
 
@@ -20,22 +20,16 @@
 			<tr>
 				<td><input type="checkbox"></td>
 				<th>ID</th>
-				<th>Subject</th>
-				<th>Code</th>
-				<th>Type</th>
-				<th>Status</th>
-				<th>Message</th>
+				<th>Name</th>
+				<th>Description</th>
 			</tr>
 			<tr ng-repeat="d in form.list">
 				<td><input type="checkbox" ng-model="temp[$index]"
 					ng-click1="delete(d.id,temp[$index])"></td>
 				<td>{{$index + 1 + (form.pageNo * form.pageSize)}}</td>
-				<td>{{d.subject}}</td>
-				<td>{{d.code}}</td>
-				<td>{{d.type}}</td>
-				<td>{{d.status}}</td>
-				<td>{{d.body}}</td>
-				<td><button ng-click="forward('/message/' +  d.id)">Edit</button></td>
+				<td>{{d.name}}</td>
+				<td>{{d.discription}}</td>
+				<td><button ng-click="forward('/role/' +  d.id)">Edit</button></td>
 			</tr>
 			<tr>
 			</tr>

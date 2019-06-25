@@ -133,10 +133,24 @@ public class BaseForm {
 		return null;
 	}
 
-	public BaseDTO getDto(BaseDTO dto) {
+	/**
+	 * Initialize DTO
+	 * 
+	 * @param dto
+	 * @return
+	 */
+	public <T extends BaseDTO> T initDTO(T dto) {
+		if (id != null && id > 0) {
 		dto.setId(id);
+		} else {
+			dto.setId(null);
+		}
 		return dto;
 	}
+
+	/*
+	 * public < T extends BaseDTO> initDTO(T dto) { return new UserDTO(); }
+	 */
 
 	/**
 	 * Converts fto into form.

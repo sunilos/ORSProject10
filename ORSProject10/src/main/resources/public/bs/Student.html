@@ -1,0 +1,47 @@
+<!-- Account form displayed in ng-view-->
+<DIV align="center">
+	<H1>Student</H1>
+	<FORM name="frm">
+		<p style="color: green" ng-bind="form.message"></p>
+		<table>
+			<tr>
+				<td>College Name</td>
+				<td><select ng-model="form.data.collegeId"
+					ng-options="c.id as c.name for c in form.preload.collegeList">
+						<option>-Select-</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td>First Name</td>
+				<td><INPUT TYPE="text" ng-model="form.data.firstName" required></td>
+			</tr>
+			<tr>
+				<td>Last Name</td>
+				<td><INPUT TYPE="text" ng-model="form.data.lastName" required></td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td><INPUT TYPE="text" ng-model="form.data.email" required></td>
+			</tr>
+			<tr>
+				<td>Phone Number</td>
+				<td><INPUT TYPE="text" ng-model="form.data.mobileNo" required></td>
+			</tr>
+			<tr>
+				<td>DOB</td>
+				<td><datepicker date-format="dd-MM-yyyy"> <input
+						style="cursor: pointer" ng-model="form.data.dob"
+						class="form-control" placeholder="DD-MM-YYYY" /> </datepicker></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<button ng-click="submit()">Save</button>
+					<button ng-click="forward('/studentList')">List</button>
+
+				</td>
+			</tr>
+		</table>
+		{{form}}
+	</FORM>
+</DIV>

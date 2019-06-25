@@ -101,8 +101,7 @@ public class StudentForm extends BaseForm {
 
 	@Override
 	public BaseDTO getDto() {
-		StudentDTO dto = new StudentDTO();
-		dto.setId(id);
+		StudentDTO dto = initDTO(new StudentDTO());
 		dto.setCollegeId(collegeId);
 		dto.setEmail(email);
 		dto.setFirstName(firstName);

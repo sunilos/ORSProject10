@@ -1,0 +1,63 @@
+<!-- Account form displayed in ng-view-->
+<DIV align="center">
+	<H1>Student List</H1>
+
+	<p style="color: green" ng-bind="form.searchMessage"></p>
+
+	<FORM>
+		<table>
+			<tr>
+				<td>College: <INPUT TYPE="text"
+					ng-model="form.searchParams.collegeName">
+				</td>
+				<td>Student Name : <INPUT TYPE="text"
+					ng-model="form.searchParams.firstName">
+				</td>
+				<td>Last Name : <INPUT TYPE="text"
+					ng-model="form.searchParams.lastName">
+				</td>
+			</tr>
+		</table>
+
+		<button ng-click="search()">Search</button>
+		<br>
+		<td><button ng-click="forward('/college')">New</button></td>
+		<td><button ng-click="previous()">Previous</button></td>
+		<td><button ng-click="next()">Next</button></td>
+
+	</FORM>
+
+
+	<table border="1">
+		<tr>
+			<td><input type="checkbox"></td>
+			<td>#</td>
+			<td>College Name</td>
+			<td>Student Name</td>
+			<td>Last Name</td>
+			<td>Email</td>
+			<td>Mobile</td>
+			<td>DOB</td>
+			<td>Edit</td>
+		</tr>
+		<tr ng-repeat="d in form.list">
+			<td><input type="checkbox" ng-model="temp[$index]"
+				ng-click="delElement(d.id,temp[$index])"></td>
+			<td>{{$index+ ( 1 + (form.pageSize * (form.pageNo))) }}</td>
+			<td>{{d.collegeName}}</td>
+			<td>{{d.firstName}}</td>
+			<td>{{d.lastName}}</td>
+			<td>{{d.email}}</td>
+			<td>{{d.mobileNo}}</td>
+			<td>{{d.dob | date:'dd-MM-yyyy'}}</td>
+			<td><button ng-click="forward('student/' +  d.id)">Edit</button></td>
+		</tr>
+		<tr>
+		</tr>
+
+	</table>
+	{{form}}
+	<hr>
+
+
+</DIV>

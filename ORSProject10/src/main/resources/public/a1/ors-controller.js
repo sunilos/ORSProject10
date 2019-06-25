@@ -120,6 +120,7 @@ app.controller('userRegistrationCtl', function($scope, $routeParams, ServiceLoca
 		form.gender = data.gender;
 		form.phone = data.phone;
 		form.password = data.password;
+		form.status = data.status;
 	}
 	
 	_self.init();

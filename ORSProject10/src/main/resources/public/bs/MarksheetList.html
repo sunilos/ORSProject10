@@ -1,0 +1,54 @@
+<!-- Account form displayed in ng-view-->
+<DIV align="center">
+	<H1>Marksheet List</H1>
+
+	<p style="color: green" ng-bind="form.searchMessage"></p>
+
+	<FORM>
+		<table>
+			<tr>
+				<td>Student Name : <INPUT TYPE="text"
+					ng-model="form.searchParams.name">
+				</td>
+				<td><button ng-click="search()">Search</button></td>
+			</tr>
+		</table>
+
+		<br>
+		<td><button ng-click="forward('/marksheet')">New</button></td>
+		<td><button ng-click="previous()">Previous</button></td>
+		<td><button ng-click="next()">Next</button></td>
+
+	</FORM>
+
+	<table border="1">
+		<tr>
+			<td><input type="checkbox"></td>
+			<td>#</td>
+			<td>Roll No</td>
+			<td>Student Name</td>
+			<td>Physics</td>
+			<td>Chemistry</td>
+			<td>Maths</td>
+			<td>Edit</td>
+		</tr>
+		<tr ng-repeat="d in form.list">
+			<td><input type="checkbox" ng-model="temp[$index]"
+				ng-click="delElement(d.id,temp[$index])"></td>
+			<td>{{$index+ ( 1 + (form.pageSize * (form.pageNo))) }}</td>
+			<td>{{d.rollNo}}</td>
+			<td>{{d.name}}</td>
+			<td>{{d.physics}}</td>
+			<td>{{d.chemistry}}</td>
+			<td>{{d.maths}}</td>
+			<td><button ng-click="forward('/marksheet/' +  d.id)">Edit</button></td>
+		</tr>
+		<tr>
+		</tr>
+
+	</table>
+	{{form}}
+	<hr>
+
+
+</DIV>

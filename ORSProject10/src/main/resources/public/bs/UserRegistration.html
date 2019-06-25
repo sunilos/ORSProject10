@@ -25,8 +25,24 @@
 				<td><INPUT TYPE="password" ng-model="form.data.password" required></td>
 			</tr>
 			<tr>
+				<td>Email</td>
+				<td><INPUT TYPE="text" ng-model="form.data.email" required></td>
+			</tr>
+			<tr>
+				<td>Mobile No</td>
+				<td><INPUT TYPE="text" ng-model="form.data.phone" required></td>
+			</tr>
+			<tr>
+				<td>Gender</td>
+				<td><select ng-model="form.data.gender"
+					ng-options="g for g in ['Male','Female']">
+						<option>-Select-</option>
+				</select></td>
+			</tr>
+			<tr>
 				<td>
 					<button ng-click="submit()" ng-disabled="frm.$invalid">Submit</button>
+					<button ng-click="forward('/userList')">List</button>
 				</td>
 			</tr>
 		</table>

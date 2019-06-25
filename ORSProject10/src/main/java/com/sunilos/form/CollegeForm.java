@@ -86,8 +86,7 @@ public class CollegeForm extends BaseForm {
 
 	@Override
 	public BaseDTO getDto() {
-		CollegeDTO dto = new CollegeDTO();
-		dto.setId(id);
+		CollegeDTO dto = initDTO(new CollegeDTO());
 		dto.setAddress(address);
 		dto.setCity(city);
 		dto.setName(name);
