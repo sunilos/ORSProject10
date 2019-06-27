@@ -68,6 +68,10 @@ var routes = function($routeProvider) {
 		templateUrl : "MessageList.html",
 		controller : 'messageListCtl'
 			
+	}).when("/login", {
+		templateUrl : "Login.html",
+		controller : 'loginCtl'
+			
 	}).when("/account", {
 		templateUrl : "Account.html",
 		controller : 'accountCtl'

@@ -1,12 +1,19 @@
 <!-- Account form displayed in ng-view-->
 <DIV align="center">
-	<H1>User Registration</H1>
+	<H1>User</H1>
 	<FORM name="frm">
 		<p style="color: green" ng-bind="form.message"></p>
 		<table>
 			<tr>
 				<td><input type="hidden" ng-model="form.id"
 					value="form.data.id"></td>
+			</tr>
+			<tr>
+				<td>Role</td>
+				<td><select ng-model="form.data.roleId"
+					ng-options="s.id as s.name for s in form.preload.roleList">
+						<option>-Select-</option>
+				</select></td>
 			</tr>
 			<tr>
 				<td>First Name</td>
@@ -22,7 +29,8 @@
 			</tr>
 			<tr>
 				<td>Password</td>
-				<td><INPUT TYPE="password" ng-model="form.data.password" required></td>
+				<td><INPUT TYPE="password" ng-model="form.data.password"
+					required></td>
 			</tr>
 			<tr>
 				<td>Email</td>

@@ -100,6 +100,7 @@ app.service('EndpointService', function() {
 	this.USER = "/User";
 	this.Role = "/Role";
 	this.Message = "/Message";
+	this.Login = "/Auth";
 	
 	self.getAPI = function(ep){
 		return {

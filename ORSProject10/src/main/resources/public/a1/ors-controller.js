@@ -1,5 +1,14 @@
 
 /**
+ * Login controller
+ */
+app.controller('loginCtl', function($scope, $routeParams, ServiceLocator) {
+
+	var api = ServiceLocator.endpointService.Login;
+	console.log(api);
+});
+
+/**
  * College controller
  */
 app.controller('collegeCtl', function($scope, $routeParams, ServiceLocator) {
@@ -102,7 +111,7 @@ app.controller('marksheetListCtl', function($scope, $routeParams, ServiceLocator
 
 
 /**
- * Marksheet controller
+ * UserReg controller
  */
 app.controller('userRegistrationCtl', function($scope, $routeParams, ServiceLocator) {
 
@@ -111,8 +120,8 @@ app.controller('userRegistrationCtl', function($scope, $routeParams, ServiceLoca
 	initController(_self, ServiceLocator.endpointService.USER, $scope, $routeParams, ServiceLocator);
 	
 	_self.populateForm  = function(form, data) {
-		console.log('USER data======',data);
 		form.id = data.id;
+		form.roleId = data.roleId;
 		form.firstName = data.firstName;
 		form.lastName = data.lastName;
 		form.email = data.email;
@@ -357,5 +366,4 @@ function initController(ctl, endpoint, $scope, $routeParams, ServiceLocator) {
 		}
 	}
 
-	
 }

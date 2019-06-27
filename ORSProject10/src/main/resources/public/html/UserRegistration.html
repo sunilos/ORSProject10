@@ -9,6 +9,13 @@
 					value="form.data.id"></td>
 			</tr>
 			<tr>
+				<td>Role</td>
+				<td><select ng-model="form.data.roleId"
+					ng-options="s.id as s.name for s in form.preload.roleList">
+						<option>-Select-</option>
+				</select></td>
+			</tr>
+			<tr>
 				<td>First Name</td>
 				<td><INPUT TYPE="text" ng-model="form.data.firstName" required></td>
 			</tr>
@@ -22,7 +29,8 @@
 			</tr>
 			<tr>
 				<td>Password</td>
-				<td><INPUT TYPE="password" ng-model="form.data.password" required></td>
+				<td><INPUT TYPE="password" ng-model="form.data.password"
+					required></td>
 			</tr>
 			<tr>
 				<td>
