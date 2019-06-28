@@ -4,8 +4,27 @@
  */
 app.controller('loginCtl', function($scope, $routeParams, ServiceLocator) {
 
-	var api = ServiceLocator.endpointService.Login;
-	console.log(api);
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.Login, $scope, $routeParams, ServiceLocator);
+	
+	$scope.submit = function() {
+		url=_self.api.endpoint+"/login",
+		ServiceLocator.http.post(url, $scope.form.data,
+				function(response) {
+			console.log('login resp',response);
+					$scope.form.error = !response.success;
+					if(response.success){
+						$scope.sessionCheck = response.success;
+						$scope.forward('/');
+					}else{
+						$scope.form.message = response.result.message;
+						$scope.form.inputerror = response.inputerror;
+					}
+				});
+	}
+
+	
 });
 
 /**
