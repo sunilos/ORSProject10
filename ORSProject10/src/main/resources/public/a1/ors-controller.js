@@ -23,8 +23,54 @@ app.controller('loginCtl', function($scope, $routeParams, ServiceLocator) {
 					}
 				});
 	}
+	});
 
+/**
+ * ChangePassword controller
+ */
+app.controller('changePasswordCtl', function($scope, $routeParams, ServiceLocator) {
 	
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.USER, $scope, $routeParams, ServiceLocator);
+	
+	$scope.submit = function() {
+		url=_self.api.endpoint+"/changepassword",
+		ServiceLocator.http.post(url, $scope.form.data,
+				function(response) {
+					$scope.form.error = !response.success;
+					if(response.success){
+						$scope.form.message = response.result.message;
+					}else{
+						$scope.form.message = response.result.message;
+						$scope.form.inputerror = response.inputerror;
+					}
+				});
+			}
+	});
+
+/**
+ * Forgot Password controller
+ */
+app.controller('forgotPasswordCtl', function($scope, $routeParams, ServiceLocator) {
+
+	_self = this;
+
+	initController(_self, ServiceLocator.endpointService.USER, $scope, $routeParams, ServiceLocator);
+	
+	$scope.submit = function() {
+		url=_self.api.endpoint+"/forgetPassword",
+		ServiceLocator.http.post(url, $scope.form.data,
+				function(response) {
+					$scope.form.error = !response.success;
+					if(response.success){
+						$scope.form.message = response.result.message;
+					}else{
+						$scope.form.message = response.result.message;
+						$scope.form.inputerror = response.inputerror;
+					}
+				});
+			}
 });
 
 /**

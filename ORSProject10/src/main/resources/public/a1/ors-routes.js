@@ -72,6 +72,14 @@ var routes = function($routeProvider) {
 		templateUrl : "Login.html",
 		controller : 'loginCtl'
 			
+	}).when("/changePassword", {
+		templateUrl : "ChangePassword.html",
+		controller : 'changePasswordCtl'
+			
+	}).when("/forgotPassword", {
+		templateUrl : "ForgotPassword.html",
+		controller : 'forgotPasswordCtl'
+
 	}).when("/account", {
 		templateUrl : "Account.html",
 		controller : 'accountCtl'

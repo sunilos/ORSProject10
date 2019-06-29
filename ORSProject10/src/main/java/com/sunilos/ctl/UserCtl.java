@@ -2,6 +2,7 @@ package com.sunilos.ctl;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +26,12 @@ import com.sunilos.common.DropdownList;
 import com.sunilos.common.ORSResponse;
 import com.sunilos.common.attachment.AttachmentDTO;
 import com.sunilos.common.attachment.AttachmentServiceInt;
+import com.sunilos.common.mail.EmailDTO;
+import com.sunilos.common.mail.EmailServiceImpl;
 import com.sunilos.dto.RoleDTO;
 import com.sunilos.dto.UserDTO;
 import com.sunilos.form.ChangePasswordForm;
+import com.sunilos.form.ForgetPasswordForm;
 import com.sunilos.form.MyProfileForm;
 import com.sunilos.form.UserForm;
 import com.sunilos.service.RoleServiceInt;
@@ -42,6 +46,12 @@ public class UserCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 
 	@Autowired
 	AttachmentServiceInt attachmentService;
+
+	/**
+	 * Send email
+	 */
+	@Autowired
+	public EmailServiceImpl emailSender;
 
 	@GetMapping("/preload")
 	public ORSResponse preload() {
@@ -117,6 +127,42 @@ public class UserCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 
 		res.setSuccess(true);
 		res.addMessage("Password has been changed");
+
+		return res;
+	}
+
+	/**
+	 * Forgot password
+	 * 
+	 * @param form
+	 * @param bindingResult
+	 * @return
+	 */
+	@PostMapping("forgetPassword")
+	public ORSResponse forgetPassword(@RequestBody @Valid ForgetPasswordForm form, BindingResult bindingResult) {
+
+		ORSResponse res = valiate(bindingResult);
+		System.out.println("form.getLogin(===="+form.getLogin());
+
+		UserDTO fDTO = baseService.forgotPassword(form.getLogin());
+ 
+		if (fDTO == null) {
+			res.setSuccess(false);
+			res.addMessage("LoginId / Email not found.");
+			return res;
+		} else {
+			String code = "101";
+			EmailDTO dto = new EmailDTO();
+			dto.addTo(fDTO.getEmail());
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put("code", "101");
+			dto.setMessageCode(code, params);
+			emailSender.send(dto, null);
+			res.setSuccess(true);
+			res.addMessage("Hello " + fDTO.getFirstName() + " " + fDTO.getLastName()
+					+ " ! Your password has been sent on your email.");
+
+		}
 
 		return res;
 	}
