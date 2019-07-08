@@ -245,7 +245,7 @@ app.controller('roleCtl', function($scope, $routeParams, ServiceLocator) {
 	/**
 	 * Populate bean from response data
 	 */
-	ctl.populateForm  = function(form, data) {
+	_self.populateForm  = function(form, data) {
 	}
 
 	/**
@@ -284,7 +284,7 @@ app.controller('roleCtl', function($scope, $routeParams, ServiceLocator) {
 			ServiceLocator.http.get(url, function(response) {
 				$scope.form.error = !response.success;
 				$scope.form.message = response.result.message;
-				ctl.populateForm($scope.form.data, response.result.data);
+				_self.populateForm($scope.form.data, response.result.data);
 			});
 		}
 	}	
