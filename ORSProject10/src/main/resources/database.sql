@@ -74,3 +74,40 @@ INSERT INTO rt_message (code,subject,body,is_html,type,status) VALUES ('U-REG','
 INSERT INTO rt_message (code,subject,body,is_html,type,status) VALUES ('U-FP','{user} password','<H1>Dear {user}</H1> Your password is {password}','Y','EMAIL','Active');
 INSERT INTO rt_message (code,subject,body,is_html,type,status) VALUES ('U-CP','{user} password is changed','<H1>Dear {user}</H1> Your password is is successfully changed','Y','EMAIL','Active');
 
+
+CREATE TABLE rt_student (
+  id bigint(20) NOT NULL auto_increment,
+  created_by varchar(50) default NULL,
+  created_datetime datetime default NULL,
+  modified_by varchar(50) default NULL,
+  modified_datetime datetime default NULL,
+  org_id bigint(20) default NULL,
+  org_name varchar(50) default NULL,
+  college_id bigint(20) default NULL,
+  college_name varchar(50) default NULL,
+  dob datetime default NULL,
+  email varchar(50) default NULL,
+  enrol_no varchar(20) default NULL,
+  first_name varchar(50) default NULL,
+  last_name varchar(50) default NULL,
+  mobile_no varchar(15) default NULL,
+  PRIMARY KEY  (id)
+) 
+
+
+
+CREATE TABLE rt_college (
+  id bigint(20) NOT NULL auto_increment,
+  created_by varchar(50) default NULL,
+  created_datetime datetime default NULL,
+  modified_by varchar(50) default NULL,
+  modified_datetime datetime default NULL,
+  org_id bigint(20) default NULL,
+  org_name varchar(50) default NULL,
+  address varchar(50) default NULL,
+  city varchar(50) default NULL,
+  name varchar(50) default NULL,
+  phoneno varchar(15) default NULL,
+  state varchar(50) default NULL,
+  PRIMARY KEY  (id)
+) 

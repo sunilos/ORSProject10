@@ -1,6 +1,7 @@
 package com.sunilos.ctl;
 
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunilos.common.BaseCtl;
+import com.sunilos.common.MenuItem;
 import com.sunilos.common.ORSResponse;
 import com.sunilos.common.UserContext;
 import com.sunilos.dto.UserDTO;
@@ -96,14 +98,12 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 	@GetMapping("fp/{login}")
 	public ORSResponse forgotPassword(@PathVariable String login, HttpServletRequest request) {
 		
-		
 		Enumeration<String> e =  request.getHeaderNames();
 		String key = null;
 		while ( e.hasMoreElements() ){
 			key = e.nextElement();
 			System.out.println(key + " = " + request.getHeader(key));
 		}
-		
 		
 		ORSResponse res = new ORSResponse(true);
 		UserDTO dto = this.baseService.forgotPassword(login);
@@ -149,11 +149,35 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 		dto.setDob(form.getDob());
 		dto.setPhone(form.getMobileNo());
 		
-
 		baseService.register(dto);
 
 		res.setSuccess(true);
 		res.addMessage("User has been registered");
+		return res;
+	}
+
+	@GetMapping("menu")
+	public ORSResponse menu(HttpSession session) {
+
+		LinkedHashSet<MenuItem> menuBar = new LinkedHashSet<MenuItem>();
+
+		MenuItem std = new MenuItem("Student", "/student");
+		std.addSubmenu("New Student", "/student");
+		std.addSubmenu("Student List", "/studentlist");
+
+		menuBar.add(std);
+
+		MenuItem coll = new MenuItem("College", "/college");
+		coll.addSubmenu("New College", "/college");
+		coll.addSubmenu("College List", "/collegelist");
+
+		menuBar.add(coll);
+		
+		
+
+		ORSResponse res = new ORSResponse(true);
+		res.addData(menuBar);
+		res.setSuccess(true);
 		return res;
 	}
 

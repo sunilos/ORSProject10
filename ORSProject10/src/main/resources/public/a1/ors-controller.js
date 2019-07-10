@@ -235,17 +235,13 @@ app.controller('roleCtl', function($scope, $routeParams, ServiceLocator) {
 
 	
 	/**
-	 * Initialize list controller
-	 */
-	_self.initList = function() {
-		$scope.search();
-		$scope.preload();
-	}
-
-	/**
 	 * Populate bean from response data
 	 */
 	_self.populateForm  = function(form, data) {
+		form.id = data.id;
+		form.name = data.name;
+		form.discription = data.discription;
+		console.log('Populated Form', form, _self.api);
 	}
 
 	/**
@@ -267,16 +263,18 @@ app.controller('roleCtl', function($scope, $routeParams, ServiceLocator) {
 	};
 
 	
-	_self.populateForm  = function(form, data) {
-		form.id = data.id;
-		form.name = data.name;
-		form.discription = data.discription;
-		console.log('Populated Form', form, _self.api);
+	/**
+	 * Fetches preload data
+	 */
+	$scope.preload = function() {
+		console.log(_self.api.preload);
+		ServiceLocator.http.get(_self.api.preload, function(response) {
+			$scope.form.preload = response.result;
+		});
 	}
 	
-	
 	/**
-	 * Fetches a record by primary key
+	 * Fetches a record by primary key. Contains display logic
 	 */
 	$scope.display = function() {
 		if ($scope.form.data.id > 0) {
@@ -289,18 +287,6 @@ app.controller('roleCtl', function($scope, $routeParams, ServiceLocator) {
 		}
 	}	
 
-	// Contains display logic
-	
-	/**
-	 * Fetches preload data
-	 */
-	$scope.preload = function() {
-		console.log(_self.api.preload);
-		ServiceLocator.http.get(_self.api.preload, function(response) {
-			$scope.form.preload = response.result;
-		});
-	}	
-	
 	/**
 	 * Save a record
 	 */
@@ -318,6 +304,76 @@ app.controller('roleCtl', function($scope, $routeParams, ServiceLocator) {
 				});
 	}
 	
+
+	/**
+	 * Navigate to next page
+	 */
+	$scope.forward = function(page) {
+		ServiceLocator.locationService.url(page);
+	}
+
+
+	_self.init();
+});
+
+app.controller('roleListCtl', function($scope, $routeParams, ServiceLocator) {
+
+	_self = this;
+
+	/**
+	 * Server API to call
+	 */
+	_self.api = ServiceLocator.endpointService.getAPI( ServiceLocator.endpointService.Role);
+
+
+	/**
+	 * Initialize list controller
+	 */
+	_self.initList = function() {
+		$scope.search();
+		$scope.preload();
+	}
+
+	/**
+	 * Populate bean from response data
+	 */
+	_self.populateForm  = function(form, data) {
+		form.id = data.id;
+		form.name = data.name;
+		form.discription = data.discription;
+		console.log('Populated Form', form, _self.api);
+	}
+	
+	/**
+	 * HTML Form data
+	 */
+	$scope.form = {
+		error : false, // error
+		message : '', // error or sucess message
+		preload : null, // preload data
+		data : {
+			id : null
+		}, // form data
+		inputerror : {}, // form input error messages
+		searchParams : {}, // search form
+		searchMessage : null, // search result message
+		list : [], // search list
+		pageNo : 0,
+		pageSize : 5
+	};
+
+	
+	/**
+	 * Fetches preload data
+	 */
+	$scope.preload = function() {
+		console.log(_self.api.preload);
+		ServiceLocator.http.get(_self.api.preload, function(response) {
+			$scope.form.preload = response.result;
+		});
+	}		
+	
+
 	/**
 	 * Deletes a record
 	 */
@@ -370,15 +426,6 @@ app.controller('roleCtl', function($scope, $routeParams, ServiceLocator) {
 		}
 	}	
 	
-	_self.init();
-});
-
-app.controller('roleListCtl', function($scope, $routeParams, ServiceLocator) {
-
-	_self = this;
-
-	initController(_self, ServiceLocator.endpointService.Role, $scope, $routeParams, ServiceLocator);
-
 	_self.initList();
 });
 
