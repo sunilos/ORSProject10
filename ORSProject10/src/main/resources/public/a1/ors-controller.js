@@ -2,21 +2,30 @@
 /**
  * Login controller
  */
-app.controller('loginCtl', function($scope, $routeParams, ServiceLocator) {
+
+app.controller('loginCtl', function($scope, $location, $http,ServiceLocator) {
 
 	_self = this;
 
-	initController(_self, ServiceLocator.endpointService.Login, $scope, $routeParams, ServiceLocator);
+	_self.api = ServiceLocator.endpointService.getAPI(ServiceLocator.endpointService.Login);
+	
+	/**
+	 * HTML Form data
+	 */
+	$scope.form = {
+		error : false, // error
+		message : '', // error or sucess message
+		data : {
+		}, // form data
+		inputerror : {} // form input error messages
+	};
 	
 	$scope.submit = function() {
 		url=_self.api.endpoint+"/login",
-		ServiceLocator.http.post(url, $scope.form.data,
-				function(response) {
-			console.log('login resp',response);
+		   $http.post(url, $scope.form.data,function(response) {
 					$scope.form.error = !response.success;
 					if(response.success){
-						$scope.sessionCheck = response.success;
-						$scope.forward('/');
+						$location.url.forward('/');
 					}else{
 						$scope.form.message = response.result.message;
 						$scope.form.inputerror = response.inputerror;
