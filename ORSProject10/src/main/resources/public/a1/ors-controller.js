@@ -483,7 +483,11 @@ function initController(ctl, endpoint, $scope, $routeParams, ServiceLocator) {
 	 * Initialize single record controller
 	 */
 	ctl.init = function() {
+		$scope.form.data = { };
 		$scope.form.data.id = 0;
+		$scope.form.message = "";
+		$scope.form.error = false;
+		
 		// Read URI variables /controller/:id
 		if ($routeParams.id) {
 			$scope.form.data.id = $routeParams.id;
@@ -506,13 +510,48 @@ function initController(ctl, endpoint, $scope, $routeParams, ServiceLocator) {
 	 */
 	ctl.populateForm  = function(form, data) {
 	}
+	
+	/**
+	 * Check is not null
+	 */
+	ctl.isNotNullObject = function(val) {
+	    var flag = true;
+	    try {
+	      if (val) {
+	        flag = true;
+	      } else {
+	        flag = false;
+	      }
+	    } catch (error) {
+	      flag = false;
+	    }
+	    return flag;
+	  }
+	
+	/**
+	 * Check is not null and Return Zero
+	 */
+	ctl.checkNotNullNumber = function(val) {
+	    var flag = 0;
+	    try {
+	      if (val) {
+	        flag = val;
+	      } else {
+	        flag = 0;
+	      }
+	    } catch (error) {
+	      flag = 0;
+	    }
+	    return flag;
+	  }
+	
 
 	/**
 	 * HTML Form data
 	 */
 	$scope.form = {
 		error : false, // error
-		message : '', // error or sucess message
+		message : '', // error or success message
 		preload : null, // preload data
 		data : {
 			id : null
@@ -524,7 +563,6 @@ function initController(ctl, endpoint, $scope, $routeParams, ServiceLocator) {
 		pageNo : 0,
 		pageSize : 5
 	};
-
 	
 	/**
 	 * Fetches a record by primary key
@@ -535,10 +573,19 @@ function initController(ctl, endpoint, $scope, $routeParams, ServiceLocator) {
 			ServiceLocator.http.get(url, function(response) {
 				$scope.form.error = !response.success;
 				$scope.form.message = response.result.message;
-				ctl.populateForm($scope.form.data, response.result.data);
+				ctl.populateForm($scope.form.data, response.result.data, response.result );
 			});
 		}
 	}	
+	
+	$scope.edit = function(id) {
+		$scope.form.data.id = id;
+		$scope.display();
+	}
+	
+	$scope.add = function() {
+		ctl.init();
+	}
 
 	// Contains display logic
 	
@@ -561,9 +608,12 @@ function initController(ctl, endpoint, $scope, $routeParams, ServiceLocator) {
 		ServiceLocator.http.post(_self.api.save, $scope.form.data,
 				function(response) {
 					$scope.form.error = !response.success;
-					
 					if(response.success){
 						$scope.form.message = "Data is saved";
+						$scope.search();
+						if($scope.form.data.id == 0){
+							  $scope.form.data.id = response.result.data; 
+						}
 					}else{
 						$scope.form.message = response.result.message;
 						$scope.form.inputerror = response.inputerror;
@@ -575,13 +625,15 @@ function initController(ctl, endpoint, $scope, $routeParams, ServiceLocator) {
 	 * Deletes a record
 	 */
 
-	$scope.delete = function() {
+	$scope.delete = function(id) {
+		$scope.form.data.id = id;
 		if ($scope.form.data.id > 0) {
-			var url = api.delete + "/" + $scope.form.data.id;
+			var url = _self.api.delete1 + "/" + $scope.form.data.id;
 			ServiceLocator.http.get(url, function(response) {
 				$scope.form.error = !response.success;
 				$scope.form.message = response.result.message;
-				populateForm($scope.form.data, response.result.data);
+				$scope.search();					
+				//populateForm($scope.form.data, response.result.data);		
 			});
 		}
 	}
@@ -589,7 +641,6 @@ function initController(ctl, endpoint, $scope, $routeParams, ServiceLocator) {
 	/**
 	 * Makes search http call
 	 */
-	
 	$scope.search = function() {
 		var url = _self.api.search + "/" + $scope.form.pageNo;
 		ServiceLocator.http.post(url, $scope.form.searchParams, function(
