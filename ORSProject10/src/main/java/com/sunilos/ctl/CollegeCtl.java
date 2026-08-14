@@ -11,7 +11,7 @@ import com.sunilos.form.CollegeForm;
 import com.sunilos.service.CollegeServiceInt;
 
 @RestController
-@RequestMapping(value = "College")
+@RequestMapping(value = "college")
 public class CollegeCtl extends BaseCtl<CollegeForm, CollegeDTO, CollegeServiceInt> {
 
 	@GetMapping("/preload")

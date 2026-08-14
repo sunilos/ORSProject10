@@ -2,9 +2,9 @@ package com.sunilos.dto;
 
 import java.util.LinkedHashMap;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import com.sunilos.common.BaseDTO;
 
@@ -28,8 +28,8 @@ public class RoleDTO extends BaseDTO {
 	@Column(name = "NAME", length = 50)
 	private String name = null;
 
-	@Column(name = "DISCRIPTION", length = 100)
-	private String discription = null;
+	@Column(name = "DESCRIPTION", length = 100)
+	private String description = null;
 
 	@Column(name = "CAN_READ", length = 1)
 	private String canRead = YES;
@@ -54,12 +54,12 @@ public class RoleDTO extends BaseDTO {
 		this.name = name;
 	}
 
-	public String getDiscription() {
-		return discription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDiscription(String discription) {
-		this.discription = discription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getCanRead() {
@@ -123,7 +123,5 @@ public class RoleDTO extends BaseDTO {
 		map.put("name", name);
 		return map;
 	}
-
-	
 
 }

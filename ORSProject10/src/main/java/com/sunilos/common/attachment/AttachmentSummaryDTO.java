@@ -1,7 +1,7 @@
 package com.sunilos.common.attachment;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 /**
  * Contains attached file information and data

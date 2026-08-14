@@ -2,8 +2,8 @@ package com.sunilos.common.attachment;
 
 import java.util.LinkedHashMap;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
 import com.sunilos.common.BaseDTO;
 

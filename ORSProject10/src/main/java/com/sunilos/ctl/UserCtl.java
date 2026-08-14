@@ -3,11 +3,13 @@ package com.sunilos.ctl;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -38,7 +40,7 @@ import com.sunilos.service.RoleServiceInt;
 import com.sunilos.service.UserServiceInt;
 
 @RestController
-@RequestMapping(value = "User")
+@RequestMapping(value = "user")
 public class UserCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 
 	@Autowired
@@ -57,9 +59,16 @@ public class UserCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 	public ORSResponse preload() {
 		ORSResponse res = new ORSResponse(true);
 		RoleDTO dto = new RoleDTO();
-		dto.setStatus(RoleDTO.ACTIVE);
 		List<DropdownList> list = roleService.search(dto, userContext);
-		res.addResult("roleList", list);
+		List<Map<String, Object>> roleList = list.stream()
+				.map(course -> Map.<String, Object>of(
+						"key", course.getKey(),
+						"value", course.getValue()))
+				.toList();
+
+		Map preload = new HashMap();
+		preload.put("roleList", roleList);
+		res.addData(preload);
 		return res;
 	}
 
@@ -82,7 +91,7 @@ public class UserCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 		UserDTO dto = baseService.findById(userContext.getUserId(), userContext);
 		dto.setFirstName(form.getFirstName());
 		dto.setLastName(form.getLastName());
-		//dto.setLoginId(form.getLogin());
+		// dto.setLoginId(form.getLogin());
 		dto.setDob(form.getDob());
 		dto.setPhone(form.getMobileNo());
 		dto.setGender(form.getGender());
@@ -142,10 +151,10 @@ public class UserCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 	public ORSResponse forgetPassword(@RequestBody @Valid ForgetPasswordForm form, BindingResult bindingResult) {
 
 		ORSResponse res = valiate(bindingResult);
-		System.out.println("form.getLogin(===="+form.getLogin());
+		System.out.println("form.getLogin(====" + form.getLogin());
 
 		UserDTO fDTO = baseService.forgotPassword(form.getLogin());
- 
+
 		if (fDTO == null) {
 			res.setSuccess(false);
 			res.addMessage("LoginId / Email not found.");
@@ -304,7 +313,7 @@ public class UserCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 	}
 
 	/**
-	 * Forgot Password 
+	 * Forgot Password
 	 * 
 	 * @param form
 	 * @param bindingResult
@@ -312,7 +321,7 @@ public class UserCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 	 */
 	@GetMapping("forgotPassword/{loginId}")
 	public ORSResponse myProfile(@PathVariable String loginId, HttpServletResponse response) {
-		ORSResponse res=new ORSResponse();
+		ORSResponse res = new ORSResponse();
 		UserDTO userDto = baseService.forgotPassword(loginId);
 		try {
 			if (userDto != null) {
@@ -327,5 +336,5 @@ public class UserCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 		}
 		return res;
 	}
-	
+
 }

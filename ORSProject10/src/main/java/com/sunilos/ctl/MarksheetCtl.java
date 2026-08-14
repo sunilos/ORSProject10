@@ -1,7 +1,8 @@
 package com.sunilos.ctl;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,7 @@ import com.sunilos.service.MarksheetServiceInt;
 import com.sunilos.service.StudentServiceInt;
 
 @RestController
-@RequestMapping(value = "Marksheet")
+@RequestMapping(value = "marksheet")
 public class MarksheetCtl extends BaseCtl<MarksheetForm, MarksheetDTO, MarksheetServiceInt> {
 
 	@Autowired
@@ -25,9 +26,18 @@ public class MarksheetCtl extends BaseCtl<MarksheetForm, MarksheetDTO, Marksheet
 
 	@GetMapping("/preload")
 	public ORSResponse preload() {
-		ORSResponse res = new ORSResponse(true);
 		List<StudentDTO> list = studentService.search(new StudentDTO(), userContext);
-		res.addResult("studentList", list);
+		List<Map<String, Object>> studentList = list.stream()
+				.map(college -> Map.<String, Object>of(
+						"key", college.getKey(),
+						"value", college.getValue()))
+				.toList();
+
+		Map<String, Object> preload = new HashMap<String, Object>();
+		preload.put("studentList", studentList);
+
+		ORSResponse res = new ORSResponse(true);
+		res.addData(preload);
 		return res;
 	}
 

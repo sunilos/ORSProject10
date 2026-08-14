@@ -12,11 +12,12 @@ import com.sunilos.form.RoleForm;
 import com.sunilos.service.RoleServiceInt;
 
 @RestController
-@RequestMapping(value = "Role")
+@RequestMapping(value = "role")
 public class RoleCtl extends BaseCtl<RoleForm, RoleDTO, RoleServiceInt> {
 
 	@GetMapping("/preload")
 	public ORSResponse preload() {
+
 		ORSResponse res = new ORSResponse(true);
 		return res;
 	}

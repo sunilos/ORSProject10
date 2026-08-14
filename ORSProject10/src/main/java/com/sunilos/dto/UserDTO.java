@@ -5,9 +5,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import com.sunilos.common.BaseDTO;
 
@@ -64,7 +64,7 @@ public class UserDTO extends BaseDTO {
 	private String gender;
 
 	@Column(name = "IMAGE_ID")
-	private Long imageId = new Long(0);
+	private Long imageId = 0L;
 
 	/**
 	 * Last login date and time

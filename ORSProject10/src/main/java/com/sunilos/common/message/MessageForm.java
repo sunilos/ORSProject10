@@ -1,6 +1,6 @@
 package com.sunilos.common.message;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 import com.sunilos.common.BaseDTO;
 import com.sunilos.common.BaseForm;

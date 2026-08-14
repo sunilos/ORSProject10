@@ -41,7 +41,7 @@ public class ORSResponse {
 	public boolean isSuccess() {
 		return success;
 	}
-	
+
 	public void setSuccess(boolean success) {
 		this.success = success;
 	}
@@ -64,6 +64,10 @@ public class ORSResponse {
 
 	public void addInputErrors(Object value) {
 		result.put(INPUT_ERROR, value);
+	}
+
+	public Map<String, String> getInputErrors() {
+		return (Map<String, String>) result.get(INPUT_ERROR);
 	}
 
 	public void addMessage(Object value) {

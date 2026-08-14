@@ -1,6 +1,7 @@
 package com.sunilos.common;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sunilos.exception.DuplicateRecordException;
 
@@ -32,10 +33,21 @@ public interface BaseServiceInt<T extends BaseDTO> {
 	public void update(T dto, UserContext userContext);
 
 	/*
-	 * 
+	 *
 	 * Save or update
 	 */
 	public long save(T dto, UserContext userContext);
+
+	/**
+	 * Updates the given fields of a record identified by id. Only the keys
+	 * present in the map are applied.
+	 *
+	 * @param id
+	 * @param fields
+	 * @param userContext
+	 * @return
+	 */
+	public T updateFields(Long id, Map<String, Object> fields, UserContext userContext);
 
 	/**
 	 * Deletes a Role
@@ -60,7 +72,7 @@ public interface BaseServiceInt<T extends BaseDTO> {
 	 * @param pageSize
 	 * @return
 	 */
-	public List search(T dto, int pageNo, int pageSize, UserContext userContext);
+	public List<T> search(T dto, int pageNo, int pageSize, UserContext userContext);
 
 	/**
 	 * Searches Roles

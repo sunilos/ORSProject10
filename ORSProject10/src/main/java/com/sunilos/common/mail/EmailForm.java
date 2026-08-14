@@ -1,6 +1,6 @@
 package com.sunilos.common.mail;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * Contains Email data received from UI

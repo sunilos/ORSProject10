@@ -1,11 +1,15 @@
 package com.sunilos.dao;
 
+import static com.sunilos.util.DataValidator.isEmptyString;
+import static com.sunilos.util.DataValidator.isNotNull;
+import static com.sunilos.util.DataValidator.isZeroNumber;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -59,7 +63,7 @@ public class StudentDAOImpl extends BaseDAOImpl<StudentDTO> implements StudentDA
 	CollegeDAOInt collegeService = null;
 
 	@Override
-	protected void populate(StudentDTO dto, UserContext userContext) {
+	public void populate(StudentDTO dto, UserContext userContext) {
 		CollegeDTO collegeDTO = collegeService.findByPK(dto.getCollegeId(), userContext);
 		if (collegeDTO != null) {
 			dto.setCollegeName(collegeDTO.getName());

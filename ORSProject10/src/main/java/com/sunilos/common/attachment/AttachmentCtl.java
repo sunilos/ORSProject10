@@ -5,9 +5,10 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -93,7 +94,7 @@ public class AttachmentCtl extends BaseCtl<AttachmentForm, AttachmentDTO, Attach
 	}
 
 	@Override
-	public ORSResponse search(@RequestBody AttachmentForm form) {
+	public ResponseEntity<ORSResponse> search(@RequestBody AttachmentForm form) {
 
 		System.out.println(form.getName() + " Page size is***** 88 -------yy-----------***********");
 
@@ -110,12 +111,12 @@ public class AttachmentCtl extends BaseCtl<AttachmentForm, AttachmentDTO, Attach
 
 		res.addData(baseService.search(dto, userContext));
 
-		return res;
+		return okResponse(res);
 
 	}
 
 	@Override
-	public ORSResponse search(@RequestBody AttachmentForm form, int pageNo) {
+	public ResponseEntity<ORSResponse> search(@RequestBody AttachmentForm form, int pageNo) {
 		// 0 is first page index
 		pageNo = (pageNo < 0) ? 0 : pageNo;
 
@@ -133,7 +134,7 @@ public class AttachmentCtl extends BaseCtl<AttachmentForm, AttachmentDTO, Attach
 
 		res.addData(baseService.search(dto, pageNo, 5, userContext));
 
-		return res;
+		return okResponse(res);
 	}
 
 }

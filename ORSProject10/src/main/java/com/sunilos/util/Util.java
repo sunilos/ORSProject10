@@ -69,7 +69,10 @@ public class Util {
 	}
 
 	public static Date convertDateFormat(String date) {
-		return getDate(date, "dd-MM-yyyy");
+		if (DataValidator.isLong(date)) {
+			return new Date(Long.parseLong(date));
+		}
+		return getDate(date, DATE_FORMAT_MYSQL);
 	}
 
 }

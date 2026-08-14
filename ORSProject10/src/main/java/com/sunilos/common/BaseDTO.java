@@ -5,12 +5,12 @@ import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -28,8 +28,7 @@ public abstract class BaseDTO implements Serializable, DropdownList, Comparable<
 	 * Non Business primary key
 	 */
 	@Id
-	@GeneratedValue(generator = "ncsPk")
-	@GenericGenerator(name = "ncsPk", strategy = "native")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	protected Long id;
 	/**
@@ -123,7 +122,7 @@ public abstract class BaseDTO implements Serializable, DropdownList, Comparable<
 	public void setOrgName(String orgName) {
 		this.orgName = orgName;
 	}
-	
+
 	public String getKey() {
 		return String.valueOf(id);
 	}
@@ -148,7 +147,7 @@ public abstract class BaseDTO implements Serializable, DropdownList, Comparable<
 	 * @return
 	 */
 	public boolean isGroupFilter() {
-		return true;
+		return false;
 	}
 
 	@Override

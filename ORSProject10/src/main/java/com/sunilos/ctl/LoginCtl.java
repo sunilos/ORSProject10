@@ -3,11 +3,13 @@ package com.sunilos.ctl;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
-import org.apache.tomcat.util.bcel.classfile.EnumElementValue;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,12 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sunilos.common.BaseCtl;
 import com.sunilos.common.MenuItem;
 import com.sunilos.common.ORSResponse;
-import com.sunilos.common.UserContext;
 import com.sunilos.dto.UserDTO;
 import com.sunilos.form.LoginForm;
 import com.sunilos.form.UserForm;
 import com.sunilos.form.UserRegistrationForm;
 import com.sunilos.service.UserServiceInt;
+import com.sunilos.util.JwtUtil;
 
 /**
  * Login controller provides API for Sign Up, Sign In and Forgot password
@@ -36,7 +38,7 @@ import com.sunilos.service.UserServiceInt;
  *
  */
 @RestController
-@RequestMapping(value = "Auth")
+@RequestMapping(value = "auth")
 public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 
 	/**
@@ -46,47 +48,42 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 	 * @return
 	 */
 	@GetMapping("login/{loginId}")
-	public ORSResponse get(@PathVariable String loginId) {
+	public ResponseEntity<ORSResponse> get(@PathVariable String loginId) {
 		ORSResponse res = new ORSResponse(true);
 		UserDTO dto = baseService.findByLoginId(loginId, userContext);
 		System.out.println("User " + dto);
-		if (dto != null) {
-			UserDTO userDTO = new UserDTO();
-			userDTO.setFirstName(dto.getFirstName());
-			userDTO.setLastName(dto.getLastName());
-			userDTO.setLoginId(dto.getLoginId());
-			res.addData(userDTO);
-		} else {
-			res.setSuccess(false);
-			res.addMessage("Record not found");
+		if (dto == null) {
+			return errorResponse(res, "Record not found", HttpStatus.NOT_FOUND);
 		}
-		return res;
+		UserDTO userDTO = new UserDTO();
+		userDTO.setFirstName(dto.getFirstName());
+		userDTO.setLastName(dto.getLastName());
+		userDTO.setLoginId(dto.getLoginId());
+		res.addData(userDTO);
+		return okResponse(res);
 	}
 
+	@Autowired
+	private JwtUtil jwtUtil;
+
 	@PostMapping("login")
-	public ORSResponse login(@RequestBody @Valid LoginForm form, BindingResult bindingResult, HttpSession session) {
+	public ResponseEntity<ORSResponse> login(@RequestBody @Valid LoginForm form, BindingResult bindingResult) {
 
 		ORSResponse res = valiate(bindingResult);
 
 		if (!res.isSuccess()) {
-			return res;
+			return errorResponse(res, HttpStatus.BAD_REQUEST);
 		}
 
 		UserDTO dto = baseService.authenticate(form.getLoginId(), form.getPassword());
 		if (dto == null) {
-			res.setSuccess(false);
-			res.addMessage("Invalid ID or Password");
-		} else {
-			UserContext context = new UserContext(dto);
-			session.setAttribute("userContext", context);
-			res.setSuccess(true);
-			res.addData(dto);
-			res.addResult("jsessionid", session.getId());
-			System.out.println("jsessionid " + session.getId());
+			return errorResponse(res, "Invalid ID or Password", HttpStatus.UNAUTHORIZED);
 		}
-		
-		System.out.println("Login Uer context : " + session.getAttribute("userContext")) ;
-		return res;
+
+		String token = jwtUtil.generateToken(dto.getLoginId());
+		res.addData(dto);
+		res.addResult("token", token);
+		return okResponse(res);
 
 	}
 
@@ -96,25 +93,22 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 	 * @return
 	 */
 	@GetMapping("fp/{login}")
-	public ORSResponse forgotPassword(@PathVariable String login, HttpServletRequest request) {
-		
-		Enumeration<String> e =  request.getHeaderNames();
+	public ResponseEntity<ORSResponse> forgotPassword(@PathVariable String login, HttpServletRequest request) {
+
+		Enumeration<String> e = request.getHeaderNames();
 		String key = null;
-		while ( e.hasMoreElements() ){
+		while (e.hasMoreElements()) {
 			key = e.nextElement();
 			System.out.println(key + " = " + request.getHeader(key));
 		}
-		
+
 		ORSResponse res = new ORSResponse(true);
 		UserDTO dto = this.baseService.forgotPassword(login);
 		if (dto == null) {
-			res.setSuccess(false);
-			res.addMessage("Invalid Login Id");
-		} else {
-			res.setSuccess(true);
-			res.addMessage("Password has been sent to email id");
+			return errorResponse(res, "Invalid Login Id", HttpStatus.NOT_FOUND);
 		}
-		return res;
+		res.addMessage("Password has been sent to email id");
+		return okResponse(res);
 	}
 
 	/**
@@ -125,22 +119,21 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 	 * @return
 	 */
 	@PostMapping("signUp")
-	public ORSResponse signUp(@RequestBody @Valid UserRegistrationForm form, BindingResult bindingResult) {
+	public ResponseEntity<ORSResponse> signUp(@RequestBody @Valid UserRegistrationForm form,
+			BindingResult bindingResult) {
 
 		ORSResponse res = valiate(bindingResult);
 
 		if (!res.isSuccess()) {
-			return res;
+			return errorResponse(res, HttpStatus.BAD_REQUEST);
 		}
 
 		UserDTO dto = baseService.findByLoginId(form.getLogin(), userContext);
 
 		if (dto != null) {
-			res.setSuccess(false);
-			res.addMessage("Login Id already exists");
-			return res;
+			return errorResponse(res, "Login Id already exists", HttpStatus.CONFLICT);
 		}
-		
+
 		dto = new UserDTO();
 		dto.setFirstName(form.getFirstName());
 		dto.setLastName(form.getLastName());
@@ -148,16 +141,15 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 		dto.setGender(form.getGender());
 		dto.setDob(form.getDob());
 		dto.setPhone(form.getMobileNo());
-		
+
 		baseService.register(dto);
 
-		res.setSuccess(true);
 		res.addMessage("User has been registered");
-		return res;
+		return okResponse(res);
 	}
 
 	@GetMapping("menu")
-	public ORSResponse menu(HttpSession session) {
+	public ResponseEntity<ORSResponse> menu(HttpSession session) {
 
 		LinkedHashSet<MenuItem> menuBar = new LinkedHashSet<MenuItem>();
 
@@ -172,13 +164,10 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 		coll.addSubmenu("College List", "/collegelist");
 
 		menuBar.add(coll);
-		
-		
 
 		ORSResponse res = new ORSResponse(true);
 		res.addData(menuBar);
-		res.setSuccess(true);
-		return res;
+		return okResponse(res);
 	}
 
 }

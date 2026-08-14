@@ -1,21 +1,27 @@
 package com.sunilos.common;
 
+import static com.sunilos.util.DataValidator.isZeroNumber;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.sunilos.exception.DatabaseException;
 import com.sunilos.exception.DuplicateRecordException;
 
 public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
@@ -29,9 +35,28 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 		// entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
 	}
 
+	@Override
+	public String getDTOClassName() {
+		return getDTOClass().getSimpleName();
+	}
+
+	@Override
+	public boolean exists(long id) {
+		Long count = entityManager.createQuery(
+				"select count(m) from " + getDTOClass().getSimpleName() + " m where m.id = :id", Long.class)
+				.setParameter("id", id)
+				.getSingleResult();
+		return count > 0;
+	}
+
+	public T findByPK(long pk, UserContext userContext) {
+		T dto = entityManager.find(getDTOClass(), pk);
+		return dto;
+	}
+
 	/**
 	 * Find record by Unique key
-	 * 
+	 *
 	 * @param attribute
 	 * @param val
 	 * @param dtoClass
@@ -70,14 +95,27 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 
 	}
 
-	public T findByPK(long pk, UserContext userContext) {
-		T dto = entityManager.find(getDTOClass(), pk);
-		return dto;
+	public List<T> findAll(T dto, int pageNo, int pageSize, UserContext userContext) {
+
+		TypedQuery<T> query = createCriteria(dto, userContext);
+
+		if (pageSize > 0) {
+			query.setFirstResult(pageNo * pageSize);
+			query.setMaxResults(pageSize);
+		}
+
+		System.out.println("Page No is****************" + pageNo
+				+ "Page size is****************" + pageSize);
+		return query.getResultList();
+	}
+
+	public List<T> findAll(T dto, UserContext userContext) {
+		return findAll(dto, 0, 0, userContext);
 	}
 
 	/**
 	 * Build criteria query
-	 * 
+	 *
 	 * @param dto
 	 * @return
 	 */
@@ -86,10 +124,11 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
 		// Create criteria
-		CriteriaQuery<T> cq = builder.createQuery(getDTOClass());
+		Class<T> dtoClass = getDTOClass();
+		CriteriaQuery<T> cq = builder.createQuery(dtoClass);
 
 		// Columns information
-		Root<T> qRoot = cq.from(getDTOClass());
+		Root<T> qRoot = cq.from(dtoClass);
 
 		// Column of query
 		cq.select(qRoot);
@@ -102,21 +141,23 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 			whereClause.add(builder.equal(qRoot.get("orgId"), dto.getOrgId()));
 		}
 
-		cq.where(whereClause.toArray(new Predicate[whereClause.size()]));
+		if (!whereClause.isEmpty()) {
+			cq.where(whereClause.toArray(new Predicate[0]));
+		}
 
-		List<Order> orderBys = getOrderByClause(dto, builder, qRoot);
+		List<Order> orderBy = getOrderByClause(dto, builder, qRoot);
 
-		cq.orderBy(orderBys.toArray(new Order[orderBys.size()]));
+		if (!orderBy.isEmpty()) {
+			cq.orderBy(orderBy.toArray(new Order[0]));
+		}
 
-		TypedQuery<T> query = entityManager.createQuery(cq);
-
-		return query;
+		return entityManager.createQuery(cq);
 
 	}
 
 	/**
 	 * Creates WHERE clause of search
-	 * 
+	 *
 	 * @param dto
 	 * @param builder
 	 * @param qRoot
@@ -124,29 +165,36 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 	 */
 	protected abstract List<Predicate> getWhereClause(T dto, CriteriaBuilder builder, Root<T> qRoot);
 
-	public List search(T dto, int pageNo, int pageSize, UserContext userContext) {
+	/**
+	 * Get order by clause
+	 *
+	 * @param dto
+	 * @param builder
+	 * @param qRoot
+	 * @return
+	 */
+	protected List<Order> getOrderByClause(T dto, CriteriaBuilder builder, Root<T> qRoot) {
 
-		TypedQuery<T> query = createCriteria(dto, userContext);
-		
-		System.out.println(" PAGE ->>>>>>>>>>>>>>>>" + pageNo + " --- " + pageSize);
-		if (pageSize > 0) {
-			
-			query.setFirstResult(pageNo * pageSize);
-			query.setMaxResults(pageSize);
-		}
+		// Apply Order by clause
 
-		List list = query.getResultList();
+		LinkedHashMap<String, String> map = dto.orderBY();
 
-		return list;
-	}
+		List<Order> orderBy = new ArrayList<Order>();
 
-	public List search(T dto, UserContext userContext) {
-		return search(dto, 0, 0, userContext);
+		map.forEach((key, value) -> {
+			if (value.equals("asc")) {
+				orderBy.add(builder.asc(qRoot.get(key)));
+			} else {
+				orderBy.add(builder.desc(qRoot.get(key)));
+			}
+		});
+
+		return orderBy;
 	}
 
 	/**
 	 * Run HQL query
-	 * 
+	 *
 	 * @param hql
 	 * @param userContext
 	 * @return
@@ -171,20 +219,11 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 		dto.setOrgId(userContext.getOrgId());
 		dto.setOrgName(userContext.getOrgName());
 
-		populate(dto,userContext);
+		populate(dto, userContext);
 
 		entityManager.persist(dto);
 
 		return dto.getId();
-
-	}
-
-	/**
-	 * Populate redundant values into dto. Overridden by chiled classes.
-	 * 
-	 * @param dto
-	 */
-	protected void populate(T dto, UserContext userContext) {
 
 	}
 
@@ -203,8 +242,17 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 	}
 
 	/**
+	 * Populate redundant values into dto. Overridden by chiled classes.
+	 *
+	 * @param dto
+	 */
+	public void populate(T dto, UserContext userContext) {
+
+	}
+
+	/**
 	 * Check unique keys
-	 * 
+	 *
 	 * @param dto
 	 */
 	private void checkDuplicate(T dto, UserContext userContext) {
@@ -220,90 +268,54 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 		});
 	}
 
+	@Override
+	@Transactional
+	public T updateFields(Long id, Map<String, Object> fields, UserContext userContext) {
+
+		if (!exists(id)) {
+			throw new DatabaseException(getDTOClass().getSimpleName() + " not found for id: " + id);
+		}
+
+		fields.remove("id");
+		fields.remove("createdBy");
+		fields.remove("createdBy");
+		fields.remove("modifiedDatetime");
+		fields.remove("createdDatetime");
+
+		if (!fields.isEmpty()) {
+			StringBuilder hql = new StringBuilder("update " + getDTOClass().getSimpleName() + " set ");
+
+			int i = 0;
+			for (String key : fields.keySet()) {
+				hql.append(key).append(" = :").append(key);
+				if (++i < fields.size()) {
+					hql.append(", ");
+				}
+			}
+			hql.append(" where id = :id");
+
+			var query = entityManager.createQuery(hql.toString());
+			fields.forEach(query::setParameter);
+			query.setParameter("id", id);
+
+			int updated = query.executeUpdate();
+			if (updated == 0) {
+				throw new DatabaseException(getDTOClass().getSimpleName() + " not found for id: " + id);
+			}
+
+			entityManager.clear();
+		}
+
+		return findByPK(id, userContext);
+	}
+
 	/**
 	 * Delete a record
 	 */
 	public void delete(T dto, UserContext userContext) {
-		entityManager.remove(dto);
-	}
-
-	/**
-	 * Get DTO Class object
-	 * 
-	 * @return
-	 */
-	public abstract Class<T> getDTOClass();
-
-	/**
-	 * Check empty string
-	 * 
-	 * @param val
-	 * @return
-	 */
-	protected boolean isEmptyString(String val) {
-		return val == null || val.trim().length() == 0;
-	}
-
-	/**
-	 * Check zero number
-	 * 
-	 * @param val
-	 * @return
-	 */
-	protected boolean isZeroNumber(Double val) {
-		return val == null || val == 0;
-	}
-
-	/**
-	 * Check zero number
-	 * 
-	 * @param val
-	 * @return
-	 */
-	protected boolean isZeroNumber(Long val) {
-		return val == null || val == 0;
-	}
-
-	/**
-	 * Check zero number
-	 * 
-	 * @param val
-	 * @return
-	 */
-
-	protected boolean isZeroNumber(Integer val) {
-		return val == null || val == 0;
-	}
-
-	protected boolean isNotNull(Object val) {
-		return val != null;
-	}
-
-	/**
-	 * Get order by clause
-	 * 
-	 * @param dto
-	 * @param builder
-	 * @param qRoot
-	 * @return
-	 */
-	protected List<Order> getOrderByClause(T dto, CriteriaBuilder builder, Root<T> qRoot) {
-
-		// Apply Order by clause
-
-		LinkedHashMap<String, String> map = dto.orderBY();
-
-		List<Order> orderBys = new ArrayList<Order>();
-
-		map.forEach((key, value) -> {
-			if (value.equals("asc")) {
-				orderBys.add(builder.asc(qRoot.get(key)));
-			} else {
-				orderBys.add(builder.desc(qRoot.get(key)));
-			}
-		});
-
-		return orderBys;
+		if (dto != null) {
+			entityManager.remove(dto);
+		}
 	}
 
 }

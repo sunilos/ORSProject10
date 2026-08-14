@@ -47,16 +47,32 @@ public class ORSApp extends SpringBootServletInitializer {
 			public void addCorsMappings(CorsRegistry registry) {
 				CorsRegistration cors = registry.addMapping("/**");
 				cors.allowedOrigins("http://localhost:4200");
+				cors.allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS");
 				cors.allowedHeaders("*");
 				cors.allowCredentials(true);
 			}
 
 			/**
-			 * Add Interceptors
+			 * Add Interceptors. Only the endpoints a client must be able to
+			 * call before it has a token are excluded here - everything
+			 * else, including the CRUD endpoints LoginCtl inherits from
+			 * BaseCtl, requires a valid JWT Bearer token.
+			 *
+			 * Each pattern ends in /** so it matches the bare path, a
+			 * trailing slash, and any sub-path - controller routing tolerates
+			 * a trailing slash (e.g. POST /auth/login/), and these patterns
+			 * need to as well or the request falls through to the "protected"
+			 * branch and gets rejected for missing a token it can't have yet.
 			 */
 			@Override
 			public void addInterceptors(InterceptorRegistry registry) {
-				registry.addInterceptor(frontCtl).addPathPatterns("/**").excludePathPatterns("/Auth/**");
+				registry.addInterceptor(frontCtl)
+						.addPathPatterns("/**")
+						.excludePathPatterns(
+								"/auth/login/**",
+								"/auth/signUp/**",
+								"/auth/fp/**",
+								"/actuator/**");
 			}
 
 			@Override

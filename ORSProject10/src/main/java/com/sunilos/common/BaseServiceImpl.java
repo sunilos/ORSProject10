@@ -1,6 +1,7 @@
 package com.sunilos.common;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +28,12 @@ public abstract class BaseServiceImpl<T extends BaseDTO, D extends BaseDAOInt<T>
 
 	@Transactional(readOnly = true)
 	public List<T> search(T dto, int pageNo, int pageSize, UserContext userContext) {
-		return baseDao.search(dto, pageNo, pageSize, userContext);
+		return baseDao.findAll(dto, pageNo, pageSize, userContext);
 	}
 
 	@Transactional(readOnly = true)
 	public List<T> search(T dto, UserContext userContext) {
-		return baseDao.search(dto, userContext);
+		return baseDao.findAll(dto, userContext);
 	}
 
 	@Transactional(readOnly = false)
@@ -56,6 +57,11 @@ public abstract class BaseServiceImpl<T extends BaseDTO, D extends BaseDAOInt<T>
 			id = add(dto, userContext);
 		}
 		return id;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED)
+	public T updateFields(Long id, Map<String, Object> fields, UserContext userContext) {
+		return baseDao.updateFields(id, fields, userContext);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)

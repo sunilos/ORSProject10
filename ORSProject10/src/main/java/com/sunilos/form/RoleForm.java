@@ -1,6 +1,6 @@
 package com.sunilos.form;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 import com.sunilos.common.BaseDTO;
 import com.sunilos.common.BaseForm;
@@ -20,7 +20,7 @@ public class RoleForm extends BaseForm {
 	private String name = null;
 
 	@NotEmpty
-	private String discription = null;
+	private String description = null;
 
 	public String getName() {
 		return name;
@@ -30,19 +30,19 @@ public class RoleForm extends BaseForm {
 		this.name = name;
 	}
 
-	public String getDiscription() {
-		return discription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDiscription(String discription) {
-		this.discription = discription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
 	public BaseDTO getDto() {
 		RoleDTO dto = initDTO(new RoleDTO());
 		dto.setName(name);
-		dto.setDiscription(discription);
+		dto.setDescription(description);
 		return dto;
 	}
 

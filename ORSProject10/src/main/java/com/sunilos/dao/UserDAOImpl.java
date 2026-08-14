@@ -1,11 +1,15 @@
 package com.sunilos.dao;
 
+import static com.sunilos.util.DataValidator.isEmptyString;
+import static com.sunilos.util.DataValidator.isNotNull;
+import static com.sunilos.util.DataValidator.isZeroNumber;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -85,7 +89,7 @@ public class UserDAOImpl extends BaseDAOImpl<UserDTO> implements UserDAOInt {
 	RoleDAOInt roleDao;
 
 	@Override
-	protected void populate(UserDTO dto, UserContext userContext) {
+	public void populate(UserDTO dto, UserContext userContext) {
 		if (dto.getRoleId() != null && dto.getRoleId() > 0) {
 			RoleDTO roleDto = roleDao.findByPK(dto.getRoleId(), userContext);
 			dto.setRoleName(roleDto.getName());

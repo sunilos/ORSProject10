@@ -2,8 +2,8 @@ package com.sunilos.form;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * Contains MyProfile for elements and its declarative validation

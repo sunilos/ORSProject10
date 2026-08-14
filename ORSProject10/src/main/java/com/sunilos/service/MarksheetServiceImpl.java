@@ -2,7 +2,8 @@ package com.sunilos.service;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,7 @@ import com.sunilos.exception.DuplicateRecordException;
 public class MarksheetServiceImpl extends BaseServiceImpl<MarksheetDTO, MarksheetDAOInt>
 		implements MarksheetServiceInt {
 
-	private static Logger log = Logger.getLogger(MarksheetServiceImpl.class);
+	private static Logger log = LoggerFactory.getLogger(MarksheetServiceImpl.class);
 
 	@Transactional(readOnly = true)
 	public MarksheetDTO findByName(String name, UserContext context) {

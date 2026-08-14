@@ -1,11 +1,14 @@
 package com.sunilos.dao;
 
+import static com.sunilos.util.DataValidator.isEmptyString;
+import static com.sunilos.util.DataValidator.isZeroNumber;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -51,7 +54,7 @@ public class MarksheetDAOImpl extends BaseDAOImpl<MarksheetDTO> implements Marks
 	}
 
 	@Override
-	protected void populate(MarksheetDTO dto, UserContext userContext) {
+	public void populate(MarksheetDTO dto, UserContext userContext) {
 		if (dto.getStudentId() != null) {
 			StudentDTO studentDTO = studentDao.findByPK(dto.getStudentId(), userContext);
 			if (studentDTO != null) {
