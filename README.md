@@ -1,6 +1,11 @@
 # ORSProject10
 Online Result System (ORS) is the web application to provide marksheet and user management online.
 
+# Project Structure
+This repository contains two subprojects:
+1. `ORSProject10` — Spring Boot backend (REST API)
+1. `ORSProject10-UI` — Angular frontend
+
 # Modules
 
 ## Functional User stories 
@@ -18,25 +23,50 @@ Online Result System (ORS) is the web application to provide marksheet and user 
 1. Document attachment Management
 
 # Technologies
-1. JDK 1.8
-1. Spring Boot
-1. JPA / Hibernate 
+
+## Backend (`ORSProject10`)
+1. JDK 21
+1. Spring Boot 3.3.5
+1. Spring Data JPA / Hibernate
+1. Spring Security + JWT (jjwt)
 1. HikariPool
-1. Angular 8
+1. Maven
+
+## Frontend (`ORSProject10-UI`)
+1. Angular 21
+1. Bootstrap 5
+1. TypeScript
 
 # Database
 1. MySQL
 
 # Server  
-1. Tomcat 7
+1. Embedded Tomcat (Spring Boot)
 
 # Platform 
 1. Windows 
-1. Ubuntu 14.x
+1. Linux
 
 # Tools 
-1. Eclipse Neon
-2. Maven Project
+1. Eclipse / VS Code
+1. Maven Project
+1. Angular CLI
+1. Node.js / npm
 
+# Getting Started
+
+## Backend
+```bash
+cd ORSProject10
+mvnw spring-boot:run
+```
+
+## Frontend
+```bash
+cd ORSProject10-UI
+npm install
+ng serve
+```
+Once the frontend dev server is running, open `http://localhost:4200/`.
 
 
