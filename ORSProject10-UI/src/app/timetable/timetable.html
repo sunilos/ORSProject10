@@ -1,0 +1,106 @@
+<div class="min-vh-100 py-4 px-3 page-bg">
+  <div class="mx-auto" style="max-width: 680px">
+
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <button class="btn btn-outline-light btn-sm" (click)="goBack()">&#8592; Back</button>
+      <h1 class="h4 text-white fw-bold mb-0">{{ title }}</h1>
+    </div>
+
+    <div class="card shadow">
+      <div class="card-body p-4">
+
+        @if (loading) {
+          <div class="text-center py-4 text-secondary">
+            <div class="spinner-border mb-3" style="color: #0f3460" role="status"></div>
+            <p class="mb-0">Loading time table...</p>
+          </div>
+        } @else {
+
+          @if (errorMessage) {
+            <div class="alert alert-danger">{{ errorMessage }}</div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="onSave()">
+
+            <p class="small fw-bold text-uppercase border-bottom pb-1 mb-3" style="color:#0f3460">Exam Schedule</p>
+
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label for="exam_date" class="form-label fw-semibold">Exam Date</label>
+                <input id="exam_date" type="date" formControlName="exam_date" class="form-control" />
+                @if (errors['exam_date']) { <div class="text-danger small mt-1">{{ errors['exam_date'] }}</div> }
+              </div>
+              <div class="col">
+                <label for="exam_time" class="form-label fw-semibold">Exam Time <span class="text-danger">*</span></label>
+                <input id="exam_time" type="text" formControlName="exam_time" placeholder="e.g. 09:00 AM"
+                  class="form-control" [class.is-invalid]="form.get('exam_time')!.invalid && form.get('exam_time')!.touched" />
+                @if (form.get('exam_time')!.invalid && form.get('exam_time')!.touched) {
+                  <div class="invalid-feedback">Exam time is required.</div>
+                }
+                @if (errors['exam_time']) { <div class="text-danger small mt-1">{{ errors['exam_time'] }}</div> }
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="semester" class="form-label fw-semibold">Semester <span class="text-danger">*</span></label>
+              <input id="semester" type="text" formControlName="semester" placeholder="e.g. Semester 1"
+                class="form-control" [class.is-invalid]="form.get('semester')!.invalid && form.get('semester')!.touched" />
+              @if (form.get('semester')!.invalid && form.get('semester')!.touched) {
+                <div class="invalid-feedback">Semester is required.</div>
+              }
+              @if (errors['semester']) { <div class="text-danger small mt-1">{{ errors['semester'] }}</div> }
+            </div>
+
+            <p class="small fw-bold text-uppercase border-bottom pb-1 mb-3" style="color:#0f3460">Assignment</p>
+
+            <div class="mb-3">
+              <label for="course_id" class="form-label fw-semibold">Course <span class="text-danger">*</span></label>
+              <select id="course_id" formControlName="course_id" (change)="onCourseChange($event)" class="form-select"
+                [class.is-invalid]="form.get('course_id')!.invalid && form.get('course_id')!.touched">
+                <option value="">— Select a course —</option>
+                @for (course of preloadData?.courses; track course.id) {
+                  <option [value]="course.id">{{ course.value }}</option>
+                }
+              </select>
+              @if (form.get('course_id')!.invalid && form.get('course_id')!.touched) {
+                <div class="invalid-feedback">Course is required.</div>
+              }
+              @if (errors['course_id']) { <div class="text-danger small mt-1">{{ errors['course_id'] }}</div> }
+            </div>
+
+            <div class="mb-3">
+              <label for="subject_id" class="form-label fw-semibold">Subject <span class="text-danger">*</span></label>
+              <select id="subject_id" formControlName="subject_id" (change)="onSubjectChange($event)" class="form-select"
+                [class.is-invalid]="form.get('subject_id')!.invalid && form.get('subject_id')!.touched">
+                <option value="">— Select a subject —</option>
+                @for (subject of preloadData?.subjects; track subject.id) {
+                  <option [value]="subject.id">{{ subject.value }}</option>
+                }
+              </select>
+              @if (form.get('subject_id')!.invalid && form.get('subject_id')!.touched) {
+                <div class="invalid-feedback">Subject is required.</div>
+              }
+              @if (errors['subject_id']) { <div class="text-danger small mt-1">{{ errors['subject_id'] }}</div> }
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn btn-success" [disabled]="saving || deleting">
+                <i class="bi bi-floppy"></i> {{ saving ? 'Saving…' : 'Save' }}
+              </button>
+              @if (isEditMode) {
+                <button type="button" class="btn btn-danger" (click)="onDelete()" [disabled]="saving || deleting">
+                  <i class="bi bi-trash"></i> {{ deleting ? 'Deleting…' : 'Delete' }}
+                </button>
+              }
+              <button type="button" class="btn btn-secondary" (click)="goBack()" [disabled]="saving || deleting">
+                <i class="bi bi-x-circle"></i> Cancel
+              </button>
+            </div>
+
+          </form>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

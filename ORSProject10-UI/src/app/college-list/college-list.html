@@ -1,0 +1,76 @@
+<div class="min-vh-100 py-4 px-3 page-bg">
+  <div class="mx-auto" style="max-width: 1000px">
+
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <button class="btn btn-outline-light btn-sm" (click)="goBack()">&#8592; Back</button>
+      <h1 class="h4 text-white fw-bold mb-0">Colleges</h1>
+      <button class="btn btn-danger btn-sm ms-auto" (click)="forward('/college/new')">+ Add College</button>
+    </div>
+
+    <form [formGroup]="form" class="d-flex align-items-center gap-2 mb-3" (ngSubmit)="doSearch()">
+      <input type="text" formControlName="name" placeholder="Name" class="form-control" />
+      <input type="text" formControlName="city" placeholder="City" class="form-control" />
+      <input type="text" formControlName="state" placeholder="State" class="form-control" />
+      <button type="button" class="btn btn-primary" (click)="doSearch('pdf')">
+        <i class="bi bi-file-earmark-pdf"></i> 
+      </button>
+      <button type="button" class="btn btn-primary" (click)="doSearch('doc')">
+        <i class="bi bi-file-earmark-word"></i> 
+      </button>
+      <button type="submit" class="btn btn-primary">Search</button>
+
+    </form>
+
+    @if (loading) {
+      <div class="card shadow text-center py-5 text-secondary">
+        <div class="spinner-border mx-auto mb-3" style="color: #0f3460" role="status"></div>
+        <p class="mb-0">Loading colleges...</p>
+      </div>
+    } @else if (searchForm.error) {
+      <div class="alert alert-danger">{{ searchForm.message }}</div>
+    } @else if (searchForm.listdata.length === 0) {
+      <div class="card shadow text-center py-5 text-secondary">
+        <p class="mb-0">No colleges found.</p>
+      </div>
+    } @else {
+      <div class="card shadow overflow-hidden">
+        <table class="table table-hover table-bordered mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>State</th>
+              <th>Phone Number</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (college of searchForm.listdata; track college.id) {
+              <tr>
+                <td class="text-secondary small">{{ (searchForm.pageNo - 1) * searchForm.pageSize + $index + 1 }}</td>
+                <td class="fw-medium">{{ college.name }}</td>
+                <td class="text-secondary small">{{ college.address || '—' }}</td>
+                <td class="text-secondary small">{{ college.city || '—' }}</td>
+                <td class="text-secondary small">{{ college.state || '—' }}</td>
+                <td class="text-secondary small">{{ college.phoneNo || '—' }}</td>
+                <td>
+                  <button class="btn btn-sm btn-primary" (click)="edit(college)">
+                    <i class="bi bi-pencil-square"></i> Edit
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <div class="d-flex align-items-center justify-content-between px-3 py-2 bg-light border-top">
+          <button class="btn btn-sm btn-outline-secondary" (click)="previous()" [disabled]="searchForm.pageNo <= 1">&#8592; Previous</button>
+          <span class="text-secondary small">Page {{ searchForm.pageNo }} &mdash; {{ searchForm.listdata.length }} college{{ searchForm.listdata.length !== 1 ? 's' : '' }}</span>
+          <button class="btn btn-sm btn-outline-secondary" (click)="next()" [disabled]="searchForm.listdata.length < searchForm.pageSize">Next &#8594;</button>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

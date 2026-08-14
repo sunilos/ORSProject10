@@ -1,0 +1,60 @@
+import { Routes } from '@angular/router';
+import { LoginComponent } from './login/login';
+import { WelcomeComponent } from './welcome/welcome';
+import { ChangePasswordComponent } from './change-password/change-password';
+import { ForgetPasswordComponent } from './forget-password/forget-password';
+import { RegisterComponent } from './register/register';
+import { UserListComponent } from './user-list/user-list';
+import { UserComponent } from './user/user';
+import { RoleListComponent } from './role-list/role-list';
+import { CollegeListComponent } from './college-list/college-list';
+import { RoleComponent } from './role/role';
+import { CollegeComponent } from './college/college';
+import { CourseListComponent } from './course-list/course-list';
+import { CourseComponent } from './course/course';
+import { StudentListComponent } from './student-list/student-list';
+import { StudentComponent } from './student/student';
+import { SubjectListComponent } from './subject-list/subject-list';
+import { SubjectComponent } from './subject/subject';
+import { FacultyListComponent } from './faculty-list/faculty-list';
+import { FacultyComponent } from './faculty/faculty';
+import { MarksheetListComponent } from './marksheet-list/marksheet-list';
+import { MarksheetComponent } from './marksheet/marksheet';
+import { TimeTableListComponent } from './timetable-list/timetable-list';
+import { TimeTableComponent } from './timetable/timetable';
+
+export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  { path: 'welcome', component: WelcomeComponent },
+  { path: 'change-password', component: ChangePasswordComponent },
+  { path: 'forget-password', component: ForgetPasswordComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'users', component: UserListComponent },
+  { path: 'user/new', component: UserComponent },
+  { path: 'user/:id', component: UserComponent },
+  { path: 'roles', component: RoleListComponent },
+  { path: 'role/new', component: RoleComponent },
+  { path: 'role/:id', component: RoleComponent },
+  { path: 'colleges', component: CollegeListComponent },
+  { path: 'college/new', component: CollegeComponent },
+  { path: 'college/:id', component: CollegeComponent },
+  { path: 'courses', component: CourseListComponent },
+  { path: 'course/new', component: CourseComponent },
+  { path: 'course/:id', component: CourseComponent },
+  { path: 'students', component: StudentListComponent },
+  { path: 'student/new', component: StudentComponent },
+  { path: 'student/:id', component: StudentComponent },
+  { path: 'subjects', component: SubjectListComponent },
+  { path: 'subject/new', component: SubjectComponent },
+  { path: 'subject/:id', component: SubjectComponent },
+  { path: 'faculty', component: FacultyListComponent },
+  { path: 'faculty/new', component: FacultyComponent },
+  { path: 'faculty/:id', component: FacultyComponent },
+  { path: 'marksheets', component: MarksheetListComponent },
+  { path: 'marksheet/new', component: MarksheetComponent },
+  { path: 'marksheet/:id', component: MarksheetComponent },
+  { path: 'timetables', component: TimeTableListComponent },
+  { path: 'timetable/new', component: TimeTableComponent },
+  { path: 'timetable/:id', component: TimeTableComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
+];

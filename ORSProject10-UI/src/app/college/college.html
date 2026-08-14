@@ -1,0 +1,80 @@
+<div class="min-vh-100 py-4 px-3 page-bg">
+  <div class="mx-auto" style="max-width: 600px">
+
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <button class="btn btn-outline-light btn-sm" (click)="goBack()">&#8592; Back</button>
+      <h1 class="h4 text-white fw-bold mb-0">{{ title }}</h1>
+    </div>
+
+    <div class="card shadow">
+      <div class="card-body p-4">
+
+        @if (loading) {
+          <div class="text-center py-4 text-secondary">
+            <div class="spinner-border mb-3" style="color: #0f3460" role="status"></div>
+            <p class="mb-0">Loading college...</p>
+          </div>
+        } @else {
+
+          @if (errorMessage) {
+            <div class="alert alert-danger">{{ errorMessage }}</div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="onSave()">
+
+            <div class="mb-3">
+              <label for="name" class="form-label fw-semibold">Name <span class="text-danger">*</span></label>
+              <input id="name" type="text" formControlName="name" placeholder="Enter college name"
+                class="form-control" [class.is-invalid]="form.get('name')!.invalid && form.get('name')!.touched" />
+              @if (form.get('name')!.invalid && form.get('name')!.touched) {
+                <div class="invalid-feedback">Name is required.</div>
+              }
+              @if (errors['name']) { <div class="text-danger small mt-1">{{ errors['name'] }}</div> }
+            </div>
+
+            <div class="mb-3">
+              <label for="address" class="form-label fw-semibold">Address</label>
+              <input id="address" type="text" formControlName="address" placeholder="Enter address" class="form-control" />
+              @if (errors['address']) { <div class="text-danger small mt-1">{{ errors['address'] }}</div> }
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label for="city" class="form-label fw-semibold">City</label>
+                <input id="city" type="text" formControlName="city" placeholder="Enter city" class="form-control" />
+                @if (errors['city']) { <div class="text-danger small mt-1">{{ errors['city'] }}</div> }
+              </div>
+              <div class="col">
+                <label for="state" class="form-label fw-semibold">State</label>
+                <input id="state" type="text" formControlName="state" placeholder="Enter state" class="form-control" />
+                @if (errors['state']) { <div class="text-danger small mt-1">{{ errors['state'] }}</div> }
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="phoneNo" class="form-label fw-semibold">Phone Number</label>
+              <input id="phoneNo" type="tel" formControlName="phoneNo" placeholder="Enter phone number" class="form-control" />
+              @if (errors['phoneNo']) { <div class="text-danger small mt-1">{{ errors['phoneNo'] }}</div> }
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn btn-success" [disabled]="saving || deleting">
+                <i class="bi bi-floppy"></i> {{ saving ? 'Saving…' : 'Save' }}
+              </button>
+              @if (isEditMode) {
+                <button type="button" class="btn btn-danger" (click)="onDelete()" [disabled]="saving || deleting">
+                  <i class="bi bi-trash"></i> {{ deleting ? 'Deleting…' : 'Delete' }}
+                </button>
+              }
+              <button type="button" class="btn btn-secondary" (click)="goBack()" [disabled]="saving || deleting">
+                <i class="bi bi-x-circle"></i> Cancel
+              </button>
+            </div>
+
+          </form>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

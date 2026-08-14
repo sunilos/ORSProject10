@@ -1,0 +1,169 @@
+<div class="min-vh-100 py-4 px-3 page-bg">
+  <div class="mx-auto" style="max-width: 680px">
+
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <button class="btn btn-outline-light btn-sm" (click)="goBack()">&#8592; Back</button>
+      <h1 class="h4 text-white fw-bold mb-0">{{ title }}</h1>
+    </div>
+
+    <div class="card shadow">
+      <div class="card-body p-4">
+
+        @if (loading) {
+          <div class="text-center py-4 text-secondary">
+            <div class="spinner-border mb-3" style="color: #0f3460" role="status"></div>
+            <p class="mb-0">Loading faculty...</p>
+          </div>
+        } @else {
+
+          @if (errorMessage) {
+            <div class="alert alert-danger">{{ errorMessage }}</div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="onSave()">
+
+            <p class="small fw-bold text-uppercase border-bottom pb-1 mb-3" style="color:#0f3460">Personal Info</p>
+
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label for="firstName" class="form-label fw-semibold">First Name <span class="text-danger">*</span></label>
+                <input id="firstName" type="text" formControlName="firstName" placeholder="First name"
+                  class="form-control" [class.is-invalid]="form.get('firstName')!.invalid && form.get('firstName')!.touched" />
+                @if (form.get('firstName')!.invalid && form.get('firstName')!.touched) {
+                  <div class="invalid-feedback">First name is required.</div>
+                }
+                @if (errors['firstName']) { <div class="text-danger small mt-1">{{ errors['firstName'] }}</div> }
+              </div>
+              <div class="col">
+                <label for="lastName" class="form-label fw-semibold">Last Name <span class="text-danger">*</span></label>
+                <input id="lastName" type="text" formControlName="lastName" placeholder="Last name"
+                  class="form-control" [class.is-invalid]="form.get('lastName')!.invalid && form.get('lastName')!.touched" />
+                @if (form.get('lastName')!.invalid && form.get('lastName')!.touched) {
+                  <div class="invalid-feedback">Last name is required.</div>
+                }
+                @if (errors['lastName']) { <div class="text-danger small mt-1">{{ errors['lastName'] }}</div> }
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label for="email" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                <input id="email" type="email" formControlName="email" placeholder="Email address"
+                  class="form-control" [class.is-invalid]="form.get('email')!.invalid && form.get('email')!.touched" />
+                @if (form.get('email')!.touched) {
+                  @if (form.get('email')!.hasError('required')) {
+                    <div class="invalid-feedback">Email is required.</div>
+                  } @else if (form.get('email')!.hasError('email')) {
+                    <div class="invalid-feedback">Enter a valid email address.</div>
+                  }
+                }
+                @if (errors['email']) { <div class="text-danger small mt-1">{{ errors['email'] }}</div> }
+              </div>
+              <div class="col">
+                <label for="mobileNo" class="form-label fw-semibold">Mobile Number <span class="text-danger">*</span></label>
+                <input id="mobileNo" type="tel" formControlName="mobileNo" placeholder="Mobile number" maxlength="10"
+                  class="form-control" [class.is-invalid]="form.get('mobileNo')!.invalid && form.get('mobileNo')!.touched" />
+                @if (form.get('mobileNo')!.touched) {
+                  @if (form.get('mobileNo')!.hasError('required')) {
+                    <div class="invalid-feedback">Mobile number is required.</div>
+                  } @else if (form.get('mobileNo')!.hasError('pattern')) {
+                    <div class="invalid-feedback">Enter a valid 10-digit mobile number.</div>
+                  }
+                }
+                @if (errors['mobileNo']) { <div class="text-danger small mt-1">{{ errors['mobileNo'] }}</div> }
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="address" class="form-label fw-semibold">Address</label>
+              <input id="address" type="text" formControlName="address" placeholder="Address" class="form-control" />
+              @if (errors['address']) { <div class="text-danger small mt-1">{{ errors['address'] }}</div> }
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label for="gender" class="form-label fw-semibold">Gender</label>
+                <select id="gender" formControlName="gender" class="form-select">
+                  <option value="">— Select gender —</option>
+                  @for (g of genderOptions; track g) {
+                    <option [value]="g">{{ g }}</option>
+                  }
+                </select>
+                @if (errors['gender']) { <div class="text-danger small mt-1">{{ errors['gender'] }}</div> }
+              </div>
+              <div class="col">
+                <label for="dob" class="form-label fw-semibold">Date of Birth</label>
+                <input id="dob" type="date" formControlName="dob" class="form-control" />
+                @if (errors['dob']) { <div class="text-danger small mt-1">{{ errors['dob'] }}</div> }
+              </div>
+            </div>
+
+            <p class="small fw-bold text-uppercase border-bottom pb-1 mb-3" style="color:#0f3460">Assignment</p>
+
+            <div class="mb-3">
+              <label for="collegeId" class="form-label fw-semibold">College <span class="text-danger">*</span></label>
+              <select id="collegeId" formControlName="collegeId" class="form-select"
+                [class.is-invalid]="form.get('collegeId')!.invalid && form.get('collegeId')!.touched">
+                <option value="">— Select a college —</option>
+                @for (college of preloadData?.collegeList; track college.key) {
+                  <option [value]="college.key">{{ college.value }}</option>
+                }
+              </select>
+              @if (form.get('collegeId')!.invalid && form.get('collegeId')!.touched) {
+                <div class="invalid-feedback">College is required.</div>
+              }
+              @if (errors['collegeId']) { <div class="text-danger small mt-1">{{ errors['collegeId'] }}</div> }
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label for="courseId" class="form-label fw-semibold">Course <span class="text-danger">*</span></label>
+                <select id="courseId" formControlName="courseId" (change)="onCourseChange($event)" class="form-select"
+                  [class.is-invalid]="form.get('courseId')!.invalid && form.get('courseId')!.touched">
+                  <option value="">— Select a course —</option>
+                  @for (course of preloadData?.courseList; track course.key) {
+                    <option [value]="course.key">{{ course.value }}</option>
+                  }
+                </select>
+                @if (form.get('courseId')!.invalid && form.get('courseId')!.touched) {
+                  <div class="invalid-feedback">Course is required.</div>
+                }
+                @if (errors['courseId']) { <div class="text-danger small mt-1">{{ errors['courseId'] }}</div> }
+              </div>
+              <div class="col">
+                <label for="subjectId" class="form-label fw-semibold">Subject <span class="text-danger">*</span></label>
+                <select id="subjectId" formControlName="subjectId" class="form-select"
+                  [class.is-invalid]="form.get('subjectId')!.invalid && form.get('subjectId')!.touched">
+                  <option value="">— Select a subject —</option>
+                  @for (subject of preloadData?.subjectList; track subject.key) {
+                    <option [value]="subject.key">{{ subject.value }}</option>
+                  }
+                </select>
+                @if (form.get('subjectId')!.invalid && form.get('subjectId')!.touched) {
+                  <div class="invalid-feedback">Subject is required.</div>
+                }
+                @if (errors['subjectId']) { <div class="text-danger small mt-1">{{ errors['subjectId'] }}</div> }
+              </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn btn-success" [disabled]="saving || deleting">
+                <i class="bi bi-floppy"></i> {{ saving ? 'Saving…' : 'Save' }}
+              </button>
+              @if (isEditMode) {
+                <button type="button" class="btn btn-danger" (click)="onDelete()" [disabled]="saving || deleting">
+                  <i class="bi bi-trash"></i> {{ deleting ? 'Deleting…' : 'Delete' }}
+                </button>
+              }
+              <button type="button" class="btn btn-secondary" (click)="goBack()" [disabled]="saving || deleting">
+                <i class="bi bi-x-circle"></i> Cancel
+              </button>
+            </div>
+
+          </form>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

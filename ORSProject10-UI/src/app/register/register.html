@@ -1,0 +1,139 @@
+<div class="login-wrapper">
+  <div class="register-card">
+
+    <div class="login-header">
+      <img src="logo-black.jpg" alt="ORS" class="logo-img" #logoImg
+           (error)="logoImg.style.display='none'; logoText.style.display='block'">
+      <h1 #logoText style="display:none">ORS</h1>
+      <p>Online Registration System</p>
+    </div>
+
+    <div class="card-title">
+      <i class="bi bi-person-plus-fill me-2"></i>Create an Account
+    </div>
+
+    @if (successMessage) {
+      <div class="success-banner">
+        <i class="bi bi-check-circle-fill me-1"></i> {{ successMessage }}
+      </div>
+    }
+
+    @if (errorMessage) {
+      <div class="error-banner">{{ errorMessage }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+      <!-- Name -->
+      <div class="row g-2 mb-0">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="firstName">First Name <span class="req">*</span></label>
+            <input id="firstName" type="text" formControlName="firstName" placeholder="First name"
+              [class.input-error]="form.get('firstName')!.invalid && form.get('firstName')!.touched" />
+            @if (form.get('firstName')!.invalid && form.get('firstName')!.touched) {
+              <span class="field-error">Required.</span>
+            }
+            @if (errors['firstName']) { <span class="field-error">{{ errors['firstName'] }}</span> }
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="lastName">Last Name <span class="req">*</span></label>
+            <input id="lastName" type="text" formControlName="lastName" placeholder="Last name"
+              [class.input-error]="form.get('lastName')!.invalid && form.get('lastName')!.touched" />
+            @if (form.get('lastName')!.invalid && form.get('lastName')!.touched) {
+              <span class="field-error">Required.</span>
+            }
+            @if (errors['lastName']) { <span class="field-error">{{ errors['lastName'] }}</span> }
+          </div>
+        </div>
+      </div>
+
+      <!-- Login / Email -->
+      <div class="form-group">
+        <label for="login"><i class="bi bi-envelope me-1"></i>Login (Email) <span class="req">*</span></label>
+        <input id="login" type="email" formControlName="login" placeholder="you@example.com"
+          [class.input-error]="form.get('login')!.invalid && form.get('login')!.touched" autocomplete="email" />
+        @if (form.get('login')!.touched) {
+          @if (form.get('login')!.hasError('required')) {
+            <span class="field-error">Email is required.</span>
+          } @else if (form.get('login')!.hasError('email')) {
+            <span class="field-error">Enter a valid email address.</span>
+          }
+        }
+        @if (errors['login']) { <span class="field-error">{{ errors['login'] }}</span> }
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password"><i class="bi bi-lock me-1"></i>Password <span class="req">*</span></label>
+        <div class="password-wrapper">
+          <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
+            placeholder="Enter password" maxlength="20"
+            [class.input-error]="form.get('password')!.invalid && form.get('password')!.touched"
+            autocomplete="new-password" />
+          <button type="button" class="toggle-password" (click)="showPassword = !showPassword" tabindex="-1">
+            <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </button>
+        </div>
+        @if (form.get('password')!.invalid && form.get('password')!.touched) {
+          <span class="field-error">Password is required.</span>
+        }
+        @if (errors['password']) { <span class="field-error">{{ errors['password'] }}</span> }
+      </div>
+
+      <!-- Mobile & DOB -->
+      <div class="row g-2 mb-0">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="mobileNumber"><i class="bi bi-phone me-1"></i>Mobile <span class="req">*</span></label>
+            <input id="mobileNumber" type="tel" formControlName="mobileNumber" placeholder="Mobile number"
+              maxlength="15" [class.input-error]="form.get('mobileNumber')!.invalid && form.get('mobileNumber')!.touched" />
+            @if (form.get('mobileNumber')!.invalid && form.get('mobileNumber')!.touched) {
+              <span class="field-error">Required.</span>
+            }
+            @if (errors['mobileNumber']) { <span class="field-error">{{ errors['mobileNumber'] }}</span> }
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="dob"><i class="bi bi-calendar me-1"></i>Date of Birth</label>
+            <input id="dob" type="date" formControlName="dob" />
+            @if (errors['dob']) { <span class="field-error">{{ errors['dob'] }}</span> }
+          </div>
+        </div>
+      </div>
+
+      <!-- Gender -->
+      <div class="form-group">
+        <label>Gender</label>
+        <div class="gender-group">
+          <label class="gender-option">
+            <input type="radio" formControlName="gender" value="Male" /> Male
+          </label>
+          <label class="gender-option">
+            <input type="radio" formControlName="gender" value="Female" /> Female
+          </label>
+          <label class="gender-option">
+            <input type="radio" formControlName="gender" value="Other" /> Other
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" [disabled]="loading">
+        @if (loading) {
+          <span class="spinner"></span> Registering...
+        } @else {
+          <i class="bi bi-person-check me-1"></i> Register
+        }
+      </button>
+
+    </form>
+
+    <div class="footer-links">
+      Already have an account? <a routerLink="/login">Sign In</a>
+    </div>
+
+  </div>
+</div>

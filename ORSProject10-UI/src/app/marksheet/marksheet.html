@@ -1,0 +1,129 @@
+<div class="min-vh-100 py-4 px-3 page-bg">
+  <div class="mx-auto" style="max-width: 680px">
+
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <button class="btn btn-outline-light btn-sm" (click)="goBack()">&#8592; Back</button>
+      <h1 class="h4 text-white fw-bold mb-0">{{ title }}</h1>
+    </div>
+
+    <div class="card shadow">
+      <div class="card-body p-4">
+
+        @if (loading) {
+          <div class="text-center py-4 text-secondary">
+            <div class="spinner-border mb-3" style="color: #0f3460" role="status"></div>
+            <p class="mb-0">Loading marksheet...</p>
+          </div>
+        } @else {
+
+          @if (errorMessage) {
+            <div class="alert alert-danger">{{ errorMessage }}</div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="onSave()">
+
+            <p class="small fw-bold text-uppercase border-bottom pb-1 mb-3" style="color:#0f3460">Student Info</p>
+
+            <div class="mb-3">
+              <label for="studentId" class="form-label fw-semibold">Student <span class="text-danger">*</span></label>
+              <select id="studentId" formControlName="studentId" class="form-select"
+                [class.is-invalid]="form.get('studentId')!.invalid && form.get('studentId')!.touched">
+                <option value="">— Select a student —</option>
+                @for (student of preloadData?.studentList; track student.id) {
+                  <option [value]="student.key">{{ student.value }}</option>
+                }
+              </select>
+              @if (form.get('studentId')!.invalid && form.get('studentId')!.touched) {
+                <div class="invalid-feedback">Student is required.</div>
+              }
+              @if (errors['studentId']) { <div class="text-danger small mt-1">{{ errors['studentId'] }}</div> }
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label for="rollNo" class="form-label fw-semibold">Roll Number <span class="text-danger">*</span></label>
+                <input id="rollNo" type="text" formControlName="rollNo" placeholder="Roll number"
+                  class="form-control" [class.is-invalid]="form.get('rollNo')!.invalid && form.get('rollNo')!.touched" />
+                @if (form.get('rollNo')!.invalid && form.get('rollNo')!.touched) {
+                  <div class="invalid-feedback">Roll number is required.</div>
+                }
+                @if (errors['rollNo']) { <div class="text-danger small mt-1">{{ errors['rollNo'] }}</div> }
+              </div>
+              <div class="col">
+                <label for="year" class="form-label fw-semibold">Year <span class="text-danger">*</span></label>
+                <input id="year" type="number" formControlName="year" placeholder="e.g. 2024"
+                  class="form-control" [class.is-invalid]="form.get('year')!.invalid && form.get('year')!.touched" />
+                @if (form.get('year')!.invalid && form.get('year')!.touched) {
+                  <div class="invalid-feedback">
+                    @if (form.get('year')!.hasError('required')) { Year is required. }
+                    @else { Year must be between 1900 and 2100. }
+                  </div>
+                }
+                @if (errors['year']) { <div class="text-danger small mt-1">{{ errors['year'] }}</div> }
+              </div>
+            </div>
+
+            <p class="small fw-bold text-uppercase border-bottom pb-1 mb-3" style="color:#0f3460">Marks</p>
+
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label for="physics" class="form-label fw-semibold">Physics <span class="text-danger">*</span></label>
+                <input id="physics" type="number" formControlName="physics" placeholder="Marks"
+                  class="form-control" [class.is-invalid]="form.get('physics')!.invalid && form.get('physics')!.touched" />
+                @if (form.get('physics')!.invalid && form.get('physics')!.touched) {
+                  <div class="invalid-feedback">Physics marks are required.</div>
+                }
+                @if (errors['physics']) { <div class="text-danger small mt-1">{{ errors['physics'] }}</div> }
+              </div>
+              <div class="col">
+                <label for="chemistry" class="form-label fw-semibold">Chemistry <span class="text-danger">*</span></label>
+                <input id="chemistry" type="number" formControlName="chemistry" placeholder="Marks"
+                  class="form-control" [class.is-invalid]="form.get('chemistry')!.invalid && form.get('chemistry')!.touched" />
+                @if (form.get('chemistry')!.invalid && form.get('chemistry')!.touched) {
+                  <div class="invalid-feedback">Chemistry marks are required.</div>
+                }
+                @if (errors['chemistry']) { <div class="text-danger small mt-1">{{ errors['chemistry'] }}</div> }
+              </div>
+              <div class="col">
+                <label for="maths" class="form-label fw-semibold">Maths <span class="text-danger">*</span></label>
+                <input id="maths" type="number" formControlName="maths" placeholder="Marks"
+                  class="form-control" [class.is-invalid]="form.get('maths')!.invalid && form.get('maths')!.touched" />
+                @if (form.get('maths')!.invalid && form.get('maths')!.touched) {
+                  <div class="invalid-feedback">Maths marks are required.</div>
+                }
+                @if (errors['maths']) { <div class="text-danger small mt-1">{{ errors['maths'] }}</div> }
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label class="form-label fw-semibold">Total</label>
+                <div class="form-control bg-light fw-bold text-center">{{ total }} / 300</div>
+              </div>
+              <div class="col">
+                <label class="form-label fw-semibold">Percentage</label>
+                <div class="form-control bg-light fw-bold text-center">{{ percentage }}%</div>
+              </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn btn-success" [disabled]="saving || deleting">
+                <i class="bi bi-floppy"></i> {{ saving ? 'Saving…' : 'Save' }}
+              </button>
+              @if (isEditMode) {
+                <button type="button" class="btn btn-danger" (click)="onDelete()" [disabled]="saving || deleting">
+                  <i class="bi bi-trash"></i> {{ deleting ? 'Deleting…' : 'Delete' }}
+                </button>
+              }
+              <button type="button" class="btn btn-secondary" (click)="goBack()" [disabled]="saving || deleting">
+                <i class="bi bi-x-circle"></i> Cancel
+              </button>
+            </div>
+
+          </form>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

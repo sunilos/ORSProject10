@@ -1,0 +1,65 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="login-header">
+      <img src="logo-black.jpg" alt="ORS" class="logo-img" #logoImg
+           (error)="logoImg.style.display='none'; logoText.style.display='block'">
+      <h1 #logoText style="display:none">ORS</h1>
+      <p>Online Registration System</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+      @if (errorMessage) {
+        <div class="error-banner">{{ errorMessage }}</div>
+      }
+
+      <div class="form-group">
+        <label for="login"><i class="bi bi-envelope me-1"></i>Login</label>
+        <input
+          id="login"
+          type="text"
+          formControlName="loginId"
+          placeholder="Enter your login"
+          [class.input-error]="loginForm.get('loginId')?.invalid && loginForm.get('loginId')?.touched"
+          autocomplete="username"
+        />
+        @if (loginForm.get('loginId')?.invalid && loginForm.get('loginId')?.touched) {
+          <span class="field-error">Login is required</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password"><i class="bi bi-lock me-1"></i>Password</label>
+        <div class="password-wrapper">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter your password"
+            [class.input-error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            autocomplete="current-password"
+          />
+          <button type="button" class="toggle-password" (click)="showPassword = !showPassword" tabindex="-1">
+            <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </button>
+        </div>
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+          <span class="field-error">Password is required</span>
+        }
+      </div>
+
+      <button type="submit" class="btn-login" [disabled]="loading">
+        @if (loading) {
+          <span class="spinner"></span> Signing in...
+        } @else {
+          Sign In
+        }
+      </button>
+    </form>
+
+    <div class="footer-links">
+      <a routerLink="/forget-password">Forgot Password?</a>
+      <span class="divider">|</span>
+      <a routerLink="/register">Create an Account</a>
+    </div>
+  </div>
+</div>
