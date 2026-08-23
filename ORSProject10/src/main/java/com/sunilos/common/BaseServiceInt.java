@@ -80,6 +80,15 @@ public interface BaseServiceInt<T extends BaseDTO> {
 	 * @param dto
 	 * @return
 	 */
-	public List search(T dto, UserContext userContext);
+	public List<?> search(T dto, UserContext userContext);
+
+	/**
+	 * Returns list of key and value pairs for dropdown
+	 * 
+	 * @param dto
+	 * @param userContext
+	 * @return
+	 */
+	public List<Map<String, Object>> preloadList(T dto, UserContext userContext);
 
 }

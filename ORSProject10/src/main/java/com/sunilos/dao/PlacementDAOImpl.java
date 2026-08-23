@@ -36,6 +36,9 @@ public class PlacementDAOImpl extends BaseDAOImpl<PlacementDTO> implements Place
 	protected List<Predicate> getWhereClause(PlacementDTO dto, CriteriaBuilder builder, Root<PlacementDTO> qRoot) {
 		// Create where conditions
 		List<Predicate> whereCondition = new ArrayList<Predicate>();
+		if (dto == null) {
+			return whereCondition;
+		}
 
 		if (!isZeroNumber(dto.getStudentId())) {
 

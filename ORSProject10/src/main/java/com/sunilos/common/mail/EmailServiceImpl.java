@@ -1,12 +1,15 @@
 package com.sunilos.common.mail;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Iterator;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,8 +17,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import com.sunilos.common.UserContext;
-import com.sunilos.common.attachment.AttachmentDTO;
-import com.sunilos.common.attachment.AttachmentServiceInt;
+import com.sunilos.dto.DocumentDTO;
+import com.sunilos.service.DocumentServiceInt;
 import com.sunilos.common.message.MessageDTO;
 import com.sunilos.common.message.MessageServiceInt;
 
@@ -35,6 +38,9 @@ public class EmailServiceImpl {
 	@Autowired
 	public JavaMailSender emailSender;
 
+	@Value("${document.upload-dir}")
+	String uploadDir;
+
 	/**
 	 * Get messages from database
 	 */
@@ -45,7 +51,7 @@ public class EmailServiceImpl {
 	 * Get attached filed by ids
 	 */
 	@Autowired
-	private AttachmentServiceInt attachmentService;
+	private DocumentServiceInt documentService;
 
 	/**
 	 * Sends an email
@@ -103,14 +109,15 @@ public class EmailServiceImpl {
 			Iterator<Long> itid = dto.getAttachedFileId().iterator();
 			while (itid.hasNext()) {
 				Long id = itid.next();
-				AttachmentDTO fileDto = attachmentService.findById(id, ctx);
+				DocumentDTO fileDto = documentService.findById(id, ctx);
 				if (fileDto != null) {
-					ByteArrayResource file = new ByteArrayResource(fileDto.getDoc());
+					File sourceFile = new File(uploadDir, fileDto.getName());
+					ByteArrayResource file = new ByteArrayResource(Files.readAllBytes(sourceFile.toPath()));
 					helper.addAttachment(fileDto.getName(), file);
 				}
 			}
 
-		} catch (MessagingException e) {
+		} catch (MessagingException | IOException e) {
 			e.printStackTrace();
 		}
 

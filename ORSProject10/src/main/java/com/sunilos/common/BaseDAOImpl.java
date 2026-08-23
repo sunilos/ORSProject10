@@ -294,7 +294,7 @@ public abstract class BaseDAOImpl<T extends BaseDTO> implements BaseDAOInt<T> {
 			}
 			hql.append(" where id = :id");
 
-			var query = entityManager.createQuery(hql.toString());
+			Query query = entityManager.createQuery(hql.toString());
 			fields.forEach(query::setParameter);
 			query.setParameter("id", id);
 

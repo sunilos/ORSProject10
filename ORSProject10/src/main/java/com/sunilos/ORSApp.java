@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.CorsRegistration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.sunilos.common.FrontCtl;
 
 @SpringBootApplication
-@EnableWebMvc
 // @ComponentScan(basePackages = { "com.sunilos" })
 // @EntityScan(basePackages = { "com.sunilos" })
 public class ORSApp extends SpringBootServletInitializer {
@@ -72,7 +70,8 @@ public class ORSApp extends SpringBootServletInitializer {
 								"/auth/login/**",
 								"/auth/signUp/**",
 								"/auth/fp/**",
-								"/actuator/**");
+								"/actuator/**",
+								"/doc/pub/file/**");
 			}
 
 			@Override

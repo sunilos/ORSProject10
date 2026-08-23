@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sunilos.exception.DatabaseException;
 import com.sunilos.exception.DuplicateRecordException;
 
-public abstract class BaseServiceImpl<T extends BaseDTO, D extends BaseDAOInt<T>> {
+public abstract class BaseServiceImpl<T extends BaseDTO, D extends BaseDAOInt<T>> implements BaseServiceInt<T> {
 
 	private static Logger log = LoggerFactory.getLogger(BaseServiceImpl.class);
 
@@ -36,6 +36,24 @@ public abstract class BaseServiceImpl<T extends BaseDTO, D extends BaseDAOInt<T>
 		return baseDao.findAll(dto, userContext);
 	}
 
+	/**
+	 * returns list of key and value pairs for dropdown
+	 * 
+	 * @param dto
+	 * @param userContext
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public List<Map<String, Object>> preloadList(T dto, UserContext userContext) {
+		List<T> list = baseDao.findAll(dto, userContext);
+		List<Map<String, Object>> preloadlist = list.stream()
+				.map(ele -> Map.<String, Object>of(
+						"key", ele.getKey(),
+						"value", ele.getValue()))
+				.toList();
+		return preloadlist;
+	}
+
 	@Transactional(readOnly = false)
 	public long add(T dto, UserContext userContext) throws DuplicateRecordException {
 		// check duplicate
@@ -50,11 +68,19 @@ public abstract class BaseServiceImpl<T extends BaseDTO, D extends BaseDAOInt<T>
 
 	@Transactional(propagation = Propagation.REQUIRED)
 	public long save(T dto, UserContext userContext) throws DuplicateRecordException {
+		System.out.println("I am in basedservice .save");
 		Long id = dto.getId();
-		if (id != null && id > 0) {
-			update(dto, userContext);
-		} else {
-			id = add(dto, userContext);
+		try {
+			if (id != null && id > 0) {
+				update(dto, userContext);
+				System.out.println("I am in basedservice .update");
+			} else {
+				id = add(dto, userContext);
+				System.out.println("I am in basedservice .add");
+			}
+		} catch (DuplicateRecordException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return id;
 	}

@@ -1,7 +1,5 @@
 package com.sunilos.ctl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,12 +33,9 @@ public class PlacementCtl extends BaseCtl<PlacementForm, PlacementDTO, Placement
 	@GetMapping("/preload")
 	public ORSResponse preload() {
 		ORSResponse res = new ORSResponse(true);
-		List<StudentDTO> studentList = studentService.search(new StudentDTO(), userContext);
-		List<CollegeDTO> collegeList = collegeService.search(new CollegeDTO(), userContext);
-		List<CompanyDTO> companyList = companyService.search(new CompanyDTO(), userContext);
-		res.addResult("studentList", studentList);
-		res.addResult("collegeList", collegeList);
-		res.addResult("companyList", companyList);
+		res.addResult("studentList", studentService.preloadList(new StudentDTO(), userContext));
+		res.addResult("collegeList", collegeService.preloadList(new CollegeDTO(), userContext));
+		res.addResult("companyList", companyService.preloadList(new CompanyDTO(), userContext));
 		return res;
 	}
 }

@@ -2,8 +2,6 @@ package com.sunilos.service;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +9,6 @@ import com.sunilos.common.BaseServiceImpl;
 import com.sunilos.common.UserContext;
 import com.sunilos.dao.MarksheetDAOInt;
 import com.sunilos.dto.MarksheetDTO;
-import com.sunilos.exception.DuplicateRecordException;
 
 /**
  * Session facade of Role Service. It is transactional, apply declarative
@@ -30,8 +27,6 @@ import com.sunilos.exception.DuplicateRecordException;
 @Transactional
 public class MarksheetServiceImpl extends BaseServiceImpl<MarksheetDTO, MarksheetDAOInt>
 		implements MarksheetServiceInt {
-
-	private static Logger log = LoggerFactory.getLogger(MarksheetServiceImpl.class);
 
 	@Transactional(readOnly = true)
 	public MarksheetDTO findByName(String name, UserContext context) {

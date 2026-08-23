@@ -87,6 +87,12 @@ public class FacultyDTO extends BaseDTO {
 	@Column(name = "SUBJECT_NAME", length = 50)
 	private String subjectName;
 
+	/**
+	 * DocumentId of Faculty's profile photo
+	 */
+	@Column(name = "IMAGE_ID")
+	private Long imageId = 0L;
+
 	public Long getCollegeId() {
 		return collegeId;
 	}
@@ -189,6 +195,14 @@ public class FacultyDTO extends BaseDTO {
 
 	public void setSubjectName(String subjectName) {
 		this.subjectName = subjectName;
+	}
+
+	public Long getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(Long imageId) {
+		this.imageId = imageId;
 	}
 
 	public String getKey() {

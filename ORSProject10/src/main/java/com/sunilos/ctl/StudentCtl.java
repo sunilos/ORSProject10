@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sunilos.common.BaseCtl;
+import com.sunilos.common.BaseReportCtl;
 import com.sunilos.common.ORSResponse;
 import com.sunilos.dto.CollegeDTO;
 import com.sunilos.dto.StudentDTO;
@@ -18,7 +18,7 @@ import com.sunilos.service.StudentServiceInt;
 
 @RestController
 @RequestMapping(value = "student")
-public class StudentCtl extends BaseCtl<StudentForm, StudentDTO, StudentServiceInt> {
+public class StudentCtl extends BaseReportCtl<StudentForm, StudentDTO, StudentServiceInt> {
 
 	@Autowired
 	private CollegeServiceInt collegeService;
@@ -26,13 +26,7 @@ public class StudentCtl extends BaseCtl<StudentForm, StudentDTO, StudentServiceI
 	@GetMapping("/preload")
 	public ORSResponse preload() {
 
-		List<CollegeDTO> list = collegeService.search(new CollegeDTO(), userContext);
-
-		List<Map<String, Object>> collegeList = list.stream()
-				.map(college -> Map.<String, Object>of(
-						"key", college.getKey(),
-						"value", college.getValue()))
-				.toList();
+		List<Map<String, Object>> collegeList = collegeService.preloadList(new CollegeDTO(), userContext);
 
 		Map<String, Object> preload = new HashMap<String, Object>();
 		preload.put("collegeList", collegeList);

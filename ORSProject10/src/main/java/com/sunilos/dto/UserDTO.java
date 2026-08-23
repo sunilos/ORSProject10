@@ -66,6 +66,9 @@ public class UserDTO extends BaseDTO {
 	@Column(name = "IMAGE_ID")
 	private Long imageId = 0L;
 
+	@Column(name = "PHOTO", length = 255)
+	private String photo;
+
 	/**
 	 * Last login date and time
 	 */
@@ -101,6 +104,18 @@ public class UserDTO extends BaseDTO {
 	 */
 	@Column(name = "ACCESS_TIME_TO")
 	private Time accessTimeTo;
+
+	// add type attribute to store content type of profile photo
+	@Column(name = "TYPE", length = 50)
+	private String type;
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getType() {
+		return type;
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -208,6 +223,14 @@ public class UserDTO extends BaseDTO {
 
 	public void setImageId(Long imageId) {
 		this.imageId = imageId;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 	public Timestamp getLastLogin() {

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sunilos.common.BaseCtl;
+import com.sunilos.common.BaseReportCtl;
 import com.sunilos.common.ORSResponse;
 import com.sunilos.dto.RoleDTO;
 import com.sunilos.form.RoleForm;
@@ -13,7 +13,7 @@ import com.sunilos.service.RoleServiceInt;
 
 @RestController
 @RequestMapping(value = "role")
-public class RoleCtl extends BaseCtl<RoleForm, RoleDTO, RoleServiceInt> {
+public class RoleCtl extends BaseReportCtl<RoleForm, RoleDTO, RoleServiceInt> {
 
 	@GetMapping("/preload")
 	public ORSResponse preload() {

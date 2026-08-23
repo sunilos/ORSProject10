@@ -138,6 +138,7 @@ public class LoginCtl extends BaseCtl<UserForm, UserDTO, UserServiceInt> {
 		dto.setFirstName(form.getFirstName());
 		dto.setLastName(form.getLastName());
 		dto.setLoginId(form.getLogin());
+		dto.setPassword(form.getPassword());
 		dto.setGender(form.getGender());
 		dto.setDob(form.getDob());
 		dto.setPhone(form.getMobileNo());

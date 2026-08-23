@@ -1,0 +1,11 @@
+com.sunilos
+com.sunilos.common
+com.sunilos.common.mail
+com.sunilos.common.message
+com.sunilos.ctl
+com.sunilos.dao
+com.sunilos.dto
+com.sunilos.exception
+com.sunilos.form
+com.sunilos.service
+com.sunilos.util

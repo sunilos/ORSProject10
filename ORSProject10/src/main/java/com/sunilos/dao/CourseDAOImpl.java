@@ -21,6 +21,9 @@ public class CourseDAOImpl extends BaseDAOImpl<CourseDTO> implements CourseDAOIn
 	protected List<Predicate> getWhereClause(CourseDTO dto, CriteriaBuilder builder, Root<CourseDTO> qRoot) {
 		// Create where conditions
 		List<Predicate> whereCondition = new ArrayList<Predicate>();
+		if (dto == null) {
+			return whereCondition;
+		}
 
 		if (!isEmptyString(dto.getName())) {
 

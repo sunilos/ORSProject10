@@ -62,6 +62,10 @@ public class ORSResponse {
 		result.put(DATA, value);
 	}
 
+	public <T> T getData(Class<T> type) {
+		return type.cast(result.get(DATA));
+	}
+
 	public void addInputErrors(Object value) {
 		result.put(INPUT_ERROR, value);
 	}
@@ -74,4 +78,7 @@ public class ORSResponse {
 		result.put(MESSAGE, value);
 	}
 
+	public String getMessage() {
+		return (String) result.get(MESSAGE);
+	}
 }

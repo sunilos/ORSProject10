@@ -34,6 +34,9 @@ public class MarksheetDAOImpl extends BaseDAOImpl<MarksheetDTO> implements Marks
 
 		// Create where conditions
 		List<Predicate> whereCondition = new ArrayList<Predicate>();
+		if (dto == null) {
+			return whereCondition;
+		}
 
 		if (!isEmptyString(dto.getName())) {
 

@@ -21,6 +21,9 @@ public class CompanyDAOImpl extends BaseDAOImpl<CompanyDTO> implements CompanyDA
 	protected List<Predicate> getWhereClause(CompanyDTO dto, CriteriaBuilder builder, Root<CompanyDTO> qRoot) {
 		// Create where conditions
 		List<Predicate> whereCondition = new ArrayList<Predicate>();
+		if (dto == null) {
+			return whereCondition;
+		}
 
 		if (!isEmptyString(dto.getName())) {
 

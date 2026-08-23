@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sunilos.common.BaseCtl;
+import com.sunilos.common.BaseReportCtl;
 import com.sunilos.common.DropdownList;
 import com.sunilos.common.ORSResponse;
 import com.sunilos.dto.CourseDTO;
@@ -21,7 +21,7 @@ import com.sunilos.service.SubjectServiceInt;
 
 @RestController
 @RequestMapping(value = "subject")
-public class SubjectCtl extends BaseCtl<SubjectForm, SubjectDTO, SubjectServiceInt> {
+public class SubjectCtl extends BaseReportCtl<SubjectForm, SubjectDTO, SubjectServiceInt> {
 
 	@Autowired
 	private CourseServiceInt courseService;
@@ -29,13 +29,7 @@ public class SubjectCtl extends BaseCtl<SubjectForm, SubjectDTO, SubjectServiceI
 	@GetMapping("/preload")
 	public ORSResponse preload() {
 
-		List<CourseDTO> list = courseService.search(new CourseDTO(), userContext);
-
-		List<Map<String, Object>> courseList = list.stream()
-				.map(course -> Map.<String, Object>of(
-						"key", course.getKey(),
-						"value", course.getValue()))
-				.toList();
+		List<Map<String, Object>> courseList = courseService.preloadList(new CourseDTO(), userContext);
 
 		Map<String, Object> preload = new HashMap<String, Object>();
 		preload.put("courseList", courseList);

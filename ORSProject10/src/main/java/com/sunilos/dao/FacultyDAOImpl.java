@@ -36,6 +36,9 @@ public class FacultyDAOImpl extends BaseDAOImpl<FacultyDTO> implements FacultyDA
 	protected List<Predicate> getWhereClause(FacultyDTO dto, CriteriaBuilder builder, Root<FacultyDTO> qRoot) {
 		// Create where conditions
 		List<Predicate> whereCondition = new ArrayList<Predicate>();
+		if (dto == null) {
+			return whereCondition;
+		}
 
 		if (!isEmptyString(dto.getFirstName())) {
 

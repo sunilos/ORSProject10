@@ -227,7 +227,7 @@ public abstract class BaseCtl<F extends BaseForm, T extends BaseDTO, S extends B
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private T newDto() {
+	protected T newDto() {
 		Class<?>[] typeArgs = GenericTypeResolver.resolveTypeArguments(getClass(), BaseCtl.class);
 		try {
 			return (T) typeArgs[1].getDeclaredConstructor().newInstance();

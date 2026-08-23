@@ -21,6 +21,9 @@ public class CollegeDAOImpl extends BaseDAOImpl<CollegeDTO> implements CollegeDA
 	protected List<Predicate> getWhereClause(CollegeDTO dto, CriteriaBuilder builder, Root<CollegeDTO> qRoot) {
 		// Create where conditions
 		List<Predicate> whereCondition = new ArrayList<Predicate>();
+		if (dto == null) {
+			return whereCondition;
+		}
 
 		if (!isEmptyString(dto.getName())) {
 

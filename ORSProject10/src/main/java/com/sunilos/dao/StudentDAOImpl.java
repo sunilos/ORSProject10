@@ -26,6 +26,9 @@ public class StudentDAOImpl extends BaseDAOImpl<StudentDTO> implements StudentDA
 	protected List<Predicate> getWhereClause(StudentDTO dto, CriteriaBuilder builder, Root<StudentDTO> qRoot) {
 		// Create where conditions
 		List<Predicate> whereCondition = new ArrayList<Predicate>();
+		if (dto == null) {
+			return whereCondition;
+		}
 
 		if (!isEmptyString(dto.getFirstName())) {
 

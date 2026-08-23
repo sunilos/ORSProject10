@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sunilos.common.BaseCtl;
+import com.sunilos.common.BaseReportCtl;
 import com.sunilos.common.ORSResponse;
 import com.sunilos.dto.CollegeDTO;
 import com.sunilos.form.CollegeForm;
@@ -12,7 +12,7 @@ import com.sunilos.service.CollegeServiceInt;
 
 @RestController
 @RequestMapping(value = "college")
-public class CollegeCtl extends BaseCtl<CollegeForm, CollegeDTO, CollegeServiceInt> {
+public class CollegeCtl extends BaseReportCtl<CollegeForm, CollegeDTO, CollegeServiceInt> {
 
 	@GetMapping("/preload")
 	public ORSResponse preload() {
