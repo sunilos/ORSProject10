@@ -40,6 +40,7 @@
             <thead class="table-dark">
               <tr>
                 <th>#</th>
+                <th>Photo</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Mobile</th>
@@ -54,6 +55,13 @@
               @for (faculty of searchForm.listdata; track faculty.id) {
                 <tr>
                   <td class="text-secondary small">{{ (searchForm.pageNo - 1) * searchForm.pageSize + $index + 1 }}</td>
+                  <td>
+                    @if (faculty.imageId) {
+                      <img [src]="photoUrl(faculty.imageId)" alt="photo" style="width:40px;height:40px;object-fit:cover;border-radius:50%;">
+                    } @else {
+                      <span class="text-muted">—</span>
+                    }
+                  </td>
                   <td class="fw-medium text-nowrap">{{ faculty.firstName }} {{ faculty.lastName }}</td>
                   <td class="text-secondary small">{{ faculty.email }}</td>
                   <td class="text-secondary small">{{ faculty.mobileNo || '—' }}</td>

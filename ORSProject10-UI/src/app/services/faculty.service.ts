@@ -18,6 +18,8 @@ export interface Faculty {
   subjectName: string;
   courseId: number;
   courseName: string;
+  photo?: string;
+  imageId?: string;
   [key: string]: unknown;
 }
 
@@ -27,5 +29,11 @@ export class FacultyService extends BaseService {
   constructor(serviceLocator: ServiceLocator) {
     super(serviceLocator);
     this.url = ORSAPI.FACULTY_API;
+  }
+
+  uploadPhoto(facultyId: number, file: File, onSuccess: (data: any) => void, onError: (error: any) => void): void {
+    const fd = new FormData();
+    fd.append('file', file);
+    this.serviceLocator.http.put<any>(`${ORSAPI.UPLOAD_FACULTY_PHOTO_API}/${facultyId}`, fd, onSuccess, onError);
   }
 }

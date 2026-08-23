@@ -56,7 +56,7 @@ export class BaseService {
    * @param onError - Called with the error if the request fails.
    */
   searchReport(body: unknown, onSuccess: (data: Blob) => void, onError: (error: any) => void): void {
-    this.serviceLocator.http.postBlob(`${this.url}search/`, body, onSuccess, onError);
+    this.serviceLocator.http.postBlob(`${this.url}/report`, body, onSuccess, onError);
   }
 
   /**

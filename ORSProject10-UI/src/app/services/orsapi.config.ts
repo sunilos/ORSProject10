@@ -17,6 +17,8 @@ export interface ORSAPIConfig {
   STUDENT_SEARCH_API: string;
   COLLEGE_SEARCH_API: string;
   UPLOAD_PHOTO_API: string;
+  UPLOAD_FACULTY_PHOTO_API: string;
+  GET_DOC_API: string;
 }
 
 const BASE = 'http://127.0.0.1:8080';
@@ -32,7 +34,10 @@ export const ORSAPI: ORSAPIConfig = {
   CHANGE_PASSWORD_API: `${BASE}${CONTEXT}/auth/change-password`,
   FORGOT_PASSWORD_API: `${BASE}${CONTEXT}/auth/forgot-password`,
   REGISTER_API: `${BASE}${CONTEXT}/auth/register`,
-  UPLOAD_PHOTO_API: `${BASE}${CONTEXT}/auth/upload-photo`,
+  UPLOAD_PHOTO_API: `${BASE}${CONTEXT}/user/profilePhoto`,
+  UPLOAD_FACULTY_PHOTO_API: `${BASE}${CONTEXT}/faculty/profilePhoto`,
+  GET_DOC_API: `${BASE}${CONTEXT}/doc/pub/file`,
+  
 
   USER_API: `${BASE}${CONTEXT}/user`,
   ROLE_API: `${BASE}${CONTEXT}/role`,

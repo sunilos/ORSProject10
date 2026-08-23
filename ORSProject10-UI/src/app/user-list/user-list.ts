@@ -16,7 +16,10 @@ import { ORSAPI } from '../services/orsapi.config';
 export class UserListComponent extends BaseListComponent {
 
   protected override pageUrl = '/user';
-  readonly baseUrl = ORSAPI.baseUrl;
+
+  photoUrl(imageId: string): string {
+    return `${ORSAPI.GET_DOC_API}/${imageId}`;
+  }
 
   constructor(
     private fb: FormBuilder,

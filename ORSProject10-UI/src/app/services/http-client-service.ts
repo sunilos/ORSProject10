@@ -44,6 +44,17 @@ export class HttpClientService {
   }
 
   /**
+   * Sends a GET request and resolves with the raw binary response as a Blob.
+   * Use this for endpoints that return a file (e.g. an image) instead of JSON.
+   * @param url - Endpoint to request.
+   * @param onSuccess - Called with the response Blob.
+   * @param onError - Called with the error if the request fails.
+   */
+  getBlob(url: string, onSuccess: (data: Blob) => void, onError: (error: unknown) => void): void {
+    this.http.get(url, { responseType: 'blob' }).subscribe({ next: onSuccess, error: onError });
+  }
+
+  /**
    * Sends a PUT request with a JSON body and resolves with a JSON response of type T.
    * @param url - Endpoint to request.
    * @param body - Request payload.

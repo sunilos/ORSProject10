@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FacultyService, Faculty } from '../services/faculty.service';
 import { BaseComponent } from '../base/base.component';
+import { ORSAPI } from '../services/orsapi.config';
 
 @Component({
   selector: 'app-faculty',
@@ -11,12 +12,16 @@ import { BaseComponent } from '../base/base.component';
   templateUrl: './faculty.html',
   styleUrl: './faculty.css'
 })
-export class FacultyComponent extends BaseComponent {
+export class FacultyComponent extends BaseComponent implements OnDestroy {
 
   protected override listUrl = '/faculty';
   override get title(): string { return this.isEditMode ? 'Edit Faculty' : 'Add Faculty'; }
 
   readonly genderOptions = ['Male', 'Female', 'Other'];
+
+  photoPreview: string | null = null;
+  photoUploading = false;
+  private readonly photoCdr = inject(ChangeDetectorRef);
 
   constructor(
     private fb: FormBuilder,
@@ -42,7 +47,9 @@ export class FacultyComponent extends BaseComponent {
       courseId: ['', Validators.required],
       courseName: [''],
       subjectId: ['', Validators.required],
-      subjectName: ['']
+      subjectName: [''],
+      photo: [''],
+      imageId: ['']
     });
   }
 
@@ -54,8 +61,60 @@ export class FacultyComponent extends BaseComponent {
       gender: f.gender ?? '', dob: this.toDateInputValue(f.dob),
       collegeId: f.collegeId, collegeName: f.collegeName,
       courseId: f.courseId, courseName: f.courseName,
-      subjectId: f.subjectId, subjectName: f.subjectName
+      subjectId: f.subjectId, subjectName: f.subjectName,
+      photo: f.photo ?? '', imageId: f.imageId ?? ''
     });
+    this.revokePhotoPreview();
+    this.photoPreview = null;
+    if (f.imageId) {
+      this.loadPhoto();
+    }
+  }
+
+  private loadPhoto(): void {
+    const imageId = this.form.get('imageId')?.value;
+    if (!imageId) return;
+    this.revokePhotoPreview();
+    this.photoPreview = `${ORSAPI.GET_DOC_API}/${imageId}`;
+    this.photoCdr.markForCheck();
+  }
+
+  private revokePhotoPreview(): void {
+    if (this.photoPreview?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.photoPreview);
+    }
+  }
+
+  onPhotoSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file || !this.entityId) return;
+    this.revokePhotoPreview();
+    this.photoPreview = URL.createObjectURL(file);
+    this.photoUploading = true;
+    this.photoCdr.markForCheck();
+    this.facultyService.uploadPhoto(this.entityId, file,
+      (res: any) => {
+        this.photoUploading = false;
+        const filename = res?.photo ?? res?.filename ?? '';
+        if (filename) {
+          this.form.patchValue({ photo: filename });
+        }
+        const imageId = res?.imageId ?? '';
+        if (imageId) {
+          this.form.patchValue({ imageId });
+          this.loadPhoto();
+        }
+        this.photoCdr.markForCheck();
+      },
+      () => {
+        this.photoUploading = false;
+        this.photoCdr.markForCheck();
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.revokePhotoPreview();
   }
 
   private toDateInputValue(dob: unknown): string {

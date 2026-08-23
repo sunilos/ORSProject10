@@ -49,14 +49,13 @@
                 <tbody>
                     @for (user of searchForm.listdata; track user.id) {
                     <tr>
-
                         <td class="text-secondary small">{{ (searchForm.pageNo - 1) * searchForm.pageSize + $index + 1 }}</td>
                         <td>
-                          @if (user.photo) {
-                            <img [src]="baseUrl + '/media/' + user.photo" alt="photo" style="width:40px;height:40px;object-fit:cover;border-radius:50%;">
-                          } @else {
+                            @if (user.imageId) {
+                            <img [src]="photoUrl(user.imageId)" alt="photo" style="width:40px;height:40px;object-fit:cover;border-radius:50%;">
+                            } @else {
                             <span class="text-muted">—</span>
-                          }
+                            }
                         </td>
                         <td class="fw-medium">{{ user.firstName }} {{ user.lastName }}</td>
                         <td class="text-secondary small">{{ user.loginId }}</td>
@@ -64,8 +63,8 @@
                         <td class="text-secondary small">{{ user.roleName }}</td>
                         <td>
                             <button class="btn btn-sm btn-primary" (click)="edit(user)">
-                    <i class="bi bi-pencil-square"></i> Edit
-                  </button>
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </button>
                         </td>
                     </tr>
                     }

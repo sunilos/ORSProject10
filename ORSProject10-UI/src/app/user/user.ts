@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,12 +12,10 @@ import { ORSAPI } from '../services/orsapi.config';
   templateUrl: './user.html',
   styleUrl: './user.css'
 })
-export class UserComponent extends BaseComponent {
+export class UserComponent extends BaseComponent implements OnDestroy {
 
   protected override listUrl = '/users';
   override get title(): string { return this.isEditMode ? 'Edit User' : 'Add User'; }
-
-  readonly baseUrl = ORSAPI.baseUrl;
 
   get roleOptions(): { id: string; name: string }[] {
     const roleList = this.preloadData?.['roleList'] ?? {};
@@ -26,7 +24,7 @@ export class UserComponent extends BaseComponent {
 
   photoPreview: string | null = null;
   photoUploading = false;
-  private readonly cdr2 = inject(ChangeDetectorRef);
+  private readonly photoCdr = inject(ChangeDetectorRef);
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +54,8 @@ export class UserComponent extends BaseComponent {
       roleId: ['', Validators.required],
       phone: ['', Validators.required],
       gender: ['M'],
-      photo: ['']
+      photo: [''],
+      imageId: ['']
     });
   }
 
@@ -69,32 +68,60 @@ export class UserComponent extends BaseComponent {
       roleId: u.roleId,
       phone: u.phone,
       gender: u.gender ?? 'M',
-      photo: u.photo ?? ''
+      photo: u.photo ?? '',
+      imageId: u.imageId ?? ''
     });
-    this.photoPreview = u.photo ? `${this.baseUrl}/media/${u.photo}` : null;
+    this.revokePhotoPreview();
+    this.photoPreview = null;
+    if (u.imageId) {
+      this.loadPhoto();
+    }
+  }
+
+  private loadPhoto(): void {
+    const imageId = this.form.get('imageId')?.value;
+    if (!imageId) return;
+    this.revokePhotoPreview();
+    this.photoPreview = `${ORSAPI.GET_DOC_API}/${imageId}`;
+    this.photoCdr.markForCheck();
+  }
+
+  private revokePhotoPreview(): void {
+    if (this.photoPreview?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.photoPreview);
+    }
   }
 
   onPhotoSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file || !this.entityId) return;
+    this.revokePhotoPreview();
     this.photoPreview = URL.createObjectURL(file);
     this.photoUploading = true;
-    this.cdr2.markForCheck();
+    this.photoCdr.markForCheck();
     this.userService.uploadPhoto(this.entityId, file,
       (res: any) => {
         this.photoUploading = false;
         const filename = res?.photo ?? res?.filename ?? '';
         if (filename) {
           this.form.patchValue({ photo: filename });
-          this.photoPreview = `${this.baseUrl}/media/${filename}`;
         }
-        this.cdr2.markForCheck();
+        const imageId = res?.imageId ?? '';
+        if (imageId) {
+          this.form.patchValue({ imageId });
+          this.loadPhoto();
+        }
+        this.photoCdr.markForCheck();
       },
       () => {
         this.photoUploading = false;
-        this.cdr2.markForCheck();
+        this.photoCdr.markForCheck();
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.revokePhotoPreview();
   }
 
   protected override getBody(): User {
@@ -108,7 +135,8 @@ export class UserComponent extends BaseComponent {
       roleId: v.roleId,
       phone: v.phone,
       gender: v.gender || 'M',
-      photo: v.photo || ''
+      photo: v.photo || '',
+      imageId: v.imageId || ''
     };
     if (v.password) body['password'] = v.password;
     return body;

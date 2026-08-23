@@ -98,6 +98,35 @@
               </div>
             </div>
 
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Photo</label>
+              <div class="d-flex align-items-center gap-3">
+                @if (photoPreview) {
+                  <img [src]="photoPreview" alt="photo"
+                    style="width:80px;height:80px;object-fit:cover;border-radius:50%;border:2px solid #dee2e6;">
+                } @else {
+                  <div style="width:80px;height:80px;border-radius:50%;background:#e9ecef;display:flex;align-items:center;justify-content:center;">
+                    <i class="bi bi-person-fill" style="font-size:2rem;color:#adb5bd;"></i>
+                  </div>
+                }
+                <div>
+                  <input #photoInput type="file" accept="image/*" class="d-none" (change)="onPhotoSelected($event)" />
+                  <button type="button" class="btn btn-outline-primary btn-sm"
+                    (click)="photoInput.click()" [disabled]="!isEditMode || photoUploading">
+                    @if (photoUploading) {
+                      <span class="spinner-border spinner-border-sm me-1" role="status"></span> Uploading…
+                    } @else {
+                      <i class="bi bi-upload"></i> Upload Photo
+                    }
+                  </button>
+                  @if (!isEditMode) {
+                    <div class="text-muted small mt-1">Save the faculty first, then upload a photo.</div>
+                  }
+                </div>
+              </div>
+              @if (errors['photo']) { <div class="text-danger small mt-1">{{ errors['photo'] }}</div> }
+            </div>
+
             <p class="small fw-bold text-uppercase border-bottom pb-1 mb-3" style="color:#0f3460">Assignment</p>
 
             <div class="mb-3">

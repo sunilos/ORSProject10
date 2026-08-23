@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { FacultyService } from '../services/faculty.service';
 import { BaseListComponent } from '../base/base-list.component';
 import type { BaseService } from '../services/base.service';
+import { ORSAPI } from '../services/orsapi.config';
 
 @Component({
   selector: 'app-faculty-list',
@@ -15,6 +16,10 @@ import type { BaseService } from '../services/base.service';
 export class FacultyListComponent extends BaseListComponent {
 
   protected override pageUrl = '/faculty';
+
+  photoUrl(imageId: string): string {
+    return `${ORSAPI.GET_DOC_API}/${imageId}`;
+  }
 
   constructor(private fb: FormBuilder, private facultyService: FacultyService, router: Router, cdr: ChangeDetectorRef) {
     super(router, cdr);
