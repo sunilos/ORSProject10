@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { UserService, User } from '../services/user.service';
 import { BaseComponent } from '../base/base.component';
 import { ORSAPI } from '../services/orsapi.config';
@@ -24,16 +23,9 @@ export class UserComponent extends BaseComponent implements OnDestroy {
 
   photoPreview: string | null = null;
   photoUploading = false;
-  private readonly photoCdr = inject(ChangeDetectorRef);
 
-  constructor(
-    private fb: FormBuilder,
-    private userService: UserService,
-    router: Router,
-    route: ActivatedRoute
-  ) {
-    super(router, route);
-    this.form = this.buildForm();
+  constructor(private userService: UserService) {
+    super();
   }
 
   override ngOnInit(): void {
@@ -83,7 +75,7 @@ export class UserComponent extends BaseComponent implements OnDestroy {
     if (!imageId) return;
     this.revokePhotoPreview();
     this.photoPreview = `${ORSAPI.GET_DOC_API}/${imageId}`;
-    this.photoCdr.markForCheck();
+    this.cdr.markForCheck();
   }
 
   private revokePhotoPreview(): void {
@@ -98,7 +90,7 @@ export class UserComponent extends BaseComponent implements OnDestroy {
     this.revokePhotoPreview();
     this.photoPreview = URL.createObjectURL(file);
     this.photoUploading = true;
-    this.photoCdr.markForCheck();
+    this.cdr.markForCheck();
     this.userService.uploadPhoto(this.entityId, file,
       (res: any) => {
         this.photoUploading = false;
@@ -111,11 +103,11 @@ export class UserComponent extends BaseComponent implements OnDestroy {
           this.form.patchValue({ imageId });
           this.loadPhoto();
         }
-        this.photoCdr.markForCheck();
+        this.cdr.markForCheck();
       },
       () => {
         this.photoUploading = false;
-        this.photoCdr.markForCheck();
+        this.cdr.markForCheck();
       }
     );
   }

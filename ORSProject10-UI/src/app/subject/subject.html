@@ -40,7 +40,7 @@
 
             <div class="mb-3">
               <label for="courseId" class="form-label fw-semibold">Course <span class="text-danger">*</span></label>
-              <select id="courseId" formControlName="courseId" (change)="onCourseChange($event)" class="form-select"
+              <select id="courseId" formControlName="courseId" class="form-select"
                 [class.is-invalid]="form.get('courseId')!.invalid && form.get('courseId')!.touched">
                 <option value="">— Select a course —</option>
                 @for (course of preloadData?.courseList; track course.id) {

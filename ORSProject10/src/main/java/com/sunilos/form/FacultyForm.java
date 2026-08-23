@@ -57,6 +57,8 @@ public class FacultyForm extends BaseForm {
 
 	private String subjectName;
 
+	private Long imageId = 0L;
+
 	public Long getCollegeId() {
 		return collegeId;
 	}
@@ -161,6 +163,14 @@ public class FacultyForm extends BaseForm {
 		this.subjectName = subjectName;
 	}
 
+	public Long getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(Long imageId) {
+		this.imageId = imageId;
+	}
+
 	@Override
 	public BaseDTO getDto() {
 		FacultyDTO dto = initDTO(new FacultyDTO());
@@ -177,6 +187,7 @@ public class FacultyForm extends BaseForm {
 		dto.setCourseName(courseName);
 		dto.setSubjectId(subjectId);
 		dto.setSubjectName(subjectName);
+		dto.setImageId(imageId);
 		return dto;
 	}
 

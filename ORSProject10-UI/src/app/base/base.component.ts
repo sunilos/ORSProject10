@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Directive, OnInit, inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseService } from '../services/base.service';
 
@@ -49,14 +49,13 @@ export abstract class BaseComponent implements OnInit {
 
   /**
    * The reactive form for this entity; used by `onSave()` to validate and read values.
-   * Assigned in each child constructor via `this.form = this.buildForm()`.
+   * Assigned in `ngOnInit()` via `this.form = this.buildForm()`.
    */
   form!: FormGroup;
 
   /**
    * Constructs and returns the `FormGroup` for this entity.
-   * Called in the child constructor: `this.form = this.buildForm()`.
-   * Define all controls and validators here.
+   * Called from `ngOnInit()`. Define all controls and validators here.
    */
   protected abstract buildForm(): FormGroup;
 
@@ -79,19 +78,32 @@ export abstract class BaseComponent implements OnInit {
    */
   protected abstract populateForm(data: any): void;
 
-  private readonly cdr = inject(ChangeDetectorRef);
+  /**
+   * It's used later via this.cdr.markForCheck() — inside async callbacks 
+   * (HTTP success/error handlers). markForCheck() 
+   * tells Angular "this component's data changed, 
+   * re-run change detection on it
+   * 
+   * inject is alternate way injectinging a service without using constructor
+   */
+  protected readonly cdr = inject(ChangeDetectorRef);
 
-  constructor(
-    protected router: Router,
-    protected route: ActivatedRoute
-  ) { }
+  /** Shared `FormBuilder` used by child components' `buildForm()`. */
+  protected readonly fb = inject(FormBuilder);
+
+  //add comment
+  protected readonly router = inject(Router);
+
+  // add comment  
+  protected readonly route = inject(ActivatedRoute);
 
   /**
-   * Angular lifecycle hook. Runs `loadDropdowns()` first so FK selects are
-   * populated before the form values are patched, then runs `loadEntity()`.
+   * Angular lifecycle hook. Builds the form, then runs `loadDropdowns()` so FK
+   * selects are populated before the form values are patched, then `loadEntity()`.
    */
   ngOnInit(): void {
     console.log('BaseComponent.ngOnInit() called');
+    this.form = this.buildForm();
     this.loadDropdowns();
     this.loadEntity();
   }

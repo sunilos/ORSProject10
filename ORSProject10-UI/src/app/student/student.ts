@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { StudentService, Student } from '../services/student.service';
 import { College } from '../services/college.service';
 import { BaseComponent } from '../base/base.component';
@@ -19,14 +18,8 @@ export class StudentComponent extends BaseComponent {
 
   colleges: College[] = [];
 
-  constructor(
-    private fb: FormBuilder,
-    private studentService: StudentService,
-    router: Router,
-    route: ActivatedRoute
-  ) {
-    super(router, route);
-    this.form = this.buildForm();
+  constructor(private studentService: StudentService) {
+    super();
   }
 
   protected override buildForm(): FormGroup {

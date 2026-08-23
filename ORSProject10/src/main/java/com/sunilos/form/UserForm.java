@@ -37,6 +37,8 @@ public class UserForm extends BaseForm {
 
 	private String roleName = null;
 
+	private Long imageId = 0L;
+
 	@NotNull
 	@Min(1)
 	private Long roleId;
@@ -115,6 +117,14 @@ public class UserForm extends BaseForm {
 		this.roleId = roleId;
 	}
 
+	public Long getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(Long imageId) {
+		this.imageId = imageId;
+	}
+
 	public String getPhone() {
 		return phone;
 	}
@@ -179,9 +189,8 @@ public class UserForm extends BaseForm {
 		dto.setGender(gender);
 		dto.setPhone(phone);
 		dto.setStatus(status);
+		dto.setImageId(imageId);
 		return dto;
 	}
-	
-	
 
 }

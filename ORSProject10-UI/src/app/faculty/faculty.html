@@ -98,6 +98,54 @@
               </div>
             </div>
 
+            <p class="small fw-bold text-uppercase border-bottom pb-1 mb-3" style="color:#0f3460">Assignment</p>
+
+            <div class="mb-3">
+              <label for="collegeId" class="form-label fw-semibold">College <span class="text-danger">*</span></label>
+              <select id="collegeId" formControlName="collegeId" class="form-select"
+                [class.is-invalid]="form.get('collegeId')!.invalid && form.get('collegeId')!.touched">
+                <option value="">— Select a college —</option>
+                @for (college of preloadData?.collegeList; track college.key) {
+                  <option [value]="college.key">{{ college.value }}</option>
+                }
+              </select>
+              @if (form.get('collegeId')!.invalid && form.get('collegeId')!.touched) {
+                <div class="invalid-feedback">College is required.</div>
+              }
+              @if (errors['collegeId']) { <div class="text-danger small mt-1">{{ errors['collegeId'] }}</div> }
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label for="courseId" class="form-label fw-semibold">Course <span class="text-danger">*</span></label>
+                <select id="courseId" formControlName="courseId"  class="form-select"
+                  [class.is-invalid]="form.get('courseId')!.invalid && form.get('courseId')!.touched">
+                  <option value="">— Select a course —</option>
+                  @for (course of preloadData?.courseList; track course.key) {
+                    <option [value]="course.key">{{ course.value }}</option>
+                  }
+                </select>
+                @if (form.get('courseId')!.invalid && form.get('courseId')!.touched) {
+                  <div class="invalid-feedback">Course is required.</div>
+                }
+                @if (errors['courseId']) { <div class="text-danger small mt-1">{{ errors['courseId'] }}</div> }
+              </div>
+              <div class="col">
+                <label for="subjectId" class="form-label fw-semibold">Subject <span class="text-danger">*</span></label>
+                <select id="subjectId" formControlName="subjectId" class="form-select"
+                  [class.is-invalid]="form.get('subjectId')!.invalid && form.get('subjectId')!.touched">
+                  <option value="">— Select a subject —</option>
+                  @for (subject of preloadData?.subjectList; track subject.key) {
+                    <option [value]="subject.key">{{ subject.value }}</option>
+                  }
+                </select>
+                @if (form.get('subjectId')!.invalid && form.get('subjectId')!.touched) {
+                  <div class="invalid-feedback">Subject is required.</div>
+                }
+                @if (errors['subjectId']) { <div class="text-danger small mt-1">{{ errors['subjectId'] }}</div> }
+              </div>
+            </div>
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Photo</label>
               <div class="d-flex align-items-center gap-3">
@@ -125,54 +173,6 @@
                 </div>
               </div>
               @if (errors['photo']) { <div class="text-danger small mt-1">{{ errors['photo'] }}</div> }
-            </div>
-
-            <p class="small fw-bold text-uppercase border-bottom pb-1 mb-3" style="color:#0f3460">Assignment</p>
-
-            <div class="mb-3">
-              <label for="collegeId" class="form-label fw-semibold">College <span class="text-danger">*</span></label>
-              <select id="collegeId" formControlName="collegeId" class="form-select"
-                [class.is-invalid]="form.get('collegeId')!.invalid && form.get('collegeId')!.touched">
-                <option value="">— Select a college —</option>
-                @for (college of preloadData?.collegeList; track college.key) {
-                  <option [value]="college.key">{{ college.value }}</option>
-                }
-              </select>
-              @if (form.get('collegeId')!.invalid && form.get('collegeId')!.touched) {
-                <div class="invalid-feedback">College is required.</div>
-              }
-              @if (errors['collegeId']) { <div class="text-danger small mt-1">{{ errors['collegeId'] }}</div> }
-            </div>
-
-            <div class="row g-3 mb-3">
-              <div class="col">
-                <label for="courseId" class="form-label fw-semibold">Course <span class="text-danger">*</span></label>
-                <select id="courseId" formControlName="courseId" (change)="onCourseChange($event)" class="form-select"
-                  [class.is-invalid]="form.get('courseId')!.invalid && form.get('courseId')!.touched">
-                  <option value="">— Select a course —</option>
-                  @for (course of preloadData?.courseList; track course.key) {
-                    <option [value]="course.key">{{ course.value }}</option>
-                  }
-                </select>
-                @if (form.get('courseId')!.invalid && form.get('courseId')!.touched) {
-                  <div class="invalid-feedback">Course is required.</div>
-                }
-                @if (errors['courseId']) { <div class="text-danger small mt-1">{{ errors['courseId'] }}</div> }
-              </div>
-              <div class="col">
-                <label for="subjectId" class="form-label fw-semibold">Subject <span class="text-danger">*</span></label>
-                <select id="subjectId" formControlName="subjectId" class="form-select"
-                  [class.is-invalid]="form.get('subjectId')!.invalid && form.get('subjectId')!.touched">
-                  <option value="">— Select a subject —</option>
-                  @for (subject of preloadData?.subjectList; track subject.key) {
-                    <option [value]="subject.key">{{ subject.value }}</option>
-                  }
-                </select>
-                @if (form.get('subjectId')!.invalid && form.get('subjectId')!.touched) {
-                  <div class="invalid-feedback">Subject is required.</div>
-                }
-                @if (errors['subjectId']) { <div class="text-danger small mt-1">{{ errors['subjectId'] }}</div> }
-              </div>
             </div>
 
             <div class="d-flex gap-2 mt-4">

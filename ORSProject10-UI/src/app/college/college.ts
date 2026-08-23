@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CollegeService, College } from '../services/college.service';
 import { BaseComponent } from '../base/base.component';
 
@@ -16,14 +15,8 @@ export class CollegeComponent extends BaseComponent {
   protected override listUrl = '/colleges';
   override get title(): string { return this.isEditMode ? 'Edit College' : 'Add College'; }
 
-  constructor(
-    private fb: FormBuilder,
-    private collegeService: CollegeService,
-    router: Router,
-    route: ActivatedRoute
-  ) {
-    super(router, route);
-    this.form = this.buildForm();
+  constructor(private collegeService: CollegeService) {
+    super();
   }
 
   protected override buildForm(): FormGroup {

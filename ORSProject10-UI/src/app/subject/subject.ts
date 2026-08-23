@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { SubjectService, Subject } from '../services/subject.service';
 import { BaseComponent } from '../base/base.component';
 
@@ -16,14 +15,8 @@ export class SubjectComponent extends BaseComponent {
   protected override listUrl = '/subjects';
   override get title(): string { return this.isEditMode ? 'Edit Subject' : 'Add Subject'; }
 
-  constructor(
-    private fb: FormBuilder,
-    private subjectService: SubjectService,
-    router: Router,
-    route: ActivatedRoute
-  ) {
-    super(router, route);
-    this.form = this.buildForm();
+  constructor(private subjectService: SubjectService) {
+    super();
   }
 
   protected override buildForm(): FormGroup {
@@ -44,15 +37,11 @@ export class SubjectComponent extends BaseComponent {
     });
   }
 
-  onCourseChange(event: Event): void {
-    const id = +(event.target as HTMLSelectElement).value;
-    const course = this.preloadData?.courses?.find((c: any) => c.id === id);
-    this.form.patchValue({ courseName: course?.value ?? '' });
-  }
-
   protected override getBody(): Subject {
     const v = this.form.value;
     return { id: this.entityId ?? 0, ...v };
   }
-  protected override getService() { return this.subjectService; }
+  protected override getService() { 
+    return this.subjectService; 
+  }
 }

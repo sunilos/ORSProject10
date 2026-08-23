@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MarksheetService, Marksheet } from '../services/marksheet.service';
 import { BaseComponent } from '../base/base.component';
 
@@ -16,14 +15,8 @@ export class MarksheetComponent extends BaseComponent {
   protected override listUrl = '/marksheets';
   override get title(): string { return this.isEditMode ? 'Edit Marksheet' : 'Add Marksheet'; }
 
-  constructor(
-    private fb: FormBuilder,
-    private marksheetService: MarksheetService,
-    router: Router,
-    route: ActivatedRoute
-  ) {
-    super(router, route);
-    this.form = this.buildForm();
+  constructor(private marksheetService: MarksheetService) {
+    super();
   }
 
   protected override buildForm(): FormGroup {

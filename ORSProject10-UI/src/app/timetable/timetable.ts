@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { TimeTableService, TimeTable } from '../services/timetable.service';
 import { BaseComponent } from '../base/base.component';
 
@@ -16,14 +15,8 @@ export class TimeTableComponent extends BaseComponent {
   protected override listUrl = '/timetables';
   override get title(): string { return this.isEditMode ? 'Edit Time Table' : 'Add Time Table'; }
 
-  constructor(
-    private fb: FormBuilder,
-    private timeTableService: TimeTableService,
-    router: Router,
-    route: ActivatedRoute
-  ) {
-    super(router, route);
-    this.form = this.buildForm();
+  constructor(private timeTableService: TimeTableService) {
+    super();
   }
 
   protected override buildForm(): FormGroup {
