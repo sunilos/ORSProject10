@@ -19,6 +19,7 @@ CREATE TABLE rt_role (
 
 INSERT INTO rt_role (name,discription,can_delete,can_read,can_update,can_write,status,org_id,org_name) VALUES ('Admin','Administrator','Y','Y','Y','Y','Active','0','root')
 INSERT INTO rt_role (name,discription,can_delete,can_read,can_update,can_write,status,org_id,org_name) VALUES ('Superadmin','Super Administrator','Y','Y','Y','Y','Active','0','root')
+INSERT INTO rt_role (name,discription,can_delete,can_read,can_update,can_write,status,org_id,org_name) VALUES ('Guest','Self-registered user','N','Y','N','N','Active','0','root')
 
 
 CREATE TABLE rt_user (

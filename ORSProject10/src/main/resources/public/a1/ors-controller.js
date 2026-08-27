@@ -65,11 +65,11 @@ app.controller('forgotPasswordCtl', function($scope, $routeParams, ServiceLocato
 
 	_self = this;
 
-	initController(_self, ServiceLocator.endpointService.USER, $scope, $routeParams, ServiceLocator);
-	
+	initController(_self, ServiceLocator.endpointService.Login, $scope, $routeParams, ServiceLocator);
+
 	$scope.submit = function() {
-		url=_self.api.endpoint+"/forgetPassword",
-		ServiceLocator.http.post(url, $scope.form.data,
+		url=_self.api.endpoint+"/fp/"+encodeURIComponent($scope.form.data.login),
+		ServiceLocator.http.post(url, {},
 				function(response) {
 					$scope.form.error = !response.success;
 					if(response.success){

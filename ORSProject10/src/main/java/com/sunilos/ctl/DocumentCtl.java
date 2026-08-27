@@ -9,11 +9,12 @@ import com.sunilos.service.DocumentServiceInt;
 import com.sunilos.util.DataValidator;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -146,15 +147,13 @@ public class DocumentCtl extends BaseCtl<DocumentForm, DocumentDTO, DocumentServ
 
 	private void saveFile(DocumentDTO doc, MultipartFile file) throws IOException {
 
-		File baseDir = new File(uploadDir);
-		if (!baseDir.exists() && !baseDir.mkdirs()) {
-			throw new IOException("Unable to create upload directory: " + uploadDir);
-		}
+		Path baseDir = Paths.get(uploadDir);
+		Files.createDirectories(baseDir);
 
-		File destFile = new File(baseDir, doc.getName());
+		Path destFile = baseDir.resolve(doc.getName());
 
-		try (InputStream input = file.getInputStream(); OutputStream output = new FileOutputStream(destFile)) {
-			input.transferTo(output);
+		try (InputStream input = file.getInputStream()) {
+			Files.copy(input, destFile, StandardCopyOption.REPLACE_EXISTING);
 		}
 	}
 
@@ -176,22 +175,22 @@ public class DocumentCtl extends BaseCtl<DocumentForm, DocumentDTO, DocumentServ
 			return;
 		}
 
-		File sourceFile = new File(uploadDir, dto.getName());
-		if (!sourceFile.exists()) {
+		Path sourceFile = Paths.get(uploadDir, dto.getName());
+		if (!Files.exists(sourceFile)) {
 			log.error("Document id={} has no file on disk at {}", id, sourceFile);
 			writeError(response, HttpServletResponse.SC_NOT_FOUND, "ERROR: File not found");
 			return;
 		}
 
+		try {
 		response.setContentType(dto.getType());
-		response.setContentLengthLong(sourceFile.length());
+			response.setContentLengthLong(Files.size(sourceFile));
 		if (!DataValidator.isEmptyString(dto.getOriginalName())) {
 			String safeName = dto.getOriginalName().replaceAll("[\r\n\"]", "_");
 			response.setHeader("Content-Disposition", "attachment; filename=\"" + safeName + "\"");
 		}
 
-		try (InputStream input = new FileInputStream(sourceFile)) {
-			input.transferTo(response.getOutputStream());
+			Files.copy(sourceFile, response.getOutputStream());
 		} catch (IOException e) {
 			log.error("Failed to stream document id={}", id, e);
 		}

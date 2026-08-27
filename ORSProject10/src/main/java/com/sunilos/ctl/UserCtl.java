@@ -3,7 +3,6 @@ package com.sunilos.ctl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -24,13 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sunilos.common.BaseReportCtl;
 import com.sunilos.common.ORSResponse;
 import com.sunilos.service.DocumentServiceInt;
-import com.sunilos.common.mail.EmailDTO;
-import com.sunilos.common.mail.EmailServiceImpl;
 import com.sunilos.dto.DocumentDTO;
 import com.sunilos.dto.RoleDTO;
 import com.sunilos.dto.UserDTO;
 import com.sunilos.form.ChangePasswordForm;
-import com.sunilos.form.ForgetPasswordForm;
 import com.sunilos.form.MyProfileForm;
 import com.sunilos.form.UserForm;
 import com.sunilos.service.RoleServiceInt;
@@ -51,16 +47,14 @@ import com.sunilos.service.UserServiceInt;
  * <li>{@code POST /user/changepassword} -
  * {@link #changePassword(ChangePasswordForm, BindingResult)}: changes the
  * password of the logged-in user</li>
- * <li>{@code POST /user/forgetPassword} -
- * {@link #forgetPassword(ForgetPasswordForm, BindingResult)}: emails a
- * password-reset message to the given login/email</li>
  * <li>{@code PUT /user/profilePhoto/{userId}} -
  * {@link #uploadUserProfilePhoto(Long, MultipartFile)}: uploads/replaces the
  * profile photo of the given user id</li>
- * <li>{@code GET /user/forgotPassword/{loginId}} -
- * {@link #myProfile(String, HttpServletResponse)}: looks up a user by login
- * id for the forgot-password flow</li>
  * </ul>
+ *
+ * <p>
+ * The forgot-password flow lives at {@code POST /auth/fp/{login}} (see
+ * {@link LoginCtl#forgotPassword(String)}), not here.
  */
 @RestController
 @RequestMapping(value = "user")
@@ -73,12 +67,6 @@ public class UserCtl extends BaseReportCtl<UserForm, UserDTO, UserServiceInt> {
 
 	@Autowired
 	DocumentServiceInt documentService;
-
-	/**
-	 * Send email
-	 */
-	@Autowired
-	public EmailServiceImpl emailSender;
 
 	@Value("${photo.base-path}")
 	private String photoBasePath;
@@ -164,42 +152,6 @@ public class UserCtl extends BaseReportCtl<UserForm, UserDTO, UserServiceInt> {
 		return res;
 	}
 
-	/**
-	 * Forgot password
-	 * 
-	 * @param form
-	 * @param bindingResult
-	 * @return
-	 */
-	@PostMapping("forgetPassword")
-	public ORSResponse forgetPassword(@RequestBody @Valid ForgetPasswordForm form, BindingResult bindingResult) {
-
-		ORSResponse res = valiate(bindingResult);
-		System.out.println("form.getLogin(====" + form.getLogin());
-
-		UserDTO fDTO = baseService.forgotPassword(form.getLogin());
-
-		if (fDTO == null) {
-			res.setSuccess(false);
-			res.addMessage("LoginId / Email not found.");
-			return res;
-		} else {
-			String code = "101";
-			EmailDTO dto = new EmailDTO();
-			dto.addTo(fDTO.getEmail());
-			HashMap<String, String> params = new HashMap<String, String>();
-			params.put("code", "101");
-			dto.setMessageCode(code, params);
-			emailSender.send(dto, null);
-			res.setSuccess(true);
-			res.addMessage("Hello " + fDTO.getFirstName() + " " + fDTO.getLastName()
-					+ " ! Your password has been sent on your email.");
-
-		}
-
-		return res;
-	}
-
 	@Autowired
 	private DocumentCtl documentCtl;
 
@@ -242,31 +194,6 @@ public class UserCtl extends BaseReportCtl<UserForm, UserDTO, UserServiceInt> {
 		}
 
 		return new ORSResponse(true, "Profile photo uploaded successfully");
-	}
-
-	/**
-	 * Forgot Password
-	 * 
-	 * @param form
-	 * @param bindingResult
-	 * @return
-	 */
-	@GetMapping("forgotPassword/{loginId}")
-	public ORSResponse myProfile(@PathVariable String loginId, HttpServletResponse response) {
-		ORSResponse res = new ORSResponse();
-		UserDTO userDto = baseService.forgotPassword(loginId);
-		try {
-			if (userDto != null) {
-				res.addData(userDto);
-				res.setSuccess(true);
-			} else {
-				res.setSuccess(false);
-				res.addMessage("Login id is not exist");
-			}
-		} catch (Exception e) {
-			res.addMessage(e.getMessage());
-		}
-		return res;
 	}
 
 }

@@ -1,9 +1,10 @@
 # Base Class Hierarchies
 
-ORSProject10's layered architecture rests on three abstract bases in `com.sunilos.common`:
-`BaseDTO` for persistent entities, `BaseForm` for request-bound form beans, and the
-`BaseServiceInt` / `BaseServiceImpl` pair for the transactional service facade. This document
-diagrams each base and everything that extends it.
+ORSProject10's layered architecture rests on four abstract bases in `com.sunilos.common`:
+`BaseDTO` for persistent entities, `BaseForm` for request-bound form beans, the
+`BaseServiceInt` / `BaseServiceImpl` pair for the transactional service facade, and the
+`BaseDAOInt` / `BaseDAOImpl` pair for JPA persistence. This document diagrams each base and
+everything that extends it.
 
 Diagrams are Mermaid class diagrams (render inline on GitHub) with a PNG export alongside each
 one, generated with [`@mermaid-js/mermaid-cli`](https://github.com/mermaid-js/mermaid-cli) from
@@ -15,6 +16,7 @@ the sources in [`docs/diagrams/`](docs/diagrams).
 - [BaseDTO — what each subclass does with the contract](#basedto--what-each-subclass-does-with-the-contract)
 - [BaseForm — inheritance & members](#baseform--inheritance--members)
 - [Service layer — BaseServiceInt & BaseServiceImpl](#service-layer--baseserviceint--baseserviceimpl)
+- [Data access layer — BaseDAOInt & BaseDAOImpl](#data-access-layer--basedaoint--basedaoimpl)
 - [Classes outside these trees](#classes-outside-these-trees)
 
 ---
@@ -550,6 +552,184 @@ classDiagram
 
 > **Note.** `PlacementServiceInt`/`Impl` and `DocumentServiceInt`/`Impl` add nothing beyond the
 > base contract — the generated CRUD operations are all they need.
+
+---
+
+## Data access layer — BaseDAOInt & BaseDAOImpl
+
+Same shape as the service layer, one level down: a `*DAOInt` extends `BaseDAOInt<T>` and a
+`*DAOImpl` extends `BaseDAOImpl<T>`, backed by JPA's `EntityManager`. Every impl supplies two
+things the base can't: which entity class it queries (`getDTOClass()`) and the search filters
+for that entity (`getWhereClause()`, abstract on the base). Several also override `populate()`
+to resolve a related entity's name onto the DTO before it's returned or saved — the other half
+of the denormalized-FK pattern flagged in the BaseDTO diagram above.
+
+![BaseDAOInt and BaseDAOImpl class diagram](docs/diagrams/basedao.png)
+
+```mermaid
+classDiagram
+    direction TB
+
+    class BaseDAOInt~T~ {
+        <<interface>>
+        +getDTOClass() Class
+        +getDTOClassName() String
+        +exists(long) boolean
+        +findByPK(long, UserContext) T
+        +findByUniqueKey(String, Object, UserContext) T
+        +findAll(T, int, int, UserContext) List~T~
+        +findAll(T, UserContext) List~T~
+        +runHQL(String, UserContext) List
+        +add(T, UserContext) long
+        +update(T, UserContext) void
+        +updateFields(Long, Map, UserContext) T
+        +delete(T, UserContext) void
+        +populate(T, UserContext) void
+    }
+    class BaseDAOImpl~T~ {
+        <<abstract>>
+        #EntityManager entityManager
+        +getDTOClass()* Class
+        #getWhereClause(T, CriteriaBuilder, Root)* List~Predicate~
+        +populate(T, UserContext) void
+        implements all other BaseDAOInt~T~ operations
+    }
+    BaseDAOInt <|.. BaseDAOImpl
+
+    class RoleDAOInt { <<interface>> no additional members }
+    class RoleDAOImpl {
+        +getDTOClass() Class
+        #getWhereClause(): name, description, status
+    }
+    BaseDAOInt <|-- RoleDAOInt
+    BaseDAOImpl <|-- RoleDAOImpl
+    RoleDAOInt <|.. RoleDAOImpl
+
+    class CollegeDAOInt { <<interface>> no additional members }
+    class CollegeDAOImpl {
+        +getDTOClass() Class
+        #getWhereClause(): name, city, state
+    }
+    BaseDAOInt <|-- CollegeDAOInt
+    BaseDAOImpl <|-- CollegeDAOImpl
+    CollegeDAOInt <|.. CollegeDAOImpl
+
+    class MarksheetDAOInt {
+        <<interface>>
+        +getMeritList() List~MarksheetDTO~
+    }
+    class MarksheetDAOImpl {
+        -StudentDAOInt studentDao
+        +getDTOClass() Class
+        #getWhereClause(): name, rollNo, studentId
+        +getMeritList() List~MarksheetDTO~
+        +populate(): resolves name from studentDao
+    }
+    BaseDAOInt <|-- MarksheetDAOInt
+    BaseDAOImpl <|-- MarksheetDAOImpl
+    MarksheetDAOInt <|.. MarksheetDAOImpl
+    MarksheetDAOImpl ..> StudentDAOInt : studentDao
+
+    class StudentDAOInt { <<interface>> no additional members }
+    class StudentDAOImpl {
+        -CollegeDAOInt collegeService
+        +getDTOClass() Class
+        #getWhereClause(): firstName, lastName, email, dob, collegeId
+        +populate(): resolves collegeName from collegeService
+    }
+    BaseDAOInt <|-- StudentDAOInt
+    BaseDAOImpl <|-- StudentDAOImpl
+    StudentDAOInt <|.. StudentDAOImpl
+    StudentDAOImpl ..> CollegeDAOInt : collegeService
+
+    class UserDAOInt { <<interface>> no additional members }
+    class UserDAOImpl {
+        -RoleDAOInt roleDao
+        +getDTOClass() Class
+        #getWhereClause(): firstName, lastName, loginId, password, status, roleId, imageId, email, dob
+        +populate(): resolves roleName from roleDao
+    }
+    BaseDAOInt <|-- UserDAOInt
+    BaseDAOImpl <|-- UserDAOImpl
+    UserDAOInt <|.. UserDAOImpl
+    UserDAOImpl ..> RoleDAOInt : roleDao
+
+    class CompanyDAOInt { <<interface>> no additional members }
+    class CompanyDAOImpl {
+        +getDTOClass() Class
+        #getWhereClause(): name, industry, city
+    }
+    BaseDAOInt <|-- CompanyDAOInt
+    BaseDAOImpl <|-- CompanyDAOImpl
+    CompanyDAOInt <|.. CompanyDAOImpl
+
+    class CourseDAOInt { <<interface>> no additional members }
+    class CourseDAOImpl {
+        +getDTOClass() Class
+        #getWhereClause(): name, description
+    }
+    BaseDAOInt <|-- CourseDAOInt
+    BaseDAOImpl <|-- CourseDAOImpl
+    CourseDAOInt <|.. CourseDAOImpl
+
+    class SubjectDAOInt { <<interface>> no additional members }
+    class SubjectDAOImpl {
+        -CourseDAOInt courseDao
+        +getDTOClass() Class
+        #getWhereClause(): name, courseId
+        +populate(): resolves courseName from courseDao
+    }
+    BaseDAOInt <|-- SubjectDAOInt
+    BaseDAOImpl <|-- SubjectDAOImpl
+    SubjectDAOInt <|.. SubjectDAOImpl
+    SubjectDAOImpl ..> CourseDAOInt : courseDao
+
+    class FacultyDAOInt { <<interface>> no additional members }
+    class FacultyDAOImpl {
+        -CollegeDAOInt collegeDao
+        -CourseDAOInt courseDao
+        -SubjectDAOInt subjectDao
+        +getDTOClass() Class
+        #getWhereClause(): firstName, lastName, email, collegeId
+        +populate(): resolves college/course/subject names
+    }
+    BaseDAOInt <|-- FacultyDAOInt
+    BaseDAOImpl <|-- FacultyDAOImpl
+    FacultyDAOInt <|.. FacultyDAOImpl
+    FacultyDAOImpl ..> CollegeDAOInt : collegeDao
+    FacultyDAOImpl ..> CourseDAOInt : courseDao
+    FacultyDAOImpl ..> SubjectDAOInt : subjectDao
+
+    class PlacementDAOInt { <<interface>> no additional members }
+    class PlacementDAOImpl {
+        -StudentDAOInt studentDao
+        -CollegeDAOInt collegeDao
+        -CompanyDAOInt companyDao
+        +getDTOClass() Class
+        #getWhereClause(): studentId, collegeId, companyId, status, jobType
+        +populate(): resolves student/college/company names
+    }
+    BaseDAOInt <|-- PlacementDAOInt
+    BaseDAOImpl <|-- PlacementDAOImpl
+    PlacementDAOInt <|.. PlacementDAOImpl
+    PlacementDAOImpl ..> StudentDAOInt : studentDao
+    PlacementDAOImpl ..> CollegeDAOInt : collegeDao
+    PlacementDAOImpl ..> CompanyDAOInt : companyDao
+
+    class DocumentDAOInt { <<interface>> no additional members }
+    class DocumentDAOImpl {
+        +getDTOClass() Class
+        #getWhereClause(): name, description, tags, path, userId
+    }
+    BaseDAOInt <|-- DocumentDAOInt
+    BaseDAOImpl <|-- DocumentDAOImpl
+    DocumentDAOInt <|.. DocumentDAOImpl
+```
+
+> **Note.** Dashed arrows without a triangle head (e.g. `UserDAOImpl --> RoleDAOInt`) are
+> dependencies — one DAO calling another to resolve a name, not inheritance.
+> `checkDuplicate()`, called from `add()`/`update()` via `uniqueKeys()`, is private on
+> `BaseDAOImpl` and isn't shown.
 
 ---
 
