@@ -54,7 +54,7 @@
             <tbody>
               @for (faculty of searchForm.listdata; track faculty.id) {
                 <tr>
-                  <td class="text-secondary small">{{ (searchForm.pageNo - 1) * searchForm.pageSize + $index + 1 }}</td>
+                  <td class="text-secondary small">{{ searchForm.pageNo * searchForm.pageSize + $index + 1 }}</td>
                   <td>
                     @if (faculty.imageId) {
                       <img [src]="photoUrl(faculty.imageId)" alt="photo" style="width:40px;height:40px;object-fit:cover;border-radius:50%;">
@@ -80,7 +80,7 @@
           </table>
         </div>
         <div class="d-flex align-items-center justify-content-between px-3 py-2 bg-light border-top">
-          <button class="btn btn-sm btn-outline-secondary" (click)="previous()" [disabled]="searchForm.pageNo <= 1">&#8592; Previous</button>
+          <button class="btn btn-sm btn-outline-secondary" (click)="previous()" [disabled]="searchForm.pageNo < 1">&#8592; Previous</button>
           <span class="text-secondary small">Page {{ searchForm.pageNo }} &mdash; {{ searchForm.listdata.length }} faculty member{{ searchForm.listdata.length !== 1 ? 's' : '' }}</span>
           <button class="btn btn-sm btn-outline-secondary" (click)="next()" [disabled]="searchForm.listdata.length < searchForm.pageSize">Next &#8594;</button>
         </div>

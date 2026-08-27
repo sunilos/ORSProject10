@@ -56,7 +56,8 @@ export class UserComponent extends BaseComponent implements OnDestroy {
       firstName: u.firstName,
       lastName: u.lastName,
       loginId: u.loginId,
-      dob: u.dob ?? '',
+      password: u.password ?? '',
+      dob: this.toDateInputValue(u.dob),
       roleId: u.roleId,
       phone: u.phone,
       gender: u.gender ?? 'M',
@@ -68,6 +69,16 @@ export class UserComponent extends BaseComponent implements OnDestroy {
     if (u.imageId) {
       this.loadPhoto();
     }
+  }
+
+  private toDateInputValue(dob: unknown): string {
+    if (!dob) return '';
+    const date = new Date(dob as string | number);
+    if (isNaN(date.getTime())) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   private loadPhoto(): void {
@@ -123,7 +134,7 @@ export class UserComponent extends BaseComponent implements OnDestroy {
       firstName: v.firstName,
       lastName: v.lastName,
       loginId: v.loginId,
-      dob: v.dob || null,
+      dob: v.dob ? new Date(`${v.dob}T00:00:00`).getTime() : null,
       roleId: v.roleId,
       phone: v.phone,
       gender: v.gender || 'M',

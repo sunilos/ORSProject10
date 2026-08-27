@@ -84,7 +84,7 @@ export abstract class BaseListComponent implements OnInit {
     * Navigates to the previous page of results.
     */
   previous() {
-    if (this.searchForm.pageNo > 1) {
+    if (this.searchForm.pageNo > 0) {
       this.searchForm.pageNo--;
     }
     this.doSearch();

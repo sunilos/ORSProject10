@@ -23,8 +23,8 @@ export class TimeTableListComponent extends BaseListComponent {
 
   protected override buildForm(): FormGroup {
     return this.fb.group({
-      course_name: [''],
-      subject_name: [''],
+      courseName: [''],
+      subjectName: [''],
       semester: ['']
     });
   }

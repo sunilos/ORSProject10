@@ -9,7 +9,7 @@ export interface User {
   lastName: string;
   loginId: string;
   password?: string;
-  dob?: string | null;
+  dob?: string | number | null;
   roleId: number;
   roleName?: string;
   phone: string;

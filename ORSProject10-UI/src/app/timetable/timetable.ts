@@ -21,43 +21,57 @@ export class TimeTableComponent extends BaseComponent {
 
   protected override buildForm(): FormGroup {
     return this.fb.group({
-      exam_date: [null],
-      exam_time: ['', Validators.required],
-      subject_id: ['', Validators.required],
-      subject_name: [''],
-      course_id: ['', Validators.required],
-      course_name: [''],
+      examDate: [null],
+      examTime: ['', Validators.required],
+      courseId: ['', Validators.required],
+      courseName: [''],
+      subjectId: ['', Validators.required],
+      subjectName: [''],
       semester: ['', Validators.required]
     });
   }
 
   protected override populateForm(t: any): void {
     this.form.patchValue({
-      exam_date: t.exam_date,
-      exam_time: t.exam_time,
-      subject_id: t.subject_id,
-      subject_name: t.subject_name,
-      course_id: t.course_id,
-      course_name: t.course_name,
+      examDate: this.toDateInputValue(t.examDate),
+      examTime: t.examTime,
+      courseId: t.courseId, 
+      courseName: t.courseName,
+      subjectId: t.subjectId, 
+      subjectName: t.subjectName,
       semester: t.semester
     });
   }
 
+  private toDateInputValue(value: unknown): string {
+    if (!value) return '';
+    const date = new Date(value as string | number);
+    if (isNaN(date.getTime())) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   onCourseChange(event: Event): void {
     const id = +(event.target as HTMLSelectElement).value;
-    const course = this.preloadData?.courses?.find((c: any) => c.id === id);
-    this.form.patchValue({ course_name: course?.value ?? '' });
+    const course = this.preloadData?.courseList?.find((c: any) => c.id === id);
+    this.form.patchValue({ courseName: course?.value ?? '' });
   }
 
   onSubjectChange(event: Event): void {
     const id = +(event.target as HTMLSelectElement).value;
-    const subject = this.preloadData?.subjects?.find((s: any) => s.id === id);
-    this.form.patchValue({ subject_name: subject?.value ?? '' });
+    const subject = this.preloadData?.subjectList?.find((s: any) => s.id === id);
+    this.form.patchValue({ subjectName: subject?.value ?? '' });
   }
 
   protected override getBody(): TimeTable {
     const v = this.form.value;
-    return { id: this.entityId ?? 0, ...v };
+    return {
+      id: this.entityId ?? 0,
+      ...v,
+      examDate: v.examDate ? new Date(`${v.examDate}T00:00:00`).getTime() : null
+    };
   }
 
   protected override getService() { return this.timeTableService; }

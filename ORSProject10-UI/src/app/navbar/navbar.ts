@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, RouterLink } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { ORSAPI } from '../services/orsapi.config';
 
@@ -12,26 +10,13 @@ import { ORSAPI } from '../services/orsapi.config';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
-export class NavbarComponent implements OnInit, OnDestroy {
-  isLoginPage = false;
+export class NavbarComponent {
   logoError = false;
-  private routerSub!: Subscription;
 
   constructor(private router: Router, private authService: AuthService) { }
 
-  ngOnInit(): void {
-    this.checkRoute(this.router.url);
-    this.routerSub = this.router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe((e: any) => this.checkRoute(e.urlAfterRedirects));
-  }
-
-  ngOnDestroy(): void {
-    this.routerSub?.unsubscribe();
-  }
-
-  private checkRoute(url: string): void {
-    this.isLoginPage = url === '/login' || url === '/' || url === '';
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 
   onLogoError(): void {
@@ -39,6 +24,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    localStorage.clear();
     this.authService.logout();
     this.router.navigate(['/login']);
   }
@@ -48,7 +34,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (!userinfo) return 'User';
     try {
       const parsed = JSON.parse(userinfo);
-      return parsed?.firstName ? `${parsed.firstName} ${parsed.lastName ?? ''} (  ${parsed.login ?? ''}) `.trim() : userinfo;
+      return parsed?.firstName ? `${parsed.firstName} ${parsed.lastName ?? ''} (${parsed.roleName ?? ''})`.trim() : userinfo;
     } catch {
       return userinfo;
     }
