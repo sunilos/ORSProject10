@@ -68,7 +68,7 @@ public class ORSApp extends SpringBootServletInitializer {
 						.addPathPatterns("/**")
 						.excludePathPatterns(
 								"/auth/login/**",
-								"/auth/signUp/**",
+								"/auth/register/**",
 								"/auth/fp/**",
 								"/actuator/**",
 								"/doc/pub/file/**");

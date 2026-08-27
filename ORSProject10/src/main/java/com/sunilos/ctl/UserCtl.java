@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.sunilos.common.BaseCtl;
 import com.sunilos.common.BaseReportCtl;
 import com.sunilos.common.ORSResponse;
 import com.sunilos.service.DocumentServiceInt;
@@ -174,7 +174,7 @@ public class UserCtl extends BaseReportCtl<UserForm, UserDTO, UserServiceInt> {
 			return new ORSResponse(false, "User not found");
 		}
 
-		long oldImageId = userDTO.getImageId();
+		Long oldImageId = userDTO.getImageId();
 
 		ORSResponse docResponse = documentCtl.addFile(file, userDTO.getValue() + " user profile photo", userContext);
 		if (!docResponse.isSuccess()) {
@@ -185,7 +185,7 @@ public class UserCtl extends BaseReportCtl<UserForm, UserDTO, UserServiceInt> {
 		userDTO.setImageId(uploadedDocumentDTO.getId());
 		baseService.save(userDTO, userContext);
 
-		if (oldImageId > 0) {
+		if (oldImageId != null && oldImageId > 0) {
 			try {
 				documentCtl.deleteDocument(oldImageId, userContext);
 			} catch (Exception e) {
