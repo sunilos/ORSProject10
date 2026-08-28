@@ -31,8 +31,8 @@ export const ORSAPI: ORSAPIConfig = {
 
   TOKEN_REFRESH_API: `${BASE}/api/token/refresh`,
   LOGIN_API: `${BASE}${CONTEXT}/auth/login`,
-  CHANGE_PASSWORD_API: `${BASE}${CONTEXT}/auth/change-password`,
-  FORGOT_PASSWORD_API: `${BASE}${CONTEXT}/auth/forgot-password`,
+  CHANGE_PASSWORD_API: `${BASE}${CONTEXT}/user/changepassword`,
+  FORGOT_PASSWORD_API: `${BASE}${CONTEXT}/auth/fp`,
   REGISTER_API: `${BASE}${CONTEXT}/auth/register`,
   UPLOAD_PHOTO_API: `${BASE}${CONTEXT}/user/profilePhoto`,
   UPLOAD_FACULTY_PHOTO_API: `${BASE}${CONTEXT}/faculty/profilePhoto`,
