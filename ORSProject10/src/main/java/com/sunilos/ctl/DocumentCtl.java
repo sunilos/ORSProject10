@@ -55,105 +55,22 @@ public class DocumentCtl extends BaseCtl<DocumentForm, DocumentDTO, DocumentServ
 	@PutMapping("/file/{id}")
 	public ORSResponse updateFile(@PathVariable Long id, @RequestParam("file") MultipartFile file,
 			@RequestParam(required = false) String description) {
-		return saveDocument(id, file, description, userContext);
+		try {
+			DocumentDTO doc = baseService.update(id, file, description, userContext);
+			return new ORSResponse(true, "document added", doc);
+		} catch (Exception e) {
+			return new ORSResponse(false, "document fail", doc);
+		}
 	}
 
 	@PostMapping("/file")
 	public ORSResponse addFile(@RequestParam("file") MultipartFile file,
 			@RequestParam(required = false) String description) {
-		return addFile(file, description, userContext);
-	}
-
-	/**
-	 * Entry point for other controllers that call this bean directly (a plain
-	 * Java method call, not an HTTP request) and already have a UserContext
-	 * resolved for the current request - e.g. UserCtl uploading a profile
-	 * photo. A direct call bypasses the {@code @ModelAttribute} that normally
-	 * populates {@code this.userContext}, so it must be passed in explicitly.
-	 */
-	public ORSResponse addFile(MultipartFile file, String description, UserContext ctx) {
-
-		System.err.println("DocumentCtl.saveDocument() called with  file="
-				+ (file != null ? file.getOriginalFilename() : "null"));
-
-		DocumentDTO doc = new DocumentDTO(file);
-		doc.setDescription(description);
-		doc.setPath(uploadDir);
-		doc.setUserId(ctx.getUserId());
-
-		System.err.println("DocumentCtl.saveDocument() " + 1 + doc.toString());
-
-		long pk = baseService.save(doc, ctx);
-		System.err.println("DocumentCtl.saveDocument() " + 2 + " pk=" + pk);
-		return saveDocument(pk, file, description, ctx);
-	}
-
-	private ORSResponse saveDocument(Long id, MultipartFile file, String description, UserContext ctx) {
-		System.err.println("DocumentCtl.saveDocument() called with id=" + id + ", file="
-				+ (file != null ? file.getOriginalFilename() : "null") + ", description=" + description);
-		ORSResponse response = new ORSResponse(true);
-
-		if (file == null || file.isEmpty()) {
-			response.setSuccess(false);
-			response.addMessage("ERROR: No file provided");
-			return response;
-		}
-
-		System.err.println("DocumentCtl" + 2);
-
-		DocumentDTO existing = baseService.findById(id, ctx);
-		if (existing == null) {
-			response.setSuccess(false);
-			response.addMessage("ERROR: Document not found");
-			return response;
-		}
-
-		System.err.println("DocumentCtl" + 3);
-
-		DocumentDTO doc = new DocumentDTO(file);
-		doc.setId(id);
-		doc.setDescription(description);
-		doc.setPath(uploadDir);
-		doc.setUserId(ctx.getUserId());
-
-		System.err.println("DocumentCtl" + 4);
-
 		try {
-			saveFile(doc, file);
-
-			System.err.println("DocumentCtl" + 5);
-
-		} catch (IOException e) {
-			log.error("Failed to store file for document id={}", id, e);
-			response.setSuccess(false);
-			response.addMessage("ERROR: Failed to store file");
-			return response;
-		}
-
-		baseService.save(doc, ctx);
-
-		// best-effort cleanup of the file this upload replaces
-		if (existing.getName() != null && !existing.getName().equals(doc.getName())) {
-			File oldFile = new File(uploadDir, existing.getName());
-			if (oldFile.exists() && !oldFile.delete()) {
-				log.warn("Could not delete replaced file {}", oldFile);
-			}
-		}
-
-		response.setSuccess(true);
-		response.addData(doc);
-		return response;
-	}
-
-	private void saveFile(DocumentDTO doc, MultipartFile file) throws IOException {
-
-		Path baseDir = Paths.get(uploadDir);
-		Files.createDirectories(baseDir);
-
-		Path destFile = baseDir.resolve(doc.getName());
-
-		try (InputStream input = file.getInputStream()) {
-			Files.copy(input, destFile, StandardCopyOption.REPLACE_EXISTING);
+			DocumentDTO doc = baseService.add(file, description, userContext);
+			return new ORSResponse(true, "document added", doc);
+		} catch (Exception e) {
+			return new ORSResponse(false, "document fail", doc);
 		}
 	}
 
@@ -183,12 +100,12 @@ public class DocumentCtl extends BaseCtl<DocumentForm, DocumentDTO, DocumentServ
 		}
 
 		try {
-		response.setContentType(dto.getType());
+			response.setContentType(dto.getType());
 			response.setContentLengthLong(Files.size(sourceFile));
-		if (!DataValidator.isEmptyString(dto.getOriginalName())) {
-			String safeName = dto.getOriginalName().replaceAll("[\r\n\"]", "_");
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + safeName + "\"");
-		}
+			if (!DataValidator.isEmptyString(dto.getOriginalName())) {
+				String safeName = dto.getOriginalName().replaceAll("[\r\n\"]", "_");
+				response.setHeader("Content-Disposition", "attachment; filename=\"" + safeName + "\"");
+			}
 
 			Files.copy(sourceFile, response.getOutputStream());
 		} catch (IOException e) {
@@ -203,6 +120,7 @@ public class DocumentCtl extends BaseCtl<DocumentForm, DocumentDTO, DocumentServ
 	 * String, UserContext)}.
 	 */
 	public void deleteDocument(long id, UserContext ctx) {
+		System.out.println("received Image id " + id);
 		baseService.delete(id, ctx);
 	}
 

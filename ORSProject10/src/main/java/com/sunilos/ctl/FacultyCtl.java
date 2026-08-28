@@ -25,6 +25,7 @@ import com.sunilos.dto.SubjectDTO;
 import com.sunilos.form.FacultyForm;
 import com.sunilos.service.CollegeServiceInt;
 import com.sunilos.service.CourseServiceInt;
+import com.sunilos.service.DocumentServiceInt;
 import com.sunilos.service.FacultyServiceInt;
 import com.sunilos.service.SubjectServiceInt;
 
@@ -44,7 +45,7 @@ public class FacultyCtl extends BaseReportCtl<FacultyForm, FacultyDTO, FacultySe
 	private SubjectServiceInt subjectService;
 
 	@Autowired
-	private DocumentCtl documentCtl;
+	DocumentServiceInt documentService;
 
 	@GetMapping("/preload")
 	public ORSResponse preload() {
@@ -88,27 +89,22 @@ public class FacultyCtl extends BaseReportCtl<FacultyForm, FacultyDTO, FacultySe
 			return new ORSResponse(false, "Faculty not found");
 		}
 
-		long oldImageId = facultyDTO.getImageId() == null ? 0L : facultyDTO.getImageId();
+		try {
+			Long docId = facultyDTO.getImageId();
+			String desc = facultyDTO.getValue() + " faculty profile photo";
+			DocumentDTO doc = null;
 
-		ORSResponse docResponse = documentCtl.addFile(file, facultyDTO.getValue() + " faculty profile photo",
-				userContext);
-		if (!docResponse.isSuccess()) {
-			return new ORSResponse(false, docResponse.getMessage());
-		}
-
-		DocumentDTO uploadedDocumentDTO = docResponse.getData(DocumentDTO.class);
-		facultyDTO.setImageId(uploadedDocumentDTO.getId());
-		baseService.save(facultyDTO, userContext);
-
-		if (oldImageId > 0) {
-			try {
-				documentCtl.deleteDocument(oldImageId, userContext);
-			} catch (Exception e) {
-				log.warn("Failed to delete old profile photo (document id={}) for faculty id={}", oldImageId,
-						facultyId, e);
+			if (docId != null && docId > 0) {
+				doc = documentService.update(docId, file, desc, userContext);
+			} else {
+				doc = documentService.add(file, desc, userContext);
+				facultyDTO.setImageId(doc.getId());
+				baseService.save(facultyDTO, userContext);
 			}
+		} catch (Exception e) {
+			return new ORSResponse(false, "Profile photo uploaded error: " + e.getMessage());
 		}
 
-		return new ORSResponse(true, "Profile photo uploaded successfully");
+		return new ORSResponse(true, "Profile photo uploaded successfully", facultyDTO);
 	}
 }

@@ -174,23 +174,20 @@ public class UserCtl extends BaseReportCtl<UserForm, UserDTO, UserServiceInt> {
 			return new ORSResponse(false, "User not found");
 		}
 
-		Long oldImageId = userDTO.getImageId();
+		try {
+			Long docId = userDTO.getImageId();
+			String desc = userDTO.getValue() + " user profile photo";
+			DocumentDTO doc = null;
 
-		ORSResponse docResponse = documentCtl.addFile(file, userDTO.getValue() + " user profile photo", userContext);
-		if (!docResponse.isSuccess()) {
-			return new ORSResponse(false, docResponse.getMessage());
-		}
-
-		DocumentDTO uploadedDocumentDTO = docResponse.getData(DocumentDTO.class);
-		userDTO.setImageId(uploadedDocumentDTO.getId());
-		baseService.save(userDTO, userContext);
-
-		if (oldImageId != null && oldImageId > 0) {
-			try {
-				documentCtl.deleteDocument(oldImageId, userContext);
-			} catch (Exception e) {
-				log.warn("Failed to delete old profile photo (document id={}) for user id={}", oldImageId, userId, e);
+			if (docId != null && docId > 0) {
+				doc = documentService.update(docId, file, desc, userContext);
+			} else {
+				doc = documentService.add(file, desc, userContext);
+				userDTO.setImageId(doc.getId());
+				baseService.save(userDTO, userContext);
 			}
+		} catch (Exception e) {
+			return new ORSResponse(false, "Profile photo uploaded error: " + e.getMessage());
 		}
 
 		return new ORSResponse(true, "Profile photo uploaded successfully");
